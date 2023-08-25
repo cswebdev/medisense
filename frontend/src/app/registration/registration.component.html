@@ -1,0 +1,13 @@
+<form (ngSubmit)="onSubmit($event)">
+    <label>First Name</label>
+    <input type="text" name="first_Name" [(ngModel)]="first_name" required>
+    <label>Last Name</label>
+    <input type="text" name="last_Name" [(ngModel)]="last_name" required>
+    <label>Email</label>
+    <input type="email" name="email" [(ngModel)]="email" required>
+    <label>Password</label>
+    <input type="password" name="password" [(ngModel)]="password" required>
+    <label>Confirm Password</label>
+    <input type="password" name="confirm_Password" [(ngModel)]="password" required>
+    <button type="submit">Register</button>
+</form>
