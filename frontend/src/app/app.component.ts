@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {  } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -14,5 +15,7 @@ export class AppComponent {
   public open(modal: any): void {
     this.modalService.open(modal);
   }
+
+  
 
 }

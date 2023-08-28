@@ -1,17 +1,19 @@
-<p>
-    <a routerLink="home" routerLinkActive="active">Home</a> |
-    <a routerLink="/registration">registration</a> |
-    <a routerLink="/patient-portal">portal</a>
-</p>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
 
-<ul ngbNav #nav="ngbNav" class="nav-tabs">
-    <li ngbNavItem>
-        <button ngbNavLink>First</button>
-        <ng-template ngbNavContent>First content</ng-template>
-    </li>
-    <li ngbNavItem>
-        <button ngbNavLink>Second</button>
-        <ng-template ngbNavContent>Second content</ng-template>
-    </li>
-</ul>
-<div [ngbNavOutlet]="nav"></div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" routerLink="home" routerLinkActive="active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/registration">registration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/patient-portal">portal</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
