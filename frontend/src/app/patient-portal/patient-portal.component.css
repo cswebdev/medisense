@@ -1,0 +1,42 @@
+.container {
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+}
+
+.card {
+    display: flex;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    align-self: center;
+}
+
+.d-flex {
+    padding-bottom: 1%;
+}
+
+.custom-select {
+    height: 100%;
+    border-color: lightgray;
+}
+
+.card-chat-history {
+    border-color: lightgray;
+}
+
+.container-form {
+    justify-content: center;
+}
+
+/* Styles for smaller screens */
+@media (max-width: 991px) { /* Adjust the breakpoint as needed */
+    .col-lg-6 {
+        padding-top: 5vh; /* Add 5vh top padding for smaller screens */
+    }
+}
