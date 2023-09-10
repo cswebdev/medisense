@@ -181,6 +181,6 @@ README.html
 .exercism
 
 #Database
-application.properties
-*.properties
-application.properties
+# application.properties
+# *.properties
+# application.properties
