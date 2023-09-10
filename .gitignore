@@ -179,3 +179,8 @@ README.html
 *.iml
 .idea
 .exercism
+
+#Database
+application.properties
+*.properties
+application.properties
