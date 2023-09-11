@@ -12,7 +12,7 @@
                             <div class="col-md-6 mb-2">
                                 <div class="form-outline">
                                     <input type="text" id="form3Example1" class="form-control" placeholder="Test First"
-                                        disabled />
+                                    [attr.disabled]="firstNameDisabled ? true : null" />
                                     <label class="form-label" for="form3Example1">First Name</label>
                                 </div>
                             </div>
@@ -20,7 +20,7 @@
                             <div class="col-md-6 mb-2">
                                 <div class="form-outline">
                                     <input type="text" id="form3Example2" class="form-control" placeholder="Test Last"
-                                        disabled />
+                                    [attr.disabled]="lastNameDisabled ? true : null" />
                                     <label class="form-label" for="form3Example2">Last Name</label>
                                 </div>
                             </div>
@@ -28,21 +28,22 @@
                         <!-- Email -->
                         <div class="form-outline mb-2">
                             <input type="email" id="form3Example3" class="form-control" placeholder="Email@test.com"
-                                disabled />
+                            [attr.disabled]="emailDisabled ? true : null" />
                             <label class="form-label" for="form3Example3">Email Address</label>
                         </div>
 
                         <!-- Password -->
                         <div class="form-outline mb-2">
                             <input type="password" id="form3Example4" class="form-control" placeholder="*******"
-                                disabled />
+                            [attr.disabled]="passwordDisabled ? true : null" />
                             <label class="form-label" for="form3Example4">Password</label>
                         </div>
                         <div class="d-flex justify-content-center">
                             <!-- Edit -->
-                            <button class="btn btn-primary me-2" type="submit">Edit</button>
+                            <button class="btn btn-primary me-2" type="submit" (click)="editToggle()">Edit</button>
                             <!-- Save -->
-                            <button class="btn btn-primary mw-2" type="submit" disabled>Save</button>
+                            <button class="btn btn-primary mw-2" type="submit" 
+                            [attr.disabled]="saveDisabled ? true : null">Save</button>
                         </div>
 
                     </form>
