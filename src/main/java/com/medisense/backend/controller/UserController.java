@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medisense.backend.exception.ResourceNotFoundException;
-
-import models.User;
-import repository.UserRepository;
+import com.medisense.backend.models.User;
+import com.medisense.backend.repository.UserRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -61,12 +60,12 @@ public class UserController {
     // delete user rest api
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
-                User user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User does not exist with id" + id));
 
-            userRepository.delete(user);
-            Map<String, Boolean> response = new HashMap<>();
-            response.put("deleted", Boolean.TRUE);
-            return ResponseEntity.ok(response);
+        userRepository.delete(user);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 }

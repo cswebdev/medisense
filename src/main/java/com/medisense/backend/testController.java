@@ -1,14 +1,14 @@
-package com.medisense.backend;
+// package com.medisense.backend;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+// import org.springframework.web.bind.annotation.RequestMapping;
+// import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class testController {
+// @RestController
+// public class testController {
 
-	@RequestMapping("/api")
-	public String HelloWorld() {
-		return "hello world";
-	}
+// @RequestMapping("/api")
+// public String HelloWorld() {
+// return "hello world";
+// }
 
-}
+// }
