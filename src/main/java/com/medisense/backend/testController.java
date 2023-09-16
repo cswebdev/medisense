@@ -1,4 +1,4 @@
-package com.medisense.medisense;
+package com.medisense.backend;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,5 +10,5 @@ public class testController {
 	public String HelloWorld() {
 		return "hello world";
 	}
-	
+
 }
