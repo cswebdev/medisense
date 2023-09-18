@@ -34,7 +34,6 @@
           console.log("passwords do not match")
           return; // Do not proceed with form submission
         }
-    
         // Reset the error message if passwords match
         this.passwordsMatchError = false;
     
