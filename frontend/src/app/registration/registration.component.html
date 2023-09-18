@@ -20,41 +20,42 @@
                 <div class="col-lg-6 mb-5 mb-lg-0">
                     <div class="card">
                         <div class="card-body py-5 px-md-5">
-                            <form>
+                            <form [formGroup]="userRegistrationForm" (ngSubmit)="onSubmit()">
                                 <!-- 2 column grid layout with text inputs for the first and last names -->
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
                                         <div class="form-outline">
-                                            <input type="text" id="form3Example1" class="form-control" />
-                                            <label class="form-label" for="form3Example1">First name</label>
+                                            <input type="text" id="first_name" class="form-control"
+                                                formControlName="first_name" />
+                                            <label class="form-label" for="first_name">First name</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-4">
                                         <div class="form-outline">
-                                            <input type="text" id="form3Example2" class="form-control" />
-                                            <label class="form-label" for="form3Example2">Last name</label>
+                                            <input type="text" id="last-name" class="form-control" formControlName="last_name" />
+                                            <label class="form-label" for="last_name">Last name</label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Email input -->
                                 <div class="form-outline mb-4">
-                                    <input type="email" id="form3Example3" class="form-control" />
-                                    <label class="form-label" for="form3Example3">Email address</label>
+                                    <input type="email" id="email" class="form-control" formControlName="email"/>
+                                    <label class="form-label" for="email">Email address</label>
                                 </div>
 
                                 <!-- Password input -->
                                 <div class="form-outline mb-4">
-                                    <input type="password" id="form3Example4" class="form-control" />
-                                    <label class="form-label" for="form3Example4">Password</label>
+                                    <input type="password" id="password1" class="form-control" formControlName="password" />
+                                    <label class="form-label" for="password1">Password</label>
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <input type="password" id="form3Example4" class="form-control" />
-                                    <label class="form-label" for="form3Example4">Confirm Password</label>
+                                    <input type="password" id="password2" class="form-control" formControlName="confirmPassword" />
+                                    <label class="form-label" for="password2">Confirm Password</label>
                                 </div>
                                 <!-- Submit button -->
-                                <button type="submit" class="btn btn-primary btn-block mb-4">
+                                <button type="submit" class=" btn btn-primary btn-block mb-4">
                                     Sign up
                                 </button>
 
@@ -65,7 +66,7 @@
                                         <i class="fab fa-facebook-f"></i>
                                     </button>
 
-                                    <button type="button" class="btn btn-link btn-floating mx-1">
+                                    <button type="button" event="onSubmit()" class="btn btn-link btn-floating mx-1">
                                         google
                                     </button>
 

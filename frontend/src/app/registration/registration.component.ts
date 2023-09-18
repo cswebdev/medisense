@@ -1,37 +1,48 @@
-import { Component, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+  import { Component, NgModule } from '@angular/core';
+  import { FormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
+  import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css']
-})
+  @Component({
+    selector: 'app-registration',
+    templateUrl: './registration.component.html',
+    styleUrls: ['./registration.component.css']
+  })
 
 
-export class RegistrationComponent {
 
-  first_name: string = '';
-  last_name: string = '';
-  email: string = '';
-  password: string = '';
-  passwordConfirm: string = '';
+  export class RegistrationComponent {
 
-    @NgModule({
-      imports: [
-        FormsModule
-      ]
-    })
+    userRegistrationForm: FormGroup;
 
-  
-  onSubmit(event: Event) {
-    event.preventDefault();
-    console.log('onSubmit()');
-    console.log('first_name: ' + this.first_name);
-    console.log('last_name: ' + this.last_name);
-    console.log('email: ' + this.email);
-    console.log('password: ' + this.password);
-  }
- 
+    passwordsMatchError: boolean = false;
 
+
+    constructor(private fb: FormBuilder) {
+      this.userRegistrationForm = this.fb.group({
+        first_name:['', Validators.required],
+        last_name:['', Validators.required],
+        email:['', Validators.required], 
+        password: ['', [Validators.required, Validators.minLength(6)]], 
+        confirmPassword: ['', Validators.required],
+      })
+    }
+    onSubmit() {
+      if (this.userRegistrationForm.valid) {
+        const formValue = this.userRegistrationForm.value;
+        if (formValue.password !== formValue.confirmPassword) {
+          this.passwordsMatchError = true;
+          console.log("passwords do not match")
+          return; // Do not proceed with form submission
+        }
+    
+        // Reset the error message if passwords match
+        this.passwordsMatchError = false;
+    
+        console.log('onSubmit()');
+        console.log('first_name: ' + formValue.first_name);
+        console.log('last_name: ' + formValue.last_name);
+        console.log('email: ' + formValue.email);
+        console.log('password: ' + formValue.password);
+      }
+    }
 }
