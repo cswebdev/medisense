@@ -1,4 +1,4 @@
-package models;
+package com.medisense.backend.models;
 
 import jakarta.persistence.*;
 

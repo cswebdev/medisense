@@ -1,4 +1,4 @@
-package models;
+package com.medisense.backend.models;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,50 +18,50 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
+		@UniqueConstraint(columnNames = "email")
 })
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long user_id;
 
-    @NotBlank
-    @Size(max = 50)
-    private String email;
-    
-    @NotBlank
-    @Size(max = 50)
-    private String first_name;
-    
-    @NotBlank
-    @Size(max = 50)
-    private String last_name;
+	@NotBlank
+	@Size(max = 50)
+	private String email;
 
-    @NotBlank
-    @Size(max = 100)
-    private String password;
+	@NotBlank
+	@Size(max = 50)
+	private String first_name;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+	@NotBlank
+	@Size(max = 50)
+	private String last_name;
 
-    public User() {
+	@NotBlank
+	@Size(max = 100)
+	private String password;
 
-    }
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-    public User(String email, String password, String first_name, String last_name) {
-        this.email = email;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.password = password;
-    }
+	public User() {
+
+	}
+
+	public User(String email, String password, String first_name, String last_name) {
+		this.email = email;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.password = password;
+	}
 
 	public Long getId() {
-		return id;
+		return user_id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.user_id = id;
 	}
 
 	public String getEmail() {
@@ -104,5 +104,4 @@ public class User {
 		this.roles = roles;
 	}
 
-    
 }

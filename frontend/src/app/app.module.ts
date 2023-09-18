@@ -11,6 +11,8 @@ import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FooterComponent } from './footer/footer.component';
+import { UserlistComponent } from './userlist/userlist.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -20,14 +22,17 @@ import { FooterComponent } from './footer/footer.component';
     PatientPortalComponent,
     NavbarComponent,
     HomeComponent,
-    FooterComponent
+    FooterComponent,
+    UserlistComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    HttpClientModule,
+
 
   ],
   providers: [],

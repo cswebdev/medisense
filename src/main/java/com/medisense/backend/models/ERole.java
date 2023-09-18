@@ -1,4 +1,4 @@
-package models;
+package com.medisense.backend.models;
 
 public enum ERole {
     ROLE_USER,
