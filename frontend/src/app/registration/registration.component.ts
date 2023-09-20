@@ -1,6 +1,7 @@
   import { Component, NgModule } from '@angular/core';
   import { FormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
   import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegistrationService } from '../services/registration.service';
 
   @Component({
     selector: 'app-registration',
@@ -17,7 +18,10 @@
     passwordsMatchError: boolean = false;
 
 
-    constructor(private fb: FormBuilder) {
+    constructor(
+      private fb: FormBuilder,
+      private registrationService: RegistrationService
+      ) {
       this.userRegistrationForm = this.fb.group({
         first_name:['', Validators.required],
         last_name:['', Validators.required],
@@ -42,6 +46,17 @@
         console.log('last_name: ' + formValue.last_name);
         console.log('email: ' + formValue.email);
         console.log('password: ' + formValue.password);
+
+
+        // Call the service to send the reigstration data tot he backend
+        this.registrationService.registerUser(formValue).subscribe(
+          (response) => {
+            console.log('User registered successfully', response);
+          },
+          (error) => {
+            console.error('Error registering user', error);
+          }
+        );
       }
     }
 }
