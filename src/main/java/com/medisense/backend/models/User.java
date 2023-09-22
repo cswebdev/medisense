@@ -49,7 +49,7 @@ public class User {
 
 	}
 
-	public User(String email, String password, String first_name, String last_name) {
+	public User(String email, String first_name, String last_name, String password) {
 		this.email = email;
 		this.first_name = first_name;
 		this.last_name = last_name;
