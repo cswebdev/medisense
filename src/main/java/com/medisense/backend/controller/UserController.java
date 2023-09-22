@@ -1,10 +1,13 @@
 package com.medisense.backend.controller;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medisense.backend.exception.ResourceNotFoundException;
@@ -30,42 +34,69 @@ public class UserController {
 
     // get all users
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        try {
+			List<User> users = new ArrayList<User>();
+				userRepository.findAll().forEach(users::add);
+			if (users.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(users, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 
-    // create user rest api
-    @PostMapping("/users/{id}")
-    public ResponseEntity<User> getUserId(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User does not exist with id" + id));
-        return ResponseEntity.ok(user);
+    // get user by id
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+        Optional<User> userData = userRepository.findById(id);
 
-    }
+		if (userData.isPresent()) {
+			return new ResponseEntity<>(userData.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
-    // update user reset api
+    // create new user
+    @PostMapping("/users")
+	public ResponseEntity<User> createUser(@RequestBody User user) {
+		try {
+			User _user = userRepository
+					.save(new User(user.getEmail(), user.getFirst_name(), user.getLast_name(), user.getPassword()));
+			return new ResponseEntity<>(_user, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+    // update user info
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User does not exist with id" + id));
+	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+		Optional<User> userData = userRepository.findById(id);
 
-        user.setFirst_name(userDetails.getFirst_name());
-        user.setLast_name(userDetails.getLast_name());
-        user.setEmail(userDetails.getEmail());
+		if (userData.isPresent()) {
+			User _user = userData.get();
+            _user.setEmail(user.getEmail());
+			_user.setFirst_name(user.getFirst_name());
+			_user.setLast_name(user.getLast_name());
+            _user.setPassword(user.getPassword());
+			return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
-        User updatedUser = userRepository.save(user);
-        return (updatedUser);
-    }
-
-    // delete user rest api
+    // delete user by id
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User does not exist with id" + id));
-
-        userRepository.delete(user);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
-    }
+	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
+		try {
+			userRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
