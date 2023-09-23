@@ -17,18 +17,20 @@ export class UserService {
     return this.http.get<User[]>(baseUrl);
   }
 
-  // get(id: any): Observable<User>{
-  //   return this.http.get(`${baseUrl}/${id}`);
-  // }
+  get(id: any): Observable<User> {
+    return this.http.get(`${baseUrl}/${id}`);
+  }
 
-  // in progress 
+  create(data: any): Observable<any> {
+    return this.http.post(baseUrl, data);
+  }
 
-  // create(data: any): Observable<any>{
-  //   return this.http.post(baseUrl, data);
-  // }
+  update(id: any, data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/${id}`, data);
+  }
 
-  // update(id: any, data: any): Observable<any>{
-  //   return this.http.put(`$`)
-  // }
+  delete(id: any): Observable<any> {
+    return this.http.delete(`${baseUrl}/${id}`);
+  }
+  
 }
-
