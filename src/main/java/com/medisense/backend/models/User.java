@@ -1,16 +1,16 @@
 package com.medisense.backend.models;
 
-import java.util.HashSet;
-import java.util.Set;
+// import java.util.HashSet;
+// import java.util.Set;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+// import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.JoinTable;
+// import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
@@ -38,19 +38,35 @@ public class User {
 	private String last_name;
 
 	@NotBlank
+	@Size(max = 50)
+	private String username;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@NotBlank
 	@Size(max = 100)
 	private String password;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	// REMOVED THE NEED FOR ROLES
+
+	// @ManyToMany(fetch = FetchType.LAZY)
+	// @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+	// inverseJoinColumns = @JoinColumn(name = "role_id"))
+	// private Set<Role> roles = new HashSet<>();
 
 	public User() {
 
 	}
 
-	public User(String email, String first_name, String last_name, String password) {
+	public User(String email, String username, String first_name, String last_name, String password) {
 		this.email = email;
+		this.username = username;
 		this.first_name = first_name;
 		this.last_name = last_name;
 		this.password = password;
@@ -96,12 +112,12 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
+	// public Set<Role> getRoles() {
+	// return roles;
+	// }
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
+	// public void setRoles(Set<Role> roles) {
+	// this.roles = roles;
+	// }
 
 }
