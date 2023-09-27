@@ -1,8 +1,10 @@
-package com.medisense.backend.models;
+// CURRENTLY COMMENTED OUT UNTIL ROLES/JWT GET IMPLEMENTED
 
-public enum ERole {
-    ROLE_USER,
-    ROLE_Moderator,
-    ROLE_ADMIN
+// package com.medisense.backend.models;
 
-}
+// public enum ERole {
+// ROLE_USER,
+// ROLE_Moderator,
+// ROLE_ADMIN
+
+// }
