@@ -10,6 +10,6 @@ export class RegistrationService {
   constructor(private http: HttpClient) { }
 
   registerUser(userData: any) {
-    return this.http.post(this.apiUrl, userData);
+    return this.http.post(this.apiUrl, userData, {responseType: 'text'});
   }
 }

@@ -1,7 +1,9 @@
-  import { Component, NgModule } from '@angular/core';
-  import { FormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
-  import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, NgModule } from '@angular/core';
+import { FormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegistrationService } from '../services/registration.service';
+import { Router } from '@angular/router';
+
 
   @Component({
     selector: 'app-registration',
@@ -20,7 +22,8 @@ import { RegistrationService } from '../services/registration.service';
 
     constructor(
       private fb: FormBuilder,
-      private registrationService: RegistrationService
+      private registrationService: RegistrationService,
+      private router: Router
       ) {
       this.userRegistrationForm = this.fb.group({
         first_name:['', Validators.required],
@@ -53,6 +56,10 @@ import { RegistrationService } from '../services/registration.service';
         this.registrationService.registerUser(formValue).subscribe(
           (response) => {
             console.log('User registered successfully', response);
+            this.router.navigate(['/home']).catch(err => {
+              console.error('Navigation Error:', err);
+          });
+
           },
           (error) => {
             console.error('Error registering user', error);
