@@ -61,7 +61,8 @@ public class UserController {
 	public ResponseEntity<User> createUser(@RequestBody User user) {
 		try {
 			User _user = userRepository
-					.save(new User(user.getEmail(), user.getFirst_name(), user.getLast_name(), user.getPassword()));
+					.save(new User(user.getEmail(), user.getUsername(), user.getFirst_name(), user.getLast_name(),
+							user.getPassword()));
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
