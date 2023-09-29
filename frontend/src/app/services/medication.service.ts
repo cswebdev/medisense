@@ -13,11 +13,12 @@ export class MedicationService {
 
   constructor(private http: HttpClient) { }
 
-  getMedicationsByUserId(userId: number): Observable<MedicationResponse> {
-    return this.http.get<MedicationResponse>(`${this.baseUrl}/${userId}/medications`);
+  getMedicationsByUserId(Id: number): Observable<MedicationResponse> {
+    return this.http.get<MedicationResponse>(`${this.baseUrl}/${Id}/medications`);
   }
 
-  addMedicationToUser(userId: number, medication: Medication): Observable<MedicationResponse> {
-    return this.http.post<MedicationResponse>(`${this.baseUrl}/${userId}/medications`, medication);
-  }
+  addMedicationToUser(Id: number, medication: Medication): Observable<MedicationResponse> {
+    return this.http.post<MedicationResponse>(`${this.baseUrl}/${Id}/medications`, medication);
+}
+
 }

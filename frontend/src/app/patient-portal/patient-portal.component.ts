@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MedicationComponent } from '../medication/medication.component';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Medication } from '../models/medication.model';
-import { MedicationService } from '../services/medication.service';
-import { MedicationResponse } from '../models/medication-response.model';
+import { MedicationsListComponent } from '../medications-list/medications-list.component';
+
 
 @Component({
   selector: 'app-patient-portal',
@@ -12,40 +11,22 @@ import { MedicationResponse } from '../models/medication-response.model';
 })
 export class PatientPortalComponent implements OnInit {
 
-  userId: number | undefined;
+  loggedInUser: any;
   medications: Medication[] = [];
-  newMedication: Medication = {
-    prescriptionName: ''
-  };
 
-  constructor(
-    private authService: AuthService,
-    private medicationService: MedicationService
-  ) {}
+  @ViewChild(MedicationsListComponent, { static: false }) 
+  medicationsListComponent!: MedicationsListComponent; 
 
-  ngOnInit() {
-    this.userId = this.authService.getLoggedInUser()?.user_id;
-    this.fetchMedications();
+  constructor(private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.loggedInUser = this.authService.getLoggedInUser();
+  } 
+
+  onMedicationAdded(newMedication: Medication) {
+    this.medications.push(newMedication);
+    this.medicationsListComponent.fetchUserMedications();
+
   }
-
-  fetchMedications() {
-    if (this.userId) {
-      this.medicationService.getMedicationsByUserId(this.userId).subscribe((response: MedicationResponse) => {
-        this.medications = response.medications;
-      });
-    } else {
-      console.error("User ID is not available");
-    }
-  }
-
-  addMedication() {
-    if (this.userId) {
-      this.medicationService.addMedicationToUser(this.userId, this.newMedication).subscribe(response => {
-        this.medications.push(response.medications[0]);  
-        this.newMedication = {}; 
-      });
-    } else {
-      console.error("User ID is not available");
-    }
-  }
+  
 }

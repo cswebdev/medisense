@@ -15,6 +15,8 @@ import { UserlistComponent } from './userlist/userlist.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MedicationComponent } from './medication/medication.component';
+import { AddMedicationComponent } from './add-medication/add-medication.component';
+import { MedicationsListComponent } from './medications-list/medications-list.component';
 
 
 @NgModule({
@@ -28,7 +30,9 @@ import { MedicationComponent } from './medication/medication.component';
     UserlistComponent,
     UserProfileComponent,
     UserProfileComponent,
-    MedicationComponent
+    MedicationComponent,
+    AddMedicationComponent,
+    MedicationsListComponent
   ],
   imports: [
     BrowserModule,

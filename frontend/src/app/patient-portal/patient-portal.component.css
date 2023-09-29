@@ -2,6 +2,8 @@
     align-items: center;
     justify-content: center;
     padding: 2%;
+    background-color: #ffffff14;
+
 }
 
 .card {
@@ -70,15 +72,4 @@
     color: white;
 
     margin: 0;
-}
-
-
-/* Styles for smaller screens */
-@media (max-width: 991px) {
-
-    /* Adjust the breakpoint as needed */
-    .col-lg-6 {
-        padding-top: 5vh;
-        /* Add 5vh top padding for smaller screens */
-    }
 }
