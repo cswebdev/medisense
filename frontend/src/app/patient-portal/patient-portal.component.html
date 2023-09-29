@@ -1,58 +1,25 @@
-<div class="container">
+<div class="container" id="search-container">
+
+    <div class="row height d-flex  align-items-center">
+
+        <div class="col-md-6">
+
+            <div class="form">
+                <div class="search-container">
+                    <input type="text" class="form-control form-input" placeholder="Search anything...">
+                    <span class="right-pan"><button class="btn btn-success">Search</button></span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
     <div class="row">
         <!-- profile & meds list -->
         <div class="col-lg-6">
-            <!-- profile -->
-            <div class="card" style="height: 50vh" *ngIf="user$ | async as user">
-                <div class="card-body">
-                    <h5 class="card-title"> Profile </h5>
-                    <form class="container-form" [formGroup]="profileForm">
-                        <div class="row">
-                            <!-- First name -->
-                            <div class="col-md-6 mb-2">
-                                <div class="form-outline">
-                                    <input type="text" id="firstNameInput" class="form-control" placeholder="First Name"
-                                    [attr.disabled]="firstNameDisabled ? true : null" formControlName="first_name" 
-                                    value="{{ user.first_name }}" required/>
-                                    <label class="form-label" for="firstNameInput">First Name</label>
-                                </div>
-                            </div>
-                            <!-- Last name -->
-                            <div class="col-md-6 mb-2">
-                                <div class="form-outline">
-                                    <input type="text" id="lastNameInput" class="form-control" placeholder="Last Name"
-                                    [attr.disabled]="lastNameDisabled ? true : null" formControlName="last_name"
-                                    value="{{ user.last_name }}" required/>
-                                    <label class="form-label" for="lastNameInput">Last Name</label>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Email -->
-                        <div class="form-outline mb-2">
-                            <input type="email" id="emailInput" class="form-control" placeholder="Email Address"
-                            [attr.disabled]="emailDisabled ? true : null" formControlName="email"
-                            value="{{ user.email }}" required/>
-                            <label class="form-label" for="emailInput">Email Address</label>
-                        </div>
 
-                        <!-- Password -->
-                        <div class="form-outline mb-2">
-                            <input type="password" id="passwordInput" class="form-control" placeholder="Password"
-                            [attr.disabled]="passwordDisabled ? true : null" formControlName="password" 
-                            value="{{ user.password }}" required/>
-                            <label class="form-label" for="passwordInput">Password</label>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <!-- Edit -->
-                            <button class="btn btn-primary me-2" (click)="editToggle()">Edit</button>
-                            <!-- Save -->
-                            <button class="btn btn-primary mw-2" type="submit" (click)="onSubmit()" 
-                            [attr.disabled]="saveDisabled ? true : null">Save</button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
             <!-- spacer row -->
             <div class="row" style="height: 5vh">
             </div>
@@ -63,24 +30,13 @@
                     <h5 class="card-title"> Medications </h5>
                     <!-- search/add bar -->
                     <form class="d-flex">
-                        <!-- add autocomplete to check for meds in database -->
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        <!-- if med not in patient list -->
-                        <!-- button text = add -->
-                        <!-- button color = blue -->
-                        <!-- add med to patient list -->
-                        <!-- else if med in patient list -->
-                        <!-- button text = remove -->
-                        <!-- button color = red -->
-                        <!-- remove from patient list -->
-                        <button class="btn btn-primary btn-block" type="submit">Add/Remove</button>
+                        <input class="form-control" [(ngModel)]="newMedication" type="search" placeholder="Search"
+                            aria-label="Search">
+                        <button class="btn btn-primary btn-block" (click)="addMedication()" type="button">Add</button>
                     </form>
                     <!-- current meds list -->
                     <select class="custom-select" multiple>
-                        <option selected>Medication List</option>
-                        <option value="Med 1">One</option>
-                        <option value="Med 2">Two</option>
-                        <option value="Med 3">Three</option>
+                        <option *ngFor="let med of medications">{{ med.prescriptionName }}</option>
                     </select>
                 </div>
             </div>

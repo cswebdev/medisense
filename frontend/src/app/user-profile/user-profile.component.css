@@ -1,3 +1,17 @@
+/* Styles for the parent container */
+.parent-container {
+    display: grid;
+    place-items: center;
+    height: 90vh;
+    /* This will take the full height of the viewport */
+}
+
+/* Styles for the card */
+.card {
+    width: 50%;
+    /* Any other styles you wish to apply to the card */
+}
+
 .container {
     align-items: center;
     justify-content: center;
@@ -11,6 +25,8 @@
 .card-body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-title {
@@ -32,45 +48,10 @@
 
 .container-form {
     justify-content: center;
-}
-
-/* Search Bar */
-.search-container {
-    position: relative;
-    width: 100%;
-}
-
-.form-input {
-    padding-left: 10px;
-    width: 100%;
+    width: 95%;
 
 }
 
-.right-pan {
-    position: absolute;
-    top: 50%;
-    right: 1px;
-    transform: translateY(-50%);
-
-}
-
-
-.right-pan .btn {
-    border: none;
-    background-color: rgba(172, 251, 145, 0.267);
-    color: #28a745;
-    box-shadow: none;
-
-
-
-}
-
-.right-pan .btn:hover {
-    background-color: #28a745;
-    color: white;
-
-    margin: 0;
-}
 
 
 /* Styles for smaller screens */

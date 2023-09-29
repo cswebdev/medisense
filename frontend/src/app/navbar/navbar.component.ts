@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -9,6 +10,9 @@ import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class NavbarComponent {
 
+  constructor(public authService: AuthService) {
+    
+  }
 
 }
 export class NgbdNavBasic {

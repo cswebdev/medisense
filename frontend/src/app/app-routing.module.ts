@@ -5,6 +5,7 @@ import { PatientPortalComponent } from './patient-portal/patient-portal.componen
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { UserlistComponent } from './userlist/userlist.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'userlist',
     component: UserlistComponent
+  },
+  {
+    path: 'user-profile',
+    component: UserProfileComponent
   }
 
 ];

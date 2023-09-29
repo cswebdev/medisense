@@ -6,11 +6,17 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" routerLink="home" routerLinkActive="active">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" routerLink="/registration">registration</a>
+                <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+                    <a class="nav-link" routerLink="/registration">Registration</a>
+                </li>
+                <li class="nav-item" *ngIf="authService.isLoggedIn()">
+                    <a class="nav-link" routerLink="/patient-portal">Patient portal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/userlist">userlist</a>
+                    <a class=" nav-link" routerLink="/user-profile">User Profile</a>
+                </li>
+                <li class="nav-item" *ngIf="authService.isLoggedIn()">
+                    <a class=" nav-link" routerLink="/userlist">Userlist</a>
                 </li>
             </ul>
 

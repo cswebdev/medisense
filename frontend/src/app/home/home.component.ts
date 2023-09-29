@@ -42,6 +42,8 @@ export class HomeComponent {
       response => {
         if (response.status === 200) {
           console.log('Successfully logged in!', response.body);
+          this.authService.setLoggedInUser(response.body)
+          console.log(response.body);
           this.router.navigate(['/patient-portal']); 
 
           // You can now navigate to another route, set user details in a store, etc.
