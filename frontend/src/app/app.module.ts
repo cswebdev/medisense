@@ -13,6 +13,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FooterComponent } from './footer/footer.component';
 import { UserlistComponent } from './userlist/userlist.component';
 import { HttpClientModule } from '@angular/common/http';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { MedicationComponent } from './medication/medication.component';
+import { AddMedicationComponent } from './add-medication/add-medication.component';
+import { MedicationsListComponent } from './medications-list/medications-list.component';
 
 
 @NgModule({
@@ -23,7 +27,12 @@ import { HttpClientModule } from '@angular/common/http';
     NavbarComponent,
     HomeComponent,
     FooterComponent,
-    UserlistComponent
+    UserlistComponent,
+    UserProfileComponent,
+    UserProfileComponent,
+    MedicationComponent,
+    AddMedicationComponent,
+    MedicationsListComponent
   ],
   imports: [
     BrowserModule,

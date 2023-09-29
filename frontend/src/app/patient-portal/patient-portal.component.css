@@ -2,6 +2,8 @@
     align-items: center;
     justify-content: center;
     padding: 2%;
+    background-color: #ffffff14;
+
 }
 
 .card {
@@ -34,9 +36,40 @@
     justify-content: center;
 }
 
-/* Styles for smaller screens */
-@media (max-width: 991px) { /* Adjust the breakpoint as needed */
-    .col-lg-6 {
-        padding-top: 5vh; /* Add 5vh top padding for smaller screens */
-    }
+/* Search Bar */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.form-input {
+    padding-left: 10px;
+    width: 100%;
+
+}
+
+.right-pan {
+    position: absolute;
+    top: 50%;
+    right: 1px;
+    transform: translateY(-50%);
+
+}
+
+
+.right-pan .btn {
+    border: none;
+    background-color: rgba(172, 251, 145, 0.267);
+    color: #28a745;
+    box-shadow: none;
+
+
+
+}
+
+.right-pan .btn:hover {
+    background-color: #28a745;
+    color: white;
+
+    margin: 0;
 }

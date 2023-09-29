@@ -1,0 +1,16 @@
+<div *ngIf="authService.isLoggedIn()" class="container">
+    <h2 class="mb-3">Your Medications</h2>
+    <div *ngIf="medications && medications.length">
+        <div class="row font-weight-bold mb-2">
+            <div class="col-md-4 text-bg-primary">Prescription Name</div>
+            <div class="col-md-4 text-bg-primary">Dose</div>
+            <div class="col-md-4 text-bg-primary">Frequency</div>
+        </div>
+        <div class="row mb-2" *ngFor="let med of medications">
+            <div class="col-md-4 text-muted hoverable">{{ med.prescriptionName }}</div>
+            <div class="col-md-4 text-muted hoverable">{{ med.dose }}</div>
+            <div class="col-md-4 text-muted hoverable">{{ med.frequency }}</div>
+        </div>
+    </div>
+    <p class="mt-3" *ngIf="!medications?.length">No medications found for the user.</p>
+</div>
