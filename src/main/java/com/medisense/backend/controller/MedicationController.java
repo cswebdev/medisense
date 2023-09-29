@@ -21,6 +21,8 @@ import com.medisense.backend.payload.response.MedicationResponse;
 import com.medisense.backend.repository.MedicationRepository;
 import com.medisense.backend.repository.UserRepository;
 
+import jakarta.transaction.Transactional;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1")
@@ -49,6 +51,7 @@ public class MedicationController {
 	}
 
 	@PostMapping("/users/{userId}/medications")
+	@Transactional
 	public ResponseEntity<MedicationResponse> addMedicationToUser(
 			@PathVariable("userId") Long userId,
 			@RequestBody Medication medication) {
