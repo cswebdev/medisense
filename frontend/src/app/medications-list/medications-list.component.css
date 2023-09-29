@@ -1,0 +1,9 @@
+.row,
+.mb-2 {
+    border: 1px solid rgba(167, 167, 167, 0.355);
+    margin: 0;
+}
+
+li {
+    margin: 0;
+}
