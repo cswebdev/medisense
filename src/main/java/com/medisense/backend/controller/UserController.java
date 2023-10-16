@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.medisense.backend.models.User;
+import com.medisense.backend.models.UserRegistrationDTO;
 import com.medisense.backend.repository.UserRepository;
+import com.medisense.backend.services.FirebaseService;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -29,6 +33,8 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private FirebaseService firebaseService;
 
 	// get all users
 	@GetMapping("/users")
@@ -60,16 +66,25 @@ public class UserController {
 
 	// create new user
 	@PostMapping("/users")
-	public ResponseEntity<User> createUser(@RequestBody User user) {
+	public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userDTO) {
 		try {
-			User _user = userRepository
-					.save(new User(user.getEmail(), user.getUsername(), user.getFirst_name(), user.getLast_name(),
-							user.getPassword()));
+			FirebaseToken decodedToken = firebaseService.verifyToken(userDTO.getIdToken());
+			String uid = decodedToken.getUid();
+			
+			User _user = userRepository.save(new User(	
+				userDTO.getUser().getEmail(), 
+				userDTO.getUser().getUsername(), 
+				userDTO.getUser().getFirst_name(), 
+				userDTO.getUser().getLast_name(),
+				userDTO.getUser().getPassword()
+			));
+			
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Error registering user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
 
 	// update user info
 	@PutMapping("/users/{id}")

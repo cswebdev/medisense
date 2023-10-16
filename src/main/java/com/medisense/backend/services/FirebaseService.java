@@ -1,6 +1,12 @@
+package com.medisense.backend.services;
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.FirebaseAuthException;
+
 
 import org.springframework.stereotype.Service;
 
@@ -8,7 +14,7 @@ import javax.annotation.PostConstruct;
 import java.io.FileInputStream;
 
 @Service
-public class FirebaseInitializer {
+public class FirebaseService {
 
     @PostConstruct
     public void initialize() {
@@ -25,4 +31,13 @@ public class FirebaseInitializer {
             e.printStackTrace();
         }
     }
+    public FirebaseToken verifyToken(String idToken) {
+        try {
+            return FirebaseAuth.getInstance().verifyIdToken(idToken);
+        } catch (FirebaseAuthException fae) {
+            fae.printStackTrace();
+            throw new RuntimeException("Error verifying Firebase token", fae);
+        }
+    }
+    
 }
