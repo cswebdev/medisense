@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take, tap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,18 +17,23 @@ export class AuthService {
   }
 
   // Sign up with email and password
-  async signUp(email: string, password: string): Promise<firebase.default.auth.UserCredential> {
-    return await this.afAuth.createUserWithEmailAndPassword(email, password);
+  signUp(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
+    return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
+      catchError(error => {
+        console.error("Error during sign up:", error);
+        throw error;
+      })
+    );
   }
 
   // Sign in with email and password
-  async signIn(email: string, password: string): Promise<firebase.default.auth.UserCredential> {
-    return await this.afAuth.signInWithEmailAndPassword(email, password);
+  signIn(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
+    return from(this.afAuth.signInWithEmailAndPassword(email, password));
   }
 
   // Sign out
-  async signOut(): Promise<void> {
-    return await this.afAuth.signOut();
+  signOut(): Observable<void> {
+    return from(this.afAuth.signOut());
   }
 
   // Check if the user is authenticated

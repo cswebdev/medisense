@@ -34,37 +34,25 @@ import { Router } from '@angular/router';
         confirmPassword: ['', Validators.required],
       })
     }
+
     onSubmit() {
       if (this.userRegistrationForm.valid) {
         const formValue = this.userRegistrationForm.value;
         if (formValue.password !== formValue.confirmPassword) {
-          this.passwordsMatchError = true;
-          console.log("passwords do not match")
-          return; // Do not proceed with form submission
+            this.passwordsMatchError = true;
+            console.log("passwords do not match");
+            return;
         }
-        // Reset the error message if passwords match
         this.passwordsMatchError = false;
-    
-        console.log('onSubmit()');
-        console.log('first_name: ' + formValue.first_name);
-        console.log('last_name: ' + formValue.last_name);
-        console.log('email: ' + formValue.email);
-        console.log('password: ' + formValue.password);
-
-
-        // Call the service to send the reigstration data tot he backend
+  
         this.registrationService.registerUser(formValue).subscribe(
-          (response) => {
+          response => {
             console.log('User registered successfully', response);
-            this.router.navigate(['/home']).catch(err => {
-              console.error('Navigation Error:', err);
-          });
-
+            this.router.navigate(['home']).catch(error => console.error('Navigation Error:', error));
           },
-          (error) => {
-            console.error('Error registering user', error);
-          }
+          error => console.error('Error:', error)
         );
       }
     }
-}
+  
+  }
