@@ -1,0 +1,17 @@
+<div class="row mb-4 d-flex justify-content-center">
+    <div class="col-9 pt-3">
+        <div class="form">
+            <div class="search-container">
+                <input type="text" [(ngModel)]="searchTerm" class="form-control form-input"
+                    placeholder="Search anything...">
+                <span class="right-pan">
+                    <button (click)="searchMedication()" class="btn btn-success">Search</button>
+                </span>
+                <ul *ngIf="results.length" class="list-group search-results mt-2"
+                    style="max-height: 200px; overflow-y: auto;">
+                    <li *ngFor="let result of results" class="list-group-item">{{result.name}}</li>
+                </ul>
+            </div>          
+        </div>
+    </div>
+</div>
