@@ -1,48 +1,55 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
+import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { map, take, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  // Property to store user's authentication state
+  public user$: Observable<firebase.default.User | null>;
 
-  private baseUrl: string = 'http://localhost:8080/api/v1';
-
-  private loggedInUser: any = null;
-
-  constructor(private http: HttpClient) { }
-
-  login(username: string, password: string): Observable<any> {
-    const loginData = { username: username, password: password };
-    return this.http.post(`${this.baseUrl}/login`, loginData, { observe: 'response' }).pipe(
-      tap(response => {
-        if (response.status === 200 && response.body) {
-          this.loggedInUser = response.body;  // Store user details on successful login
-        }
-      })
-    );
+  constructor(private afAuth: AngularFireAuth, private router: Router) {
+    // Set the user$ observable to track the user's authentication state
+    this.user$ = this.afAuth.authState;
   }
 
-  isLoggedIn(): boolean { 
-    return this.loggedInUser !== null;
+  // Sign up with email and password
+  async signUp(email: string, password: string): Promise<firebase.default.auth.UserCredential> {
+    return await this.afAuth.createUserWithEmailAndPassword(email, password);
   }
 
-  // Getter for loggedInUser
-  getLoggedInUser(): any {
-    return this.loggedInUser;
+  // Sign in with email and password
+  async signIn(email: string, password: string): Promise<firebase.default.auth.UserCredential> {
+    return await this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  // Setter for LoggedInUser
-  setLoggedInUser(user: any): void {
-    this.loggedInUser = user;
+  // Sign out
+  async signOut(): Promise<void> {
+    return await this.afAuth.signOut();
   }
 
-  // logout
-  logout(): void {
-    this.loggedInUser = null
+  // Check if the user is authenticated
+  isAuthenticated(): Observable<firebase.default.User | null> {
+    return this.user$;
   }
 
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    // If the route has data 'requiresAuth' set to true, check authentication
+    if (route.data['requiresAuth']) {
+      return this.afAuth.authState.pipe(
+        take(1),
+        map(user => !!user),
+        tap(loggedIn => {
+          if (!loggedIn) {
+            console.log('Access denied');
+            this.router.navigate(['/']);
+          }
+        })
+      );
+    }
+    return true; // Allow access by default
+  }
 }

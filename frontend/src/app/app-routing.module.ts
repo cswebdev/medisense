@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { UserlistComponent } from './userlist/userlist.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AuthService } from './services/auth.service';
 
 const routes: Routes = [
   {
@@ -23,7 +24,9 @@ const routes: Routes = [
   },
   {
     path: 'patient-portal', 
-    component: PatientPortalComponent
+    component: PatientPortalComponent,
+    data: {requiresAuth: true},
+    canActivate: [AuthService]
   },
   {
     path: 'userlist',
@@ -31,7 +34,9 @@ const routes: Routes = [
   },
   {
     path: 'user-profile',
-    component: UserProfileComponent
+    component: UserProfileComponent,
+    data: {requiresAuth: true},
+    canActivate: [AuthService]
   }
 
 ];

@@ -20,7 +20,7 @@ export class PatientPortalComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.loggedInUser = this.authService.getLoggedInUser();
+    // this.loggedInUser = this.authService.getLoggedInUser();
   } 
 
   onMedicationAdded(newMedication: Medication) {

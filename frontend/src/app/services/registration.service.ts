@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +8,10 @@ import { HttpClient } from '@angular/common/http';
 export class RegistrationService {
   private apiUrl = 'http://localhost:8080/api/v1/register'
 
-  constructor(private http: HttpClient) { }
+  constructor(private userService: UserService, private authService: AuthService) { }
 
   registerUser(userData: any) {
-    return this.http.post(this.apiUrl, userData, {responseType: 'text'});
+    this.authService.signUp(userData.email, userData.password);
+    return this.userService.createUser(userData);
   }
 }

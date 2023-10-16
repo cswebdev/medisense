@@ -35,27 +35,27 @@ export class HomeComponent {
   //   this.renderer.setStyle(modal, 'display', 'none');
   // }
 
-  onLogin() {
-    const { username, password } = this.userLoginForm.value;
+  // onLogin() {
+  //   const { username, password } = this.userLoginForm.value;
 
-    this.authService.login(username, password).subscribe(
-      response => {
-        if (response.status === 200) {
-          console.log('Successfully logged in!', response.body);
-          this.authService.setLoggedInUser(response.body)
-          console.log(response.body);
-          this.router.navigate(['/patient-portal']); 
+  //   this.authService.login(username, password).subscribe(
+  //     response => {
+  //       if (response.status === 200) {
+  //         console.log('Successfully logged in!', response.body);
+  //         this.authService.setLoggedInUser(response.body)
+  //         console.log(response.body);
+  //         this.router.navigate(['/patient-portal']); 
 
-          // You can now navigate to another route, set user details in a store, etc.
-        }
-      },
-      error => {
-        console.log('Error - wrong username or password')
-        // Trigger the modal
-        // const modal = this.el.nativeElement.querySelector('#errorModal');
-        // this.renderer.addClass(modal, 'show');
-        // this.renderer.setStyle(modal, 'display', 'block');
-      }
-    );
-  }
+  //         // You can now navigate to another route, set user details in a store, etc.
+  //       }
+  //     },
+  //     error => {
+  //       console.log('Error - wrong username or password')
+  //       // Trigger the modal
+  //       // const modal = this.el.nativeElement.querySelector('#errorModal');
+  //       // this.renderer.addClass(modal, 'show');
+  //       // this.renderer.setStyle(modal, 'display', 'block');
+  //     }
+  //   );
+  // }
 }

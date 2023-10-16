@@ -42,10 +42,10 @@ export class UserProfileComponent implements OnInit{
     private formBuilder: FormBuilder, 
     private authService: AuthService
   ) {
-    const loggedInUser = this.authService.getLoggedInUser();
-    const userId = loggedInUser.id; // Assuming the user object has an 'id'
+    // const loggedInUser = this.authService.getLoggedInUser();
+    // const userId = loggedInUser.id; // Assuming the user object has an 'id'
 
-    this.user$ = this.userService.getUser(userId);
+    this.user$ = this.userService.getUser(1);
   }
 
   ngOnInit() {
@@ -72,27 +72,27 @@ export class UserProfileComponent implements OnInit{
   }
 
   onSubmit() {
-    const loggedInUser = this.authService.getLoggedInUser();
-    const userId = loggedInUser.id;
+    // const loggedInUser = this.authService.getLoggedInUser();
+    // const userId = loggedInUser.id;
 
-    if (this.profileForm.valid) {
-      const formData = this.profileForm.value;
-      this.userService.updateUser(userId, formData).subscribe(
-        (response) => {
-          console.log('PUT Request was successful', response);
-          // Handle the successful response here (if needed)
-        },
-        (error) => {
-          console.error('Error updating user:', error);
-          // Handle the error here (display an error message, etc.)
-        }
-      );
-    }
-    else {
-      //change this to display error message to user later
-      console.log("invalid request");
-    }
-    this.editToggle();
+    // if (this.profileForm.valid) {
+    //   const formData = this.profileForm.value;
+    //   this.userService.updateUser(userId, formData).subscribe(
+    //     (response) => {
+    //       console.log('PUT Request was successful', response);
+    //       // Handle the successful response here (if needed)
+    //     },
+    //     (error) => {
+    //       console.error('Error updating user:', error);
+    //       // Handle the error here (display an error message, etc.)
+    //     }
+    //   );
+    // }
+    // else {
+    //   //change this to display error message to user later
+    //   console.log("invalid request");
+    // }
+    // this.editToggle();
   }
   
 
