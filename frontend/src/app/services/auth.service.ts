@@ -46,6 +46,12 @@ export class AuthService {
     return this.user$;
   }
 
+  isLoggedIn(): Observable<boolean> {
+    return this.isAuthenticated().pipe(
+      map(user => !!user)
+    );
+  }
+
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // If the route has data 'requiresAuth' set to true, check authentication
     if (route.data['requiresAuth']) {
