@@ -10,6 +10,9 @@ import { MedicationsListComponent } from '../medications-list/medications-list.c
   styleUrls: ['./patient-portal.component.css']
 })
 export class PatientPortalComponent implements OnInit {
+handleResults($event: any) {
+throw new Error('Method not implemented.');
+}
 
   loggedInUser: any;
   medications: Medication[] = [];

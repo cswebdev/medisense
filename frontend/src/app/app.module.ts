@@ -17,6 +17,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MedicationComponent } from './medication/medication.component';
 import { AddMedicationComponent } from './add-medication/add-medication.component';
 import { MedicationsListComponent } from './medications-list/medications-list.component';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MedicationsListComponent } from './medications-list/medications-list.co
     UserProfileComponent,
     MedicationComponent,
     AddMedicationComponent,
-    MedicationsListComponent
+    MedicationsListComponent,
+    SearchBarComponent
   ],
   imports: [
     BrowserModule,

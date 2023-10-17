@@ -10,6 +10,7 @@ import { MedicationResponse } from '../models/medication-response.model';
 export class MedicationService {
 
   private baseUrl: string = 'http://localhost:8080/api/v1/users';
+  private apiBaseUrl: string = 'http://localhost:8080/api/v1';
 
   constructor(private http: HttpClient) { }
 
@@ -21,4 +22,10 @@ export class MedicationService {
     return this.http.post<MedicationResponse>(`${this.baseUrl}/${Id}/medications`, medication);
 }
 
+  // New method to search for medication names
+  searchMedicationNames(medicationName: string): Observable<any> {
+    return this.http.get<any>(`${this.apiBaseUrl}/search-medication`, {
+      params: { medication: medicationName }
+    });
+  }
 }

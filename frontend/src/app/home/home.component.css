@@ -36,7 +36,9 @@
     font-weight: 800;
     line-height: 1.5;
     margin-left: 5%;
-    background-color: #fff;
+    background-color: #eaeaff;
+    /* border: 2px solid black; */
+    /* border-radius: 60px; */
     max-width: 44%;
 }
 

@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medisense.backend.models.User;
-// import com.medisense.backend.payload.request.LoginRequest;
 import com.medisense.backend.repository.UserRepository;
 
-// import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -24,9 +22,6 @@ public class RegistrationController {
 
     @Autowired
     private UserRepository userRepository;
-
-    // @Autowired
-    // private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
