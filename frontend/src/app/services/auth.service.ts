@@ -28,7 +28,12 @@ export class AuthService {
 
   // Sign in with email and password
   signIn(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
-    return from(this.afAuth.signInWithEmailAndPassword(email, password));
+    return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
+      catchError(error => {
+        console.error("Error during sign in:", error);
+        throw error;
+      })
+    );
   }
 
   // Sign out

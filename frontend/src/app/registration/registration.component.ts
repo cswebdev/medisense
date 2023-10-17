@@ -1,6 +1,5 @@
-import { Component, NgModule } from '@angular/core';
-import { FormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { RegistrationService } from '../services/registration.service';
 import { Router } from '@angular/router';
 

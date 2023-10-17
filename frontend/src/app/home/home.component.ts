@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { LoginService } from '../services/login.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Renderer2, ElementRef } from '@angular/core';
@@ -17,45 +17,41 @@ export class HomeComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private loginService: LoginService,
     private router: Router,
     private renderer: Renderer2,
     private el: ElementRef ) {
       this.userLoginForm = this.fb.group({
-        username:['',Validators.required],
+        email:['',Validators.required],
         password:['', Validators.required]
       })
    
   }
 
-  // onClick() {
+  onClick() {
     
-  //   const modal = this.el.nativeElement.querySelector('#errorModal');
-  //   this.renderer.removeClass(modal, 'show');
-  //   this.renderer.setStyle(modal, 'display', 'none');
-  // }
+    const modal = this.el.nativeElement.querySelector('#errorModal');
+    this.renderer.removeClass(modal, 'show');
+    this.renderer.setStyle(modal, 'display', 'none');
+  }
 
-  // onLogin() {
-  //   const { username, password } = this.userLoginForm.value;
+  onSubmit() {
+    this.loginService.loginUser(this.userLoginForm.value).subscribe(
+      (response) => {
+        console.log('Successfully logged in!', response);
 
-  //   this.authService.login(username, password).subscribe(
-  //     response => {
-  //       if (response.status === 200) {
-  //         console.log('Successfully logged in!', response.body);
-  //         this.authService.setLoggedInUser(response.body)
-  //         console.log(response.body);
-  //         this.router.navigate(['/patient-portal']); 
+        // Navigate to the patient portal after successful login
+        this.router.navigate(['/patient-portal']); 
+      },
+      (error: Error) => {
+        console.error('Error:', error);
+        console.log('Error - wrong username or password');
 
-  //         // You can now navigate to another route, set user details in a store, etc.
-  //       }
-  //     },
-  //     error => {
-  //       console.log('Error - wrong username or password')
-  //       // Trigger the modal
-  //       // const modal = this.el.nativeElement.querySelector('#errorModal');
-  //       // this.renderer.addClass(modal, 'show');
-  //       // this.renderer.setStyle(modal, 'display', 'block');
-  //     }
-  //   );
-  // }
+        // Trigger the modal to show the error
+        const modal = this.el.nativeElement.querySelector('#errorModal');
+        this.renderer.addClass(modal, 'show');
+        this.renderer.setStyle(modal, 'display', 'block');
+      }
+    );
+  }
 }
