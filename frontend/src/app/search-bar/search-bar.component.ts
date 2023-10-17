@@ -9,28 +9,38 @@ import { MedicationService } from '../services/medication.service';
 })
 export class SearchBarComponent {
 
+  showResults: boolean = false;
+
   searchTerm: string = '';
   results: any[] = [];
-
-  // constructor(private http: HttpClient){};
   constructor(private medicationService: MedicationService) {}
 
+  shortenMedicationName(name: string): string {
+    const parts = name.split('/');
+    return parts[0].trim();
+}
+
+
   searchMedication() {
-    const url = `http://localhost:8080/api/v1/search-medication?medication=${this.searchTerm}`;
-   
-  console.log(this.searchTerm)
-  this.medicationService.searchMedicationNames(this.searchTerm).subscribe(data => {
-    
-    console.log("Response data:", data);
-    this.results = data;
+    console.log(this.searchTerm);
+    this.medicationService.searchMedicationNames(this.searchTerm).subscribe(data => {
+      const extractedNames = [];
+      this.showResults = this.results.length > 0 
 
-    console.log("results array:", this.results);
-
-    this.results.forEach(medication => {
-      console.log(medication)
-    })
-  }, error => {
-    console.error("There was an error making the request:", error);
-  });
+      const conceptGroup = data.drugGroup.conceptGroup || [];
+      for (let group of conceptGroup) {
+        if (group.conceptProperties) {
+          for (let prop of group.conceptProperties) {
+            extractedNames.push(this.shortenMedicationName(prop.name))
+          }
+        }
+      }
+      this.results = extractedNames;
+      console.log("Extracted medication names:", this.results);
+    }, error => {
+      console.error("There was an error making this request:", error)
+    });
   }
+
+
 }

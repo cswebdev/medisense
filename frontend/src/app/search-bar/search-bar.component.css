@@ -2,6 +2,7 @@
 .search-container {
     position: relative;
     width: 100%;
+
 }
 
 .form-input {
@@ -10,6 +11,7 @@
 
 }
 
+#search-btn,
 .right-pan {
     position: absolute;
     top: 50%;
@@ -24,9 +26,6 @@
     background-color: rgba(172, 251, 145, 0.267);
     color: #28a745;
     box-shadow: none;
-
-
-
 }
 
 .right-pan .btn:hover {
@@ -34,4 +33,22 @@
     color: white;
 
     margin: 0;
+}
+
+.list-group-item {
+    padding-right: 70px;
+}
+
+.dropdown-item {
+    padding-right: 70px;
+}
+
+.add-btn {
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+
+.dropdown-menu.show {
+    width: 100%;
 }
