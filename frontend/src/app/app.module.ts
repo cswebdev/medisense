@@ -19,6 +19,7 @@ import { MedicationsListComponent } from './medications-list/medications-list.co
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { environment } from '../environments/environment';
+import { SearchBarComponent } from './search-bar/search-bar.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { environment } from '../environments/environment';
     UserProfileComponent,
     MedicationComponent,
     AddMedicationComponent,
-    MedicationsListComponent
+    MedicationsListComponent,
+    SearchBarComponent
   ],
   imports: [
     BrowserModule,
