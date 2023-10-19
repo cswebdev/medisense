@@ -16,6 +16,19 @@ export class AuthService {
     this.user$ = this.afAuth.authState;
   }
 
+  getEmail(): Observable<String | null> {
+    return this.user$.pipe(
+      map(user => user ? user.email : null)
+    );
+  }
+
+  getUserId(): Observable<String | null> {
+    return this.user$.pipe(
+      map(user => user && user.uid !== undefined ? user.uid : null)
+    );
+}
+
+
   // Sign up with email and password
   signUp(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
@@ -28,7 +41,11 @@ export class AuthService {
 
   // Sign in with email and password
   signIn(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
-    return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
+    return from(
+      this.afAuth.setPersistence('session').then(() => {
+        return this.afAuth.signInWithEmailAndPassword(email, password);
+      })
+    ).pipe(
       catchError(error => {
         console.error("Error during sign in:", error);
         throw error;
@@ -36,10 +53,18 @@ export class AuthService {
     );
   }
 
+
+
   // Sign out
   signOut(): Observable<void> {
-    return from(this.afAuth.signOut());
+    return from(this.afAuth.signOut()).pipe(
+      catchError(error => {
+        console.error("Error during sign out:", error);
+        throw error;
+      })
+    );
   }
+
 
   // Check if the user is authenticated
   isAuthenticated(): Observable<firebase.default.User | null> {

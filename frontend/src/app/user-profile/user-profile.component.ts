@@ -10,99 +10,84 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent implements OnInit{
-  user$: Observable<User>;
-  error: any;
-
-  firstName!: string;
-  lastName!: string;
-  email!: string;
-  password!: string;
+export class UserProfileComponent implements OnInit {
   profileForm!: FormGroup;
 
+  userEmail: String | null = '';
+  userFirstName: String | undefined = '';
+  userLastName: String | undefined = '';
+
   public editToggled: boolean = false;
-  public firstNameDisabled: boolean = true;
-  public lastNameDisabled: boolean = true;
-  public emailDisabled: boolean = true;
-  public passwordDisabled: boolean = true;
-  public saveDisabled: boolean = true;
-
-  // constructor(private userService: UserService, private formBuilder: FormBuilder){
-  //   this.firstNameDisabled = true;
-  //   this.lastNameDisabled = true;
-  //   this.emailDisabled = true;
-  //   this.passwordDisabled = true;
-  //   this.saveDisabled = true;
-
-  //   this.user$ = this.userService.getUser(1);
-  // }
 
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder, 
     private authService: AuthService
-  ) {
-    // const loggedInUser = this.authService.getLoggedInUser();
-    // const userId = loggedInUser.id; // Assuming the user object has an 'id'
+  ) { }
 
-    this.user$ = this.userService.getUser(1);
+  ngOnInit(): void {
+    this.initializeForm();
+  
+    this.authService.getEmail().subscribe(email => {
+      this.userEmail = email;
+      this.updateFormValues();
+    });
+  
+    this.userService.getFirstName().subscribe(firstName => {
+      this.userFirstName = firstName;
+      this.updateFormValues();
+    });
+  
+    this.userService.getLastName().subscribe(lastName => {
+      this.userLastName = lastName;
+      this.updateFormValues();
+    });
   }
+  
+  private updateFormValues(): void {
+    if (this.userEmail && this.userFirstName && this.userLastName) {
+      this.profileForm.patchValue({
+        firstName: this.userFirstName,
+        lastName: this.userLastName,
+        email: this.userEmail
+      });
+    }
+  }  
 
-  ngOnInit() {
-    this.user$.subscribe(
-      (user) => {
-        if (user) {
-         this.firstName = user.first_name || '';
-         this.lastName = user.last_name || '';
-         this.email = user.email || '';
-         this.password = user.password || '';
-
-          this.profileForm = this.formBuilder.group({
-              email: [user.email, [Validators.required, Validators.email]],
-              first_name: [user.first_name, Validators.required],
-              last_name: [user.last_name, Validators.required],
-              password: [user.password, Validators.required]
-          });
-        }
-      },
-      (error) => {
-        console.error('Error fetching user data:', error);
-      }
-    );
-  }
-
-  onSubmit() {
-    // const loggedInUser = this.authService.getLoggedInUser();
-    // const userId = loggedInUser.id;
-
-    // if (this.profileForm.valid) {
-    //   const formData = this.profileForm.value;
-    //   this.userService.updateUser(userId, formData).subscribe(
-    //     (response) => {
-    //       console.log('PUT Request was successful', response);
-    //       // Handle the successful response here (if needed)
-    //     },
-    //     (error) => {
-    //       console.error('Error updating user:', error);
-    //       // Handle the error here (display an error message, etc.)
-    //     }
-    //   );
-    // }
-    // else {
-    //   //change this to display error message to user later
-    //   console.log("invalid request");
-    // }
-    // this.editToggle();
+  private initializeForm(): void {
+    this.profileForm = this.formBuilder.group({
+      email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+      password: [{ value: '••••••••', disabled: true }, Validators.required],
+      firstName: [{ value: '', disabled: true }, Validators.required],
+      lastName: [{ value: '', disabled: true }, Validators.required]
+    });
   }
   
 
-  editToggle(){
-    this.firstNameDisabled = this.editToggled;
-    this.lastNameDisabled = this.editToggled;
-    this.emailDisabled = this.editToggled;
-    this.passwordDisabled = this.editToggled;
-    this.saveDisabled = this.editToggled;
+  onSubmit(): void {
+    if (this.profileForm.valid) {
+      const formData = this.profileForm.value;
+      const userUpdateData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName
+      };
+
+      this.userService.updateUser(this.authService.getUserId(), userUpdateData).subscribe(
+        response => console.log('PUT Request to PostgreSQL was successful', response),
+        error => console.error('Error updating user in PostgreSQL:', error)
+      );
+
+      // Update email and password in Firebase here...
+
+    } else {
+      console.log("invalid request");
+    }
+    this.editToggle();
+  }
+
+  editToggle(): void {
     this.editToggled = !this.editToggled;
   }
 
+  
 }

@@ -54,7 +54,7 @@ public class UserController {
 
 	// get user by id
 	@GetMapping("/users/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+	public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
 		Optional<User> userData = userRepository.findById(id);
 
 		if (userData.isPresent()) {
@@ -64,48 +64,55 @@ public class UserController {
 		}
 	}
 
-	// create new user
 	@PostMapping("/users")
 	public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userDTO) {
 		try {
 			FirebaseToken decodedToken = firebaseService.verifyToken(userDTO.getIdToken());
 			String uid = decodedToken.getUid();
 			
+			Optional<User> existingUser = userRepository.findById(uid);
+			if (existingUser.isPresent()) {
+				return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+			}
+
 			User _user = userRepository.save(new User(	
-				userDTO.getUser().getEmail(), 
-				userDTO.getUser().getUsername(), 
-				userDTO.getUser().getFirst_name(), 
-				userDTO.getUser().getLast_name(),
-				userDTO.getUser().getPassword()
+				uid,
+				userDTO.getFirstName(), 
+				userDTO.getLastName()
 			));
 			
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
+			// General error handling
+			if (e instanceof FirebaseAuthException) {
+				// Handle Firebase specific exceptions
+				return new ResponseEntity<>("Error with Firebase authentication: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
+			}
 			return new ResponseEntity<>("Error registering user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+
 	
 
-	// update user info
-	@PutMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
-		Optional<User> userData = userRepository.findById(id);
+	// // update user info
+	// @PutMapping("/users/{id}")
+	// public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody UserRegistrationDTO userDTO) {
+	// 	Optional<User> userData = userRepository.findById(id);
 
-		if (userData.isPresent()) {
-			User _user = userData.get();
-			_user.setEmail(user.getEmail());
-			_user.setFirst_name(user.getFirst_name());
-			_user.setLast_name(user.getLast_name());
-			_user.setPassword(user.getPassword());
-			return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+	// 	if (userData.isPresent()) {
+	// 		User _user = userData.get();
+	// 		_user.setFirstName(user.getFirstName());
+	// 		_user.setLastName(user.getLastName());
+	// 		return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+	// 	} else {
+	// 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	// 	}
+	// }
 
 	// delete user by id
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
+	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
 			userRepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

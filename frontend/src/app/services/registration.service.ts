@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, EMPTY } from 'rxjs';
+import { Observable, from, throwError } from 'rxjs';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { switchMap, map } from 'rxjs/operators';
@@ -16,16 +16,16 @@ export class RegistrationService {
     return from(this.authService.signUp(userData.email, userData.password)).pipe(
       switchMap((credential: firebase.auth.UserCredential) => {
         if (!credential.user) {
-          // Handle the error or return an empty observable
           console.error("No user in credential!");
-          return EMPTY;  // EMPTY is a type of observable that completes immediately without emitting any values.
+          return throwError("No user in credential!"); // Import throwError from 'rxjs'
         }
         
         return from(credential.user.getIdToken()).pipe(
           switchMap(idToken => {
             const userDTO = {
               idToken: idToken,
-              user: userData
+              firstName: userData.firstName,
+              lastName: userData.lastName
             };
             return this.userService.createUser(userDTO);
           })
@@ -33,4 +33,5 @@ export class RegistrationService {
       })
     );
   }
+  
 }

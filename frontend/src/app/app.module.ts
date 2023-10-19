@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FooterComponent } from './footer/footer.component';
-import { UserlistComponent } from './userlist/userlist.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { MedicationComponent } from './medication/medication.component';
@@ -30,7 +29,6 @@ import { environment } from '../environments/environment';
     NavbarComponent,
     HomeComponent,
     FooterComponent,
-    UserlistComponent,
     UserProfileComponent,
     MedicationComponent,
     AddMedicationComponent,

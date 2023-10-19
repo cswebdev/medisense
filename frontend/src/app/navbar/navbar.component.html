@@ -1,26 +1,31 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Links for users who are NOT logged in -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="!loggedIn">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" routerLink="home" routerLinkActive="active">Home</a>
+                    <a class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/registration">Registration</a>
                 </li>
-                <!-- <li class="nav-item" *ngIf="loggedIn" -->
+            </ul>
+            
+            <!-- Links for users who ARE logged in -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="loggedIn">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/patient-portal">Patient portal</a>
+                    <a class="nav-link active" aria-current="page" routerLink="/patient-portal" routerLinkActive="active">Patient Portal</a>
                 </li>
                 <li class="nav-item">
-                    <a class=" nav-link" routerLink="/user-profile">User Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class=" nav-link" routerLink="/userlist">Userlist</a>
+                    <a class="nav-link" routerLink="/user-profile">User Profile</a>
                 </li>
             </ul>
 
+            <ul class="navbar-nav ml-auto" *ngIf="loggedIn">
+                <li class="nav-item">
+                    <button class="btn btn-primary" (click)="onSubmit()">Logout</button>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

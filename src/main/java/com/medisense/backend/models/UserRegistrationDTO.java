@@ -1,35 +1,31 @@
 package com.medisense.backend.models;
 
-import com.medisense.backend.models.User;
-
 public class UserRegistrationDTO {
 
-    private User user;
     private String idToken;
+    private String firstName;
+    private String lastName;
 
     // Default constructor
     public UserRegistrationDTO() {}
 
     // Parameterized constructor
-    public UserRegistrationDTO(User user, String idToken) {
-        this.user = user;
+    public UserRegistrationDTO(String idToken, String firstName, String lastName) {
         this.idToken = idToken;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     // Getters and Setters
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getIdToken() {
         return idToken;
     }
+    
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public void setIdToken(String idToken) {
-        this.idToken = idToken;
+    public String getLastName() {
+        return lastName;
     }
 }

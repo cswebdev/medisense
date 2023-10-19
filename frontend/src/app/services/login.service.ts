@@ -14,7 +14,7 @@ export class LoginService {
 
   constructor(private userService: UserService, private authService: AuthService) { }
 
-  loginUser(userData: any): Observable<string> {
+  loginUser(userData: any): Observable<String> {
     return from(this.authService.signIn(userData.email, userData.password)).pipe(
       switchMap((credential: firebase.auth.UserCredential) => {
         if (!credential.user) {

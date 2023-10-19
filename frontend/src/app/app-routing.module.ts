@@ -1,12 +1,11 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { PatientPortalComponent } from './patient-portal/patient-portal.component';
-import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { UserlistComponent } from './userlist/userlist.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AuthService } from './services/auth.service';
+import { NewUserResolverService } from './services/new-user-resolver.service';
 
 const routes: Routes = [
   {
@@ -25,12 +24,9 @@ const routes: Routes = [
   {
     path: 'patient-portal', 
     component: PatientPortalComponent,
-    data: {requiresAuth: true},
+    resolve: { user: NewUserResolverService },
+    data: { requiresAuth: true },
     canActivate: [AuthService]
-  },
-  {
-    path: 'userlist',
-    component: UserlistComponent
   },
   {
     path: 'user-profile',

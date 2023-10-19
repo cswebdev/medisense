@@ -1,15 +1,10 @@
 package com.medisense.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,23 +13,26 @@ public class Medication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "prescription_name", nullable = false)
     private String prescriptionName;
 
+    @Column(name = "dose")
     private String dose;
 
+    @Column(name = "dosage_form")
     private String dosageForm;
 
+    @Column(name = "frequency")
     private String frequency;
 
+    @Column(name = "route")
     private String route;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
-    private User user;
 
     public Long getId() {
         return id;
@@ -42,6 +40,14 @@ public class Medication {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPrescriptionName() {
@@ -82,14 +88,6 @@ public class Medication {
 
     public void setRoute(String route) {
         this.route = route;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
 }
