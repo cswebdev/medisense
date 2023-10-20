@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,13 +14,29 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnDestroy {
 
   loggedIn: boolean = false;
+  userEmail: String | null = '';
+  emailVerified: boolean = false;
   private destroy$ = new Subject<void>();
 
-  constructor(public authService: AuthService, public logoutService: LogoutService, private router: Router) {
+  constructor(private authService: AuthService, 
+              private logoutService: LogoutService,
+              private alertService: AlertService, 
+              private router: Router
+  ) {
     this.authService.isLoggedIn()
       .pipe(takeUntil(this.destroy$))
       .subscribe(isLoggedIn => {
         this.loggedIn = isLoggedIn;
+        if (isLoggedIn) {
+          this.authService.getEmail().subscribe(email => {
+            this.userEmail = email;
+          });
+        }
+      });
+    this.authService.isEmailVerified()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isVerified => {
+        this.emailVerified = isVerified;
       });
   }
 
@@ -28,11 +45,12 @@ export class NavbarComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
-  onSubmit() {
+  handleLogout() {
     this.logoutService.logoutUser().subscribe(
       () => {
         console.log('Logged out successfully');
-        this.router.navigate(['home']).catch(error => console.error('Navigation Error:', error));
+        this.alertService.success('Successfully logged out!');
+        // this.router.navigate(['home']).catch(error => console.error('Navigation Error:', error));
         // Maybe navigate the user to the login page or show a message
       },
       error => {

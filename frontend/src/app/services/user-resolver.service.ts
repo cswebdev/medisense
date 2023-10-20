@@ -2,17 +2,18 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { UserService } from './user.service';  // Path to your UserService
-import { AuthService } from './auth.service';  // Path to your UserService
+import { UserService } from './user.service';
+import { AuthService } from './auth.service';
+import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NewUserResolverService implements Resolve<any> {
+export class UserResolverService implements Resolve<any> {
 
   constructor(private userService: UserService, private authService: AuthService) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User | null> {
     return this.authService.getUserId().pipe(
       switchMap(userId => {
         if (!userId) {

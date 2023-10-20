@@ -1,33 +1,32 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, EMPTY } from 'rxjs';
-import { UserService } from './user.service';
+import { Observable, from, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
-import { switchMap } from 'rxjs/operators';
-import firebase from "firebase/compat/app";
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { switchMap, catchError } from 'rxjs/operators';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  constructor(private userService: UserService, private authService: AuthService) { }
+  constructor(
+    private authService: AuthService
+  ) {}
 
-  loginUser(userData: any): Observable<String> {
-    return from(this.authService.signIn(userData.email, userData.password)).pipe(
-      switchMap((credential: firebase.auth.UserCredential) => {
-        if (!credential.user) {
-          console.error("No user in credential!");
-          return throwError("Login failed!"); // throwError creates an observable that will error out
+  loginUser(email: string, password: string ): Observable<string> {
+    return this.authService.signIn(email, password).pipe(
+      switchMap((user: firebase.User | null) => {
+        if (!user) {
+          console.error('No user!');
+          return throwError(() => new Error('Login failed!'));
         }
-        
+
         // Return the token after successful login
-        return from(credential.user.getIdToken());
+        return from(user.getIdToken());
       }),
       catchError(error => {
-        console.error("Login Error:", error);
-        return throwError("Login failed due to an unexpected error.");
+        console.error('Login Error:', error);
+        return throwError(() => new Error('Login failed due to an unexpected error.'));
       })
     );
   }

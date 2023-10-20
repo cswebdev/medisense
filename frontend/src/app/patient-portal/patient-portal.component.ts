@@ -26,6 +26,10 @@ export class PatientPortalComponent implements OnInit {
     }
   }
 
+  handleResults($event: any) {
+    throw new Error('Method not implemented.');
+  }
+
   onMedicationAdded(newMedication: Medication): void {
     this.medications.push(newMedication);
     this.medicationsListComponent.fetchUserMedications();

@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap, throwError, of } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { User } from '../models/user.model';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service'; 
@@ -13,24 +13,6 @@ const baseUrl = 'http://localhost:8080/api/v1/users';
 export class UserService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
-
-  // getFirstName(): Observable<String | undefined> {
-  //   return this.authService.getUserId().pipe(
-  //     switchMap((userId: String | null) => {
-  //       if (userId) {
-  //         console.log(this.getUser(userId));
-  //         return this.getUser(userId);
-  //       } else {
-  //         return of(null);
-  //       }
-  //     }),
-  //     map((user: User | null) => user ? user.firstName : ''),
-  //     catchError((error) => {
-  //       console.error('Error fetching first name:', error);
-  //       return of('');  // default fallback value
-  //     })
-  //   );
-  // }
 
   getFirstName(): Observable<String | undefined> {
     console.log(this.authService.getUserId());

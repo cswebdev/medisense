@@ -22,9 +22,26 @@
             </ul>
 
             <ul class="navbar-nav ml-auto" *ngIf="loggedIn">
-                <li class="nav-item">
-                    <button class="btn btn-primary" (click)="onSubmit()">Logout</button>
-                </li>
+                <div class="dropdown position-relative">
+                    <div class="email-verification-box"
+                        [ngClass]="{'email-verified': emailVerified, 'email-not-verified': !emailVerified}"
+                        ngbTooltip="{{ emailVerified ? 'Email is verified' : 'Email is not verified' }}"
+                    >
+                        <i [ngClass]="{'fas fa-check': emailVerified, 'fa-solid fa-exclamation': !emailVerified}" aria-hidden="true"></i>
+                    </div>
+                    <button class="btn btn-primary dropdown-toggle" 
+                            type="button" 
+                            id="optionsDropdownMenuButton" 
+                            data-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        {{ userEmail }} 
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="optionsDropdownMenuButton">
+                        <li><button class="dropdown-item" type="button" routerLink="/edit-user-profile">Edit Profile</button></li>
+                        <li><button class="dropdown-item" type="button" (click)="handleLogout()">Logout</button></li>
+                    </ul>
+                </div>
             </ul>
         </div>
     </div>

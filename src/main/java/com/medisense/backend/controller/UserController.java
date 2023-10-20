@@ -95,20 +95,17 @@ public class UserController {
 
 	
 
-	// // update user info
-	// @PutMapping("/users/{id}")
-	// public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody UserRegistrationDTO userDTO) {
-	// 	Optional<User> userData = userRepository.findById(id);
-
-	// 	if (userData.isPresent()) {
-	// 		User _user = userData.get();
-	// 		_user.setFirstName(user.getFirstName());
-	// 		_user.setLastName(user.getLastName());
-	// 		return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
-	// 	} else {
-	// 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	// 	}
-	// }
+	// update user info
+	@PutMapping("/users/{id}")
+	public ResponseEntity<?> updateUser(@PathVariable("id") String id, @RequestBody UserRegistrationDTO userDTO) {
+    	return userRepository.findById(id)
+        .map(existingUser -> {
+            existingUser.setFirstName(userDTO.getFirstName());
+            existingUser.setLastName(userDTO.getLastName());
+            return new ResponseEntity<>(userRepository.save(existingUser), HttpStatus.OK);
+        })
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
 
 	// delete user by id
 	@DeleteMapping("/users/{id}")

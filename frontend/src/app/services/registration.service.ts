@@ -27,6 +27,7 @@ export class RegistrationService {
               firstName: userData.firstName,
               lastName: userData.lastName
             };
+            this.authService.sendEmailVerification();
             return this.userService.createUser(userDTO);
           })
         );

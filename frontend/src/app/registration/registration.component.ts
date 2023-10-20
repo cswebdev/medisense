@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { RegistrationService } from '../services/registration.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AlertService } from '../services/alert.service';
 
 
   @Component({
@@ -26,6 +26,7 @@ import { AuthService } from '../services/auth.service';
       private fb: FormBuilder,
       private registrationService: RegistrationService,
       private router: Router,
+      private alertService: AlertService
       ) {
       this.userRegistrationForm = this.fb.group({
         firstName:['', Validators.required],
@@ -51,6 +52,7 @@ import { AuthService } from '../services/auth.service';
             console.log('User registered successfully', response);
       
             if (response) {
+              this.alertService.success('Successfully registerd! A verification email has been sent. Please check your email.');
               this.router.navigate(['patient-portal']).catch(error => console.error('Navigation Error:', error));
             } else {
               console.warn('Registration was successful, but the response was not as expected. Not navigating.');
