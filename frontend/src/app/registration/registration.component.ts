@@ -1,8 +1,8 @@
-import { Component, NgModule } from '@angular/core';
-import { FormsModule, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { RegistrationService } from '../services/registration.service';
 import { Router } from '@angular/router';
+import { AlertService } from '../services/alert.service';
 
 
   @Component({
@@ -19,52 +19,51 @@ import { Router } from '@angular/router';
 
     passwordsMatchError: boolean = false;
 
+    isLoading: boolean = false;
+
 
     constructor(
       private fb: FormBuilder,
       private registrationService: RegistrationService,
-      private router: Router
+      private router: Router,
+      private alertService: AlertService
       ) {
       this.userRegistrationForm = this.fb.group({
-        first_name:['', Validators.required],
-        last_name:['', Validators.required],
-        username:['',Validators.required],
+        firstName:['', Validators.required],
+        lastName:['', Validators.required],
         email:['', Validators.required], 
         password: ['', [Validators.required, Validators.minLength(6)]], 
         confirmPassword: ['', Validators.required],
       })
     }
+
     onSubmit() {
       if (this.userRegistrationForm.valid) {
         const formValue = this.userRegistrationForm.value;
         if (formValue.password !== formValue.confirmPassword) {
           this.passwordsMatchError = true;
-          console.log("passwords do not match")
-          return; // Do not proceed with form submission
+          console.log("passwords do not match");
+          return;
         }
-        // Reset the error message if passwords match
         this.passwordsMatchError = false;
     
-        console.log('onSubmit()');
-        console.log('first_name: ' + formValue.first_name);
-        console.log('last_name: ' + formValue.last_name);
-        console.log('email: ' + formValue.email);
-        console.log('password: ' + formValue.password);
-
-
-        // Call the service to send the reigstration data tot he backend
         this.registrationService.registerUser(formValue).subscribe(
-          (response) => {
+          response => {
             console.log('User registered successfully', response);
-            this.router.navigate(['/home']).catch(err => {
-              console.error('Navigation Error:', err);
-          });
-
+      
+            if (response) {
+              this.alertService.success('Successfully registerd! A verification email has been sent. Please check your email.');
+              this.router.navigate(['patient-portal']).catch(error => console.error('Navigation Error:', error));
+            } else {
+              console.warn('Registration was successful, but the response was not as expected. Not navigating.');
+            }
           },
-          (error) => {
-            console.error('Error registering user', error);
+          error => {
+            console.error('Error:', error);
+            // Optionally, show some user-friendly error message or notification here
           }
         );
+        
       }
     }
-}
+  }

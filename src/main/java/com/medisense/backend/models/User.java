@@ -3,124 +3,66 @@ package com.medisense.backend.models;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
-
-// import java.util.HashSet;
-// import java.util.Set;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-// import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-// import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.JoinTable;
-// import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-		@UniqueConstraint(columnNames = "email")
-})
+@Table(name = "users")
 public class User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long user_id;
 
-	@NotBlank
-	@Size(max = 50)
-	private String email;
+    @Id
+    @Column(name = "user_id", columnDefinition = "VARCHAR(255)")
+    private String userId;
 
-	@NotBlank
-	@Size(max = 50)
-	private String first_name;
+    @NotBlank
+    @Size(max = 50)
+    @Column(name = "first_name", columnDefinition = "VARCHAR(255)")
+    private String firstName;
 
-	@NotBlank
-	@Size(max = 50)
-	private String last_name;
+    @NotBlank
+    @Size(max = 50)
+    @Column(name = "last_name", columnDefinition = "VARCHAR(255)")
+    private String lastName;
 
-	@NotBlank
-	@Size(max = 50)
-	private String username;
+    public User() {
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public User(String userId, String firstName, String lastName) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	@NotBlank
-	@Size(max = 100)
-	private String password;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
+    public String getFirstName() {
+        return firstName;
+    }
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Medication> medications;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public User() {
+    public String getLastName() {
+        return lastName;
+    }
 
-	}
-
-	public User(String email, String username, String first_name, String last_name, String password) {
-		this.email = email;
-		this.username = username;
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.password = password;
-	}
-
-	public Long getId() {
-		return user_id;
-	}
-
-	public void setId(Long id) {
-		this.user_id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getFirst_name() {
-		return first_name;
-	}
-
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
-	}
-
-	public String getLast_name() {
-		return last_name;
-	}
-
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	// public Set<Role> getRoles() {
-	// return roles;
-	// }
-
-	// public void setRoles(Set<Role> roles) {
-	// this.roles = roles;
-	// }
-
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

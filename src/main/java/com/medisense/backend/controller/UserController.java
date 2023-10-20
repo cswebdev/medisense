@@ -17,8 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.medisense.backend.models.User;
+import com.medisense.backend.models.UserRegistrationDTO;
 import com.medisense.backend.repository.UserRepository;
+import com.medisense.backend.services.FirebaseService;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -27,6 +33,8 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private FirebaseService firebaseService;
 
 	// get all users
 	@GetMapping("/users")
@@ -46,7 +54,7 @@ public class UserController {
 
 	// get user by id
 	@GetMapping("/users/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+	public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
 		Optional<User> userData = userRepository.findById(id);
 
 		if (userData.isPresent()) {
@@ -56,39 +64,52 @@ public class UserController {
 		}
 	}
 
-	// create new user
 	@PostMapping("/users")
-	public ResponseEntity<User> createUser(@RequestBody User user) {
+	public ResponseEntity<?> createUser(@RequestBody UserRegistrationDTO userDTO) {
 		try {
-			User _user = userRepository
-					.save(new User(user.getEmail(), user.getUsername(), user.getFirst_name(), user.getLast_name(),
-							user.getPassword()));
+			FirebaseToken decodedToken = firebaseService.verifyToken(userDTO.getIdToken());
+			String uid = decodedToken.getUid();
+			
+			Optional<User> existingUser = userRepository.findById(uid);
+			if (existingUser.isPresent()) {
+				return new ResponseEntity<>("User already exists!", HttpStatus.BAD_REQUEST);
+			}
+
+			User _user = userRepository.save(new User(	
+				uid,
+				userDTO.getFirstName(), 
+				userDTO.getLastName()
+			));
+			
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			// General error handling
+			if (e instanceof FirebaseAuthException) {
+				// Handle Firebase specific exceptions
+				return new ResponseEntity<>("Error with Firebase authentication: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
+			}
+			return new ResponseEntity<>("Error registering user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
+
+	
+
 	// update user info
 	@PutMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
-		Optional<User> userData = userRepository.findById(id);
-
-		if (userData.isPresent()) {
-			User _user = userData.get();
-			_user.setEmail(user.getEmail());
-			_user.setFirst_name(user.getFirst_name());
-			_user.setLast_name(user.getLast_name());
-			_user.setPassword(user.getPassword());
-			return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<?> updateUser(@PathVariable("id") String id, @RequestBody UserRegistrationDTO userDTO) {
+    	return userRepository.findById(id)
+        .map(existingUser -> {
+            existingUser.setFirstName(userDTO.getFirstName());
+            existingUser.setLastName(userDTO.getLastName());
+            return new ResponseEntity<>(userRepository.save(existingUser), HttpStatus.OK);
+        })
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	// delete user by id
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
+	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
 			userRepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);

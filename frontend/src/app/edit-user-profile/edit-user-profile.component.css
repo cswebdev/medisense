@@ -1,0 +1,67 @@
+/* Styles for the parent container */
+.parent-container {
+    display: grid;
+    place-items: center;
+    height: auto;
+    margin: 5%
+    /* This will take the full height of the viewport */
+}
+
+/* Styles for the card */
+.card {
+    width: 50%;
+    display: flex;
+}
+
+.container {
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-title {
+    align-self: center;
+}
+
+.d-flex {
+    padding-bottom: 1%;
+}
+
+.custom-select {
+    height: 100%;
+    border-color: lightgray;
+}
+
+.card-chat-history {
+    border-color: lightgray;
+}
+
+.container-form {
+    justify-content: center;
+    width: 95%;
+
+}
+
+.input-row {
+    width: 100%;
+}
+
+.input-row-half {
+    width: 50%;
+    padding: 0;
+}
+
+.left-row-split {
+    padding-right: 10px;
+}
+
+.right-row-split {
+    padding-left: 10px;
+}

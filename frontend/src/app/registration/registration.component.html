@@ -26,24 +26,16 @@
                                     <div class="col-md-6 mb-4">
                                         <div class="form-outline">
                                             <input type="text" id="first_name" class="form-control"
-                                                formControlName="first_name" />
-                                            <label class="form-label" for="first_name">First name</label>
+                                                formControlName="firstName" />
+                                            <label class="form-label" for="firstName">First name</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-4">
                                         <div class="form-outline">
                                             <input type="text" id="last-name" class="form-control"
-                                                formControlName="last_name" />
-                                            <label class="form-label" for="last_name">Last name</label>
+                                                formControlName="lastName" />
+                                            <label class="form-label" for="lastName">Last name</label>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- username input -->
-                                <div class="form-outline mb-4">
-                                    <div class="form-outline">
-                                        <input type="text" id="username" class="form-control"
-                                            formControlName="username" />
-                                        <label class="form-label" for="username">Username</label>
                                     </div>
                                 </div>
 
@@ -79,3 +71,6 @@
     <!-- Jumbotron -->
 </section>
 <!-- Section: Design Block -->
+<div *ngIf="isLoading" class="overlay">
+    <div class="spinner"></div>
+</div>

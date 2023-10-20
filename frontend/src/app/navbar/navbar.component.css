@@ -1,0 +1,35 @@
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+.email-verified {
+    background-color: #198754;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 20%;
+    display: flex;
+    place-self: end;
+    align-items: center;
+    justify-content: center;
+}
+
+.email-not-verified {
+    background-color: #dc3545;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 20%;
+    display: flex;
+    place-self: end;
+    align-items: center;
+    justify-content: center;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.email-verification-box {
+    position: absolute;
+    place-self: start;
+    transform: translate(-40%, -40%);
+}

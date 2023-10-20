@@ -36,7 +36,7 @@ public class MedicationController {
 	private UserRepository userRepository;
 
 	@GetMapping("/users/{userId}/medications")
-	public ResponseEntity<MedicationResponse> getAllMedicationsByUserID(@PathVariable("userId") Long userId) {
+	public ResponseEntity<MedicationResponse> getAllMedicationsByUserID(@PathVariable("userId") String userId) {
 		List<Medication> medications = medicationRepository.findByUserId(userId);
 		MedicationResponse response = new MedicationResponse();
 
@@ -54,7 +54,7 @@ public class MedicationController {
 	@PostMapping("/users/{userId}/medications")
 	@Transactional
 	public ResponseEntity<MedicationResponse> addMedicationToUser(
-			@PathVariable("userId") Long userId,
+			@PathVariable("userId") String userId,
 			@RequestBody Medication medication) {
 		MedicationResponse response = new MedicationResponse();
 
@@ -65,7 +65,7 @@ public class MedicationController {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 
-		medication.setUser(userOptional.get());
+		// medication.setUser(userOptional.get());
 
 		try {
 			// Save the medication

@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 import { Medication } from '../models/medication.model';
 import { MedicationsListComponent } from '../medications-list/medications-list.component';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-patient-portal',
@@ -10,26 +9,29 @@ import { MedicationsListComponent } from '../medications-list/medications-list.c
   styleUrls: ['./patient-portal.component.css']
 })
 export class PatientPortalComponent implements OnInit {
-handleResults($event: any) {
-throw new Error('Method not implemented.');
-}
-
-  loggedInUser: any;
+  
   medications: Medication[] = [];
+  userFirstName?: String;
 
   @ViewChild(MedicationsListComponent, { static: false }) 
   medicationsListComponent!: MedicationsListComponent; 
 
-  constructor(private authService: AuthService) { }
+  constructor(private route: ActivatedRoute) { }
+
 
   ngOnInit(): void {
-    this.loggedInUser = this.authService.getLoggedInUser();
-  } 
+    const resolvedData = this.route.snapshot.data['user'];
+    if (resolvedData) {
+      this.userFirstName = resolvedData.firstName;
+    }
+  }
 
-  onMedicationAdded(newMedication: Medication) {
+  handleResults($event: any) {
+    throw new Error('Method not implemented.');
+  }
+
+  onMedicationAdded(newMedication: Medication): void {
     this.medications.push(newMedication);
     this.medicationsListComponent.fetchUserMedications();
-
   }
-  
 }

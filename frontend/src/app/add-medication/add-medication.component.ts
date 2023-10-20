@@ -17,22 +17,22 @@ export class AddMedicationComponent {
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
 
   onSubmit(): void {
-    const loggedInUser = this.authService.getLoggedInUser();
-    if (loggedInUser && loggedInUser.id) {
-      this.medicationService.addMedicationToUser(loggedInUser.id, this.medication).subscribe(
-        response => {
-          if (response && response.message) {
-            alert(response.message);
-            if (response.medications && response.medications[0]) {
-              this.medicationAdded.emit(response.medications[0]);
-            }
-          }
-        },
-        error => {
-          console.error('Error adding medication:', error);
-          alert('An error occurred. Please try again.');
-        }
-      );
-    }
+    // const loggedInUser = this.authService.getLoggedInUser();
+    // if (loggedInUser && loggedInUser.id) {
+    //   this.medicationService.addMedicationToUser(loggedInUser.id, this.medication).subscribe(
+    //     response => {
+    //       if (response && response.message) {
+    //         alert(response.message);
+    //         if (response.medications && response.medications[0]) {
+    //           this.medicationAdded.emit(response.medications[0]);
+    //         }
+    //       }
+    //     },
+    //     error => {
+    //       console.error('Error adding medication:', error);
+    //       alert('An error occurred. Please try again.');
+    //     }
+    //   );
+    // }
   }
 }
