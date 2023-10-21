@@ -9,7 +9,7 @@ import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class UserResolverService implements Resolve<any> {
+export class UserResolverService implements Resolve<User | null> {
 
   constructor(private userService: UserService, private authService: AuthService) { }
 
@@ -17,14 +17,13 @@ export class UserResolverService implements Resolve<any> {
     return this.authService.getUserId().pipe(
       switchMap(userId => {
         if (!userId) {
-          // If userId is null, you can decide how to handle it. 
-          // Here, I'm just returning an observable of null.
+          // If userId is null, handle accordingly
           return of(null);
         }
         return this.userService.getUser(userId);
       }),
       catchError((error) => {
-        console.error("Error fetching new user data", error);
+        console.error("Error fetching user data", error);
         return of(null);  // In case of error, return a null observable
       })
     );

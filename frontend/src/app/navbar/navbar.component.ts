@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { LogoutService } from '../services/logout.service';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { Observable } from 'rxjs';
 

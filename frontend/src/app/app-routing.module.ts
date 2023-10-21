@@ -17,11 +17,16 @@ const routes: Routes = [
   {
     path: 'home', 
     component: HomeComponent,
+    data: { requiresAuth: false },
+    canActivate: [AuthService]
+    
     // canActivate: [AuthService] // Remove AuthService if home route does not require authentication
   },
   {
     path: 'registration', 
     component: RegistrationComponent,
+    data: { requiresAuth: false },
+    canActivate: [AuthService]
     // canActivate: [AuthService] // Remove AuthService if registration route does not require authentication
   },
   {

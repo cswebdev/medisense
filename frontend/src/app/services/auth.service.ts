@@ -172,19 +172,35 @@ export class AuthService {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (route.data['requiresAuth']) {
-      return this.afAuth.authState.pipe(
-        take(1),
-        map((user) => (user ? true : this.router.createUrlTree(['/']))),
-        tap((loggedIn) => {
-          if (loggedIn === true) {
-            console.log('Access granted');
-          } else {
-            console.log('Access denied');
-          }
-        })
-      );
-    }
-    return true;
+    return this.afAuth.authState.pipe(
+      take(1),
+      map((user) => {
+        const requiresAuth = route.data['requiresAuth'];
+        if (requiresAuth === undefined) {
+          throw new Error('Route data "requiresAuth" is not defined');
+        }
+  
+        if (requiresAuth && !user) {
+          console.log('Access denied: requires authentication');
+          return this.router.createUrlTree(['/']);
+        }
+  
+        if (!requiresAuth && user) {
+          console.log('Access denied: requires no authentication');
+          return this.router.createUrlTree(['/patient-portal']); // Redirect to a different route when user is logged in
+        }
+  
+        console.log('Access granted');
+        return true;
+      }),
+      tap((result) => {
+        if (result === true) {
+          console.log('Access granted');
+        } else {
+          console.log('Access denied');
+        }
+      })
+    );
   }
+  
 }
