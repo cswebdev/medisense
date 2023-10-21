@@ -19,9 +19,6 @@ import { AlertService } from '../services/alert.service';
 
     passwordsMatchError: boolean = false;
 
-    isLoading: boolean = false;
-
-
     constructor(
       private fb: FormBuilder,
       private registrationService: RegistrationService,

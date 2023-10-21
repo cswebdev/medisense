@@ -9,15 +9,14 @@ import firebase from 'firebase/compat/app';
 })
 export class LoginService {
 
-  constructor(
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   loginUser(email: string, password: string ): Observable<string> {
     return this.authService.signIn(email, password).pipe(
       switchMap((user: firebase.User | null) => {
         if (!user) {
           console.error('No user!');
+          console.error(user);
           return throwError(() => new Error('Login failed!'));
         }
 

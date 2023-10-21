@@ -2,32 +2,32 @@
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Links for users who are NOT logged in -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="!loggedIn">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="!(loggedIn$ | async)">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
+                    <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/registration">Registration</a>
+                    <a class="nav-link" routerLink="/registration" routerLinkActive="active">Registration</a>
                 </li>
             </ul>
             
             <!-- Links for users who ARE logged in -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="loggedIn">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="(loggedIn$ | async)">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" routerLink="/patient-portal" routerLinkActive="active">Patient Portal</a>
+                    <a class="nav-link active" routerLink="/patient-portal" routerLinkActive="active">Patient Portal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/user-profile">User Profile</a>
+                    <a class="nav-link" routerLink="/user-profile" routerLinkActive="active">User Profile</a>
                 </li>
             </ul>
 
-            <ul class="navbar-nav ml-auto" *ngIf="loggedIn">
+            <ul class="navbar-nav ml-auto" *ngIf="(loggedIn$ | async)">
                 <div class="dropdown position-relative">
                     <div class="email-verification-box"
-                        [ngClass]="{'email-verified': emailVerified, 'email-not-verified': !emailVerified}"
-                        ngbTooltip="{{ emailVerified ? 'Email is verified' : 'Email is not verified' }}"
+                        [ngClass]="{'email-verified': (emailVerified$ | async), 'email-not-verified': !(emailVerified$ | async)}"
+                        ngbTooltip="{{ (emailVerified$ | async) ? 'Email is verified' : 'Email is not verified' }}"
                     >
-                        <i [ngClass]="{'fas fa-check': emailVerified, 'fa-solid fa-exclamation': !emailVerified}" aria-hidden="true"></i>
+                        <i [ngClass]="{'fas fa-check': (emailVerified$ | async), 'fa-solid fa-exclamation': !(emailVerified$ | async)}" aria-hidden="true"></i>
                     </div>
                     <button class="btn btn-primary dropdown-toggle" 
                             type="button" 
@@ -35,7 +35,7 @@
                             data-toggle="dropdown"
                             aria-expanded="false"
                     >
-                        {{ userEmail }} 
+                        {{ (userEmail$ | async) }} 
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="optionsDropdownMenuButton">
                         <li><button class="dropdown-item" type="button" routerLink="/edit-user-profile">Edit Profile</button></li>

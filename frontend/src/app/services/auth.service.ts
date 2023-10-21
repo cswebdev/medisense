@@ -3,16 +3,18 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { BehaviorSubject, from, Observable, throwError, tap } from 'rxjs';
 import { catchError, map, take, switchMap } from 'rxjs/operators';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { EmailAuthProvider } from 'firebase/auth';
+import { EmailAuthProvider, onAuthStateChanged } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private userSubject = new BehaviorSubject<firebase.default.User | null>(null);
-  public user$ = this.afAuth.authState; // Subscribed to afAuth.authState
+  public user$ = this.afAuth.authState;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {}
+  constructor(private afAuth: AngularFireAuth, private router: Router) {
+
+}
 
   getEmail(): Observable<String | null> {
     return this.user$.pipe(map((user) => (user ? user.email : null)));
@@ -69,10 +71,7 @@ export class AuthService {
     );
   }
 
-  signUp(
-    email: string,
-    password: string
-  ): Observable<firebase.default.auth.UserCredential> {
+  signUp(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       catchError((error) => {
         console.error('Error during sign up:', error);
@@ -176,7 +175,7 @@ export class AuthService {
     if (route.data['requiresAuth']) {
       return this.afAuth.authState.pipe(
         take(1),
-        map((user) => (user ? true : this.router.createUrlTree(['/home']))),
+        map((user) => (user ? true : this.router.createUrlTree(['/']))),
         tap((loggedIn) => {
           if (loggedIn === true) {
             console.log('Access granted');

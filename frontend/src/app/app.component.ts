@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -13,11 +14,14 @@ export class AppComponent implements OnDestroy {
 
   private authSubscription!: Subscription;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private modalService: NgbModal) {
+
+  constructor(private authService: AuthService, 
+              private router: Router, 
+              private modalService: NgbModal) {
   }
 
   ngOnInit() {
-    this.authSubscription = this.afAuth.authState.subscribe((user) => {
+    this.authSubscription = this.authService.isAuthenticated().subscribe((user) => {
       if (user) {
         console.log('User is logged in');
         // Perform any actions you need when the user is logged in
@@ -40,7 +44,4 @@ export class AppComponent implements OnDestroy {
   public open(modal: any): void {
     this.modalService.open(modal);
   }
-
-  
-
 }
