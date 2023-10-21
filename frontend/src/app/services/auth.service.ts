@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { BehaviorSubject, from, Observable, throwError, tap } from 'rxjs';
 import { catchError, map, take, switchMap } from 'rxjs/operators';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { EmailAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import { EmailAuthProvider } from '@firebase/auth';
 
 @Injectable({
   providedIn: 'root',

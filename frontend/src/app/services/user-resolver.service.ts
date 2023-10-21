@@ -11,20 +11,30 @@ import { User } from '../models/user.model';
 })
 export class UserResolverService implements Resolve<User | null> {
 
-  constructor(private userService: UserService, private authService: AuthService) { }
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User | null> {
     return this.authService.getUserId().pipe(
       switchMap(userId => {
         if (!userId) {
-          // If userId is null, handle accordingly
           return of(null);
         }
-        return this.userService.getUser(userId);
+        return this.userService.getUser(userId).pipe(
+          switchMap(user => {
+            return this.authService.getEmail().pipe(
+              switchMap(email => {
+                return of({ ...user, email });
+              })
+            );
+          })
+        );
       }),
       catchError((error) => {
         console.error("Error fetching user data", error);
-        return of(null);  // In case of error, return a null observable
+        return of(null);
       })
     );
   }

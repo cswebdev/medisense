@@ -15,8 +15,6 @@ export class LoginService {
     return this.authService.signIn(email, password).pipe(
       switchMap((user: firebase.User | null) => {
         if (!user) {
-          console.error('No user!');
-          console.error(user);
           return throwError(() => new Error('Login failed!'));
         }
 

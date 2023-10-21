@@ -1,7 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { UserService } from '../services/user.service';
-import { AuthService } from '../services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -9,17 +6,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent implements OnInit {
 
-  userEmail?: String | null;
+  userEmail?: String;
   userFirstName?: String;
   userLastName?: String;
 
-  public editToggled: boolean = false;
-  private emailSubscription?: Subscription;
-
   constructor(
-    private authService: AuthService,
     private route: ActivatedRoute
   ) { }
 
@@ -29,15 +22,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (resolvedData) {
       this.userFirstName = resolvedData.firstName;
       this.userLastName = resolvedData.lastName;
-      this.emailSubscription = this.authService.getEmail().subscribe(email => {
-        this.userEmail = email;
-      });
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.emailSubscription) {
-      this.emailSubscription.unsubscribe();
-    }
+      this.userEmail = resolvedData.email;
+    };
   }
 }
