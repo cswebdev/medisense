@@ -5,7 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { map, take, tap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
@@ -14,26 +14,17 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    console.log("can activate");
     return this.authService.isLoggedIn().pipe(
       take(1),
       map((isLoggedIn) => {
-        const requiresAuth = route.data['requiresAuth'];
-        if (requiresAuth === undefined) {
-          throw new Error('Route data "requiresAuth" is not defined');
-        }
-  
-        if (requiresAuth && !isLoggedIn) {
-          console.log('Access denied: requires authentication');
+        const isPublicRoute = ['/registration', '/home'].includes(state.url);
+
+        if (isPublicRoute && isLoggedIn) {
           return this.router.createUrlTree(['/patient-portal']);
-        }
-  
-        if (!requiresAuth && isLoggedIn) {
-          console.log('Access denied: requires no authentication');
+        } else if (!isPublicRoute && !isLoggedIn) {
           return this.router.createUrlTree(['/home']);
         }
-  
-        console.log('Access granted');
+
         return true;
       }),
       tap((result) => {

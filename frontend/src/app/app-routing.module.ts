@@ -20,48 +20,41 @@ const routes: Routes = [
   {
     path: 'home', 
     component: HomeComponent,
-    data: { requiresAuth: false },
     canActivate: [AuthGuard]
   },
   {
     path: 'registration', 
     component: RegistrationComponent,
-    data: { requiresAuth: false },
     canActivate: [AuthGuard]
   },
   {
     path: 'patient-portal', 
     component: PatientPortalComponent,
     resolve: { user: UserResolverService },
-    data: { requiresAuth: true },
     canActivate: [AuthGuard]
   },
   {
     path: 'user-profile',
     component: UserProfileComponent,
     resolve: { user: UserResolverService },
-    data: {requiresAuth: true},
     canActivate: [AuthGuard]
   },
   {
     path: 'edit-user-profile',
     component: EditUserProfileComponent,
     resolve: { user: UserResolverService },
-    data: {requiresAuth: true},
     canActivate: [AuthGuard]
   },
   {
     path: 'change-email',
     component: ChangeEmailComponent,
     resolve: { user: UserResolverService },
-    data: {requiresAuth: true},
     canActivate: [AuthGuard]
   },
   {
     path: 'change-password',
     component: ChangePasswordComponent,
     resolve: { user: UserResolverService },
-    data: {requiresAuth: true},
     canActivate: [AuthGuard]
   }
 ];
