@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from, Observable, throwError } from 'rxjs';
+import { from, Observable, throwError, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { EmailAuthProvider } from '@firebase/auth';
@@ -45,22 +45,29 @@ export class AuthService {
   
   
 
-  setPassword(newPassword: string): Observable<void> {
-    return from(
-      this.afAuth.currentUser.then((user) => {
-        if (user) {
-          return user.updatePassword(newPassword);
-        } else {
+  setPassword(newPassword: string, oldPassword: string, email: string): Observable<void> {
+    return from(this.signIn(email, oldPassword)).pipe(
+      switchMap((user) => {
+        if (!user) {
           throw new Error('User not logged in');
         }
-      })
-    ).pipe(
+        if (!user.emailVerified) {
+          throw new Error('Please verify your email before updating your password');
+        }
+        return from(user.updatePassword(newPassword));
+      }),
       catchError((error) => {
         console.error('Error updating password:', error);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
+  
+
+  
+  
+  
+  
 
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
     console.log("auth persistence");

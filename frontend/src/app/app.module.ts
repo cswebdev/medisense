@@ -24,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { ChangeEmailComponent } from './change-email/change-email.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { ChangeEmailComponent } from './change-email/change-email.component';
     MedicationsListComponent,
     SearchBarComponent,
     GlobalAlertComponent,
-    ChangeEmailComponent
+    ChangeEmailComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

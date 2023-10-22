@@ -47,20 +47,14 @@ import { AlertService } from '../services/alert.service';
         this.registrationService.registerUser(formValue).subscribe(
           response => {
             console.log('User registered successfully', response);
-      
-            if (response) {
-              this.alertService.success('Successfully registerd! A verification email has been sent. Please check your email.');
-              this.router.navigate(['patient-portal']).catch(error => console.error('Navigation Error:', error));
-            } else {
-              console.warn('Registration was successful, but the response was not as expected. Not navigating.');
-            }
+            this.alertService.success('Successfully registered! A verification email has been sent. Check your email!');
+            this.router.navigate(['patient-portal']).catch(error => console.error('Navigation Error:', error));
           },
           error => {
             console.error('Error:', error);
-            // Optionally, show some user-friendly error message or notification here
+            this.alertService.warning('Failed to register! Please try again later.');
           }
         );
-        
       }
-    }
+    }    
   }
