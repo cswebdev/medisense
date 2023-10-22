@@ -1,29 +1,24 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject, from, Observable, throwError, tap } from 'rxjs';
-import { catchError, map, take, switchMap } from 'rxjs/operators';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { from, Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { EmailAuthProvider } from '@firebase/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private userSubject = new BehaviorSubject<firebase.default.User | null>(null);
   public user$ = this.afAuth.authState;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {
-
-}
+  constructor(private afAuth: AngularFireAuth, private router: Router) {}
 
   getEmail(): Observable<String | null> {
-    return this.user$.pipe(map((user) => (user ? user.email : null)));
+    return this.user$.pipe(map((user) => user?.email ?? null));
   }
 
   getUserId(): Observable<String | null> {
-    return this.user$.pipe(
-      map((user) => (user && user.uid !== undefined ? user.uid : null))
-    );
+    return this.user$.pipe(map((user) => user?.uid ?? null));
   }
 
   setEmail(newEmail: string): Observable<void> {
@@ -61,6 +56,7 @@ export class AuthService {
   }
 
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
+    console.log("auth persistence");
     return from(
       this.afAuth.setPersistence(persistenceType)
     ).pipe(
@@ -82,16 +78,9 @@ export class AuthService {
 
   signIn(email: string, password: string): Observable<firebase.default.User | null> {
     return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
-      switchMap((userCredential) => {
-        // Update the user subject with the authenticated user
-        this.userSubject.next(userCredential.user);
-        // Return the user observable
-        return this.user$;
-      }),
+      map((userCredential) => userCredential.user),
       catchError((error) => {
-        // Log the error for debugging
         console.error('Login Error:', error);
-        // Provide a more informative error message based on Firebase error codes
         let errorMessage = 'Login failed due to an unexpected error.';
         if (error.code) {
           switch (error.code) {
@@ -104,7 +93,6 @@ export class AuthService {
             // Add more cases as needed for different Firebase error codes
           }
         }
-        // Return an observable that emits the error message
         return throwError(() => new Error(errorMessage));
       })
     );
@@ -167,40 +155,4 @@ export class AuthService {
       map(() => this.afAuth.currentUser) // Map to return the current user after reauthentication
     );
   }
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.afAuth.authState.pipe(
-      take(1),
-      map((user) => {
-        const requiresAuth = route.data['requiresAuth'];
-        if (requiresAuth === undefined) {
-          throw new Error('Route data "requiresAuth" is not defined');
-        }
-  
-        if (requiresAuth && !user) {
-          console.log('Access denied: requires authentication');
-          return this.router.createUrlTree(['/']);
-        }
-  
-        if (!requiresAuth && user) {
-          console.log('Access denied: requires no authentication');
-          return this.router.createUrlTree(['/patient-portal']); // Redirect to a different route when user is logged in
-        }
-  
-        console.log('Access granted');
-        return true;
-      }),
-      tap((result) => {
-        if (result === true) {
-          console.log('Access granted');
-        } else {
-          console.log('Access denied');
-        }
-      })
-    );
-  }
-  
 }

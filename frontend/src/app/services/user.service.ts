@@ -52,19 +52,22 @@ export class UserService {
     );
   }
 
-  
-
-
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(baseUrl);
-  }
-
   getUser(id: any): Observable<User> {
-    return this.http.get<User>(`${baseUrl}/${id}`);
+    console.log('get user')
+    return this.http.get<User>(`${baseUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   createUser(data: any): Observable<any> {
-    return this.http.post(baseUrl, data);
+    return this.http.post(baseUrl, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any) {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
   updateUser(id: any, data: any): Observable<any> {

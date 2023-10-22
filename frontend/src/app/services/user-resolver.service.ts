@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of, switchMap } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
@@ -27,9 +27,11 @@ export class UserResolverService implements Resolve<User | null> {
             return this.authService.getEmail().pipe(
               switchMap(email => {
                 return of({ ...user, email });
-              })
+              }),
+              retry(3)  // retry 3 times in case of error
             );
-          })
+          }),
+          retry(3)  // retry 3 times in case of error
         );
       }),
       catchError((error) => {

@@ -5,7 +5,7 @@ import { PatientPortalComponent } from './patient-portal/patient-portal.componen
 import { HomeComponent } from './home/home.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
-import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
 import { UserResolverService } from './services/user-resolver.service';
 
 const routes: Routes = [
@@ -18,34 +18,34 @@ const routes: Routes = [
     path: 'home', 
     component: HomeComponent,
     data: { requiresAuth: false },
-    canActivate: [AuthService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'registration', 
     component: RegistrationComponent,
     data: { requiresAuth: false },
-    canActivate: [AuthService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'patient-portal', 
     component: PatientPortalComponent,
     resolve: { user: UserResolverService },
     data: { requiresAuth: true },
-    canActivate: [AuthService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'user-profile',
     component: UserProfileComponent,
     resolve: { user: UserResolverService },
     data: {requiresAuth: true},
-    canActivate: [AuthService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'edit-user-profile',
     component: EditUserProfileComponent,
     resolve: { user: UserResolverService },
     data: {requiresAuth: true},
-    canActivate: [AuthService]
+    canActivate: [AuthGuard]
   }
 ];
 

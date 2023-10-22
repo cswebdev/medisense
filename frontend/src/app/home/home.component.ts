@@ -32,7 +32,7 @@ export class HomeComponent {
   handleLogin(): void {
     const formValue = this.userLoginForm.value;
     const persistenceType = formValue.persistence ? 'local' : 'session';
-
+    console.log('home login')
     this.authService.setPersistence(persistenceType).pipe(
       switchMap(() => {
         return this.loginService.loginUser(formValue.email, formValue.password);
