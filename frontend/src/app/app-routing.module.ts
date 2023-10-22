@@ -7,6 +7,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AuthGuard } from './guards/auth.guard';
 import { UserResolverService } from './services/user-resolver.service';
+import { ChangeEmailComponent } from './change-email/change-email.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,13 @@ const routes: Routes = [
   {
     path: 'edit-user-profile',
     component: EditUserProfileComponent,
+    resolve: { user: UserResolverService },
+    data: {requiresAuth: true},
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'change-email',
+    component: ChangeEmailComponent,
     resolve: { user: UserResolverService },
     data: {requiresAuth: true},
     canActivate: [AuthGuard]

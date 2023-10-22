@@ -21,22 +21,29 @@ export class AuthService {
     return this.user$.pipe(map((user) => user?.uid ?? null));
   }
 
-  setEmail(newEmail: string): Observable<void> {
-    return from(
-      this.afAuth.currentUser.then((user) => {
-        if (user) {
-          return user.updateEmail(newEmail);
-        } else {
+  setEmail(newEmail: string, password: string, oldEmail: string): Observable<void> {
+    return from(this.signIn(oldEmail, password)).pipe(
+      switchMap((user) => {
+        if (!user) {
           throw new Error('User not logged in');
         }
-      })
-    ).pipe(
+        if (!user.emailVerified) {
+          throw new Error('Please verify your old email before updating to a new one');
+        }
+        return from(user.verifyBeforeUpdateEmail(newEmail)).pipe(
+          switchMap(() => {
+            return from(user.sendEmailVerification()); // Send verification email to new email
+          })
+        );
+      }),
       catchError((error) => {
         console.error('Error updating email:', error);
         throw error;
       })
     );
   }
+  
+  
 
   setPassword(newPassword: string): Observable<void> {
     return from(

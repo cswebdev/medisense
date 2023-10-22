@@ -23,6 +23,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
+import { ChangeEmailComponent } from './change-email/change-email.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
     AddMedicationComponent,
     MedicationsListComponent,
     SearchBarComponent,
-    GlobalAlertComponent
+    GlobalAlertComponent,
+    ChangeEmailComponent
   ],
   imports: [
     BrowserModule,

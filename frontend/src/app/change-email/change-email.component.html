@@ -1,0 +1,45 @@
+<div class="parent-container">
+    <form class="container-form" [formGroup]="emailForm" (ngSubmit)="onSubmit()">
+        <!-- Profile Details Card -->
+        <div class="card mb-3" style="height: 55vh">
+            <div class="card-body">
+                <h5 class="card-title"> Change Email </h5>
+                <div class="form-outline mb-2 input-row">
+                    <input type="email" id="emailInput" class="form-control" placeholder="Email Address"
+                        formControlName="email" [value]="(userEmail$ | async) ?? ''" 
+                        required />
+                    <label class="form-label" for="emailInput">Email Address</label>
+                </div>
+                <h6 class="card-title"> Please enter your password to confirm changes: </h6>
+                <div class="row input-row">
+                    <!-- Password -->
+                    <div class="col">
+                        <div class="form-outline mb-2">
+                            <input type="password" id="passwordInput" class="form-control"
+                                formControlName="password" required />
+                            <label class="form-label" for="passwordInput">Enter Password</label>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="row input-row">
+                    <!-- Confirm Password -->
+                    <div class="col">
+                        <div class="form-outline mb-3">
+                            <input type="password" id="confirmPasswordInput" class="form-control"
+                                formControlName="confirmPassword" required />
+                            <label class="form-label" for="confirmPasswordInput">Confirm Password</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center">
+                    <!-- Save -->
+                    <button class="btn btn-primary mw-2" type="submit">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

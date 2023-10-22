@@ -14,11 +14,8 @@ import { Router } from '@angular/router';
 export class EditUserProfileComponent implements OnInit {
   profileForm!: FormGroup;
 
-  // userEmail$!: Observable<String | null>;
   userFirstName$!: Observable<String | null>;
   userLastName$!: Observable<String | null>;
-
-  public editToggled: boolean = false;
 
   constructor(
     private userService: UserService,
