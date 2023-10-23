@@ -180,11 +180,10 @@ README.html
 .idea
 .exercism
 
-#Database
-# application.properties
-# *.properties
-# application.properties
+# Paths to be ignored
+/frontend/src/environments/*
+/frontend/src/environments/environment.ts
+/src/main/resources/application.properties
+/src/main/resources/secrets.properties
+/medisense-7104f-firebase-adminsdk-30q14-1652601820.json
 
-#Firebase
-medisense-7104f-firebase-adminsdk-30q14-1652601820.json
-secrets.properties
