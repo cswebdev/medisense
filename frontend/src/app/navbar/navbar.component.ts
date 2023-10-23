@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class NavbarComponent {
   loggedIn$: Observable<boolean>;
-  userEmail$: Observable<String | null>;
+  userEmail$: Observable<string | null>;
   emailVerified$: Observable<boolean>;
 
   constructor(private authService: AuthService, 

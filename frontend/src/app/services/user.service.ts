@@ -14,10 +14,10 @@ export class UserService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  getFirstName(): Observable<String | undefined> {
+  getFirstName(): Observable<string | undefined> {
     console.log(this.authService.getUserId());
     return this.authService.getUserId().pipe(
-      switchMap((userId: String | null) => {
+      switchMap((userId: string | null) => {
         if (userId) {
           // Since getUserId returns an Observable, we handle the ID inside this switchMap
           return this.getUser(userId);
@@ -33,10 +33,10 @@ export class UserService {
     );
   }
 
-  getLastName(): Observable<String | undefined> {
+  getLastName(): Observable<string | undefined> {
     console.log(this.authService.getUserId());
     return this.authService.getUserId().pipe(
-      switchMap((userId: String | null) => {
+      switchMap((userId: string | null) => {
         if (userId) {
           // Since getUserId returns an Observable, we handle the ID inside this switchMap
           return this.getUser(userId);

@@ -12,7 +12,7 @@ import { Observable, map } from 'rxjs';
 export class ChangeEmailComponent implements OnInit {
   emailForm!: FormGroup;
 
-  userEmail$!: Observable<String | null>;
+  userEmail$!: Observable<string | null>;
 
   constructor(
     private formBuilder: FormBuilder,
