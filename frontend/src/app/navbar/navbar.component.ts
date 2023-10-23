@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';  // Import OnInit
 import { LogoutService } from '../services/logout.service';
 import { AuthService } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
@@ -11,20 +11,36 @@ import { filter, switchMap, take } from 'rxjs/operators';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {  // Implement OnInit
   loggedIn$: Observable<boolean>;
   userEmail$: Observable<string | null>;
   emailVerified$: Observable<boolean>;
   isVerificationButtonDisabled = false;
 
-  constructor(private authService: AuthService, 
-              private logoutService: LogoutService,
-              private alertService: AlertService,
-              private router: Router
+  constructor(
+    private authService: AuthService,
+    private logoutService: LogoutService,
+    private alertService: AlertService,
+    private router: Router
   ) {
     this.loggedIn$ = this.authService.isLoggedIn();
     this.userEmail$ = this.authService.getEmail();
     this.emailVerified$ = this.authService.isEmailVerified();
+  }
+
+  ngOnInit() {  // Add ngOnInit lifecycle hook
+    // Check local storage to see if enough time has passed since the last email was sent
+    const lastSentTimestamp = localStorage.getItem('lastEmailSentTimestamp');
+    if (lastSentTimestamp) {
+      const timePassed = Date.now() - parseInt(lastSentTimestamp);
+      if (timePassed < 180000) {
+        this.isVerificationButtonDisabled = true;
+        timer(180000 - timePassed).subscribe(() => {
+          this.isVerificationButtonDisabled = false;
+          localStorage.removeItem('lastEmailSentTimestamp');
+        });
+      }
+    }
   }
 
   handleLogout() {
@@ -43,25 +59,23 @@ export class NavbarComponent {
   sendEmailVerification() {
     this.isVerificationButtonDisabled = true;
 
-    timer(180000) // 3 minutes
-      .subscribe(() => {
-        this.isVerificationButtonDisabled = false;
-      });
-
     this.emailVerified$.pipe(
       take(1),
       filter(verified => !verified),
       switchMap(() => this.authService.sendEmailVerification())
     ).subscribe({
       next: () => {
-        // Handle success, show a message to the user if necessary
         this.alertService.success('Verification email sent successfully!');
+        localStorage.setItem('lastEmailSentTimestamp', Date.now().toString());
+        timer(180000).subscribe(() => {
+          this.isVerificationButtonDisabled = false;
+          localStorage.removeItem('lastEmailSentTimestamp');
+        });
       },
       error: (error) => {
-        // Handle error, show an error message to the user if necessary
         this.alertService.warning('Failed to send verification email. Please try again later.');
-        // Removed console.error statement
+        this.isVerificationButtonDisabled = false;
       },
     });
-  }  
+  }
 }
