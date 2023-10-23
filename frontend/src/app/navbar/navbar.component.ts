@@ -3,7 +3,8 @@ import { LogoutService } from '../services/logout.service';
 import { AuthService } from '../services/auth.service';
 import { AlertService } from '../services/alert.service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, timer } from 'rxjs';
+import { filter, switchMap, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ export class NavbarComponent {
   loggedIn$: Observable<boolean>;
   userEmail$: Observable<string | null>;
   emailVerified$: Observable<boolean>;
+  isVerificationButtonDisabled = false;
 
   constructor(private authService: AuthService, 
               private logoutService: LogoutService,
@@ -37,4 +39,29 @@ export class NavbarComponent {
       }
     );
   }
+
+  sendEmailVerification() {
+    this.isVerificationButtonDisabled = true;
+
+    timer(180000) // 3 minutes
+      .subscribe(() => {
+        this.isVerificationButtonDisabled = false;
+      });
+
+    this.emailVerified$.pipe(
+      take(1),
+      filter(verified => !verified),
+      switchMap(() => this.authService.sendEmailVerification())
+    ).subscribe({
+      next: () => {
+        // Handle success, show a message to the user if necessary
+        this.alertService.success('Verification email sent successfully!');
+      },
+      error: (error) => {
+        // Handle error, show an error message to the user if necessary
+        this.alertService.warning('Failed to send verification email. Please try again later.');
+        // Removed console.error statement
+      },
+    });
+  }  
 }
