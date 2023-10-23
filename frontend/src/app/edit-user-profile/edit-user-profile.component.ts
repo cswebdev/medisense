@@ -14,8 +14,8 @@ import { Router } from '@angular/router';
 export class EditUserProfileComponent implements OnInit {
   profileForm!: FormGroup;
 
-  userFirstName$!: Observable<String | null>;
-  userLastName$!: Observable<String | null>;
+  userFirstName$!: Observable<string | null>;
+  userLastName$!: Observable<string | null>;
 
   constructor(
     private userService: UserService,
@@ -67,7 +67,7 @@ export class EditUserProfileComponent implements OnInit {
       };
   
       // Get email from authService
-      let retrievedEmail: String | null = '';
+      let retrievedEmail: string | null = '';
   
       this.authService.getEmail().pipe(
         switchMap(email => {

@@ -8,9 +8,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserProfileComponent implements OnInit {
 
-  userEmail?: String;
-  userFirstName?: String;
-  userLastName?: String;
+  userEmail?: string;
+  userFirstName?: string;
+  userLastName?: string;
 
   constructor(
     private route: ActivatedRoute

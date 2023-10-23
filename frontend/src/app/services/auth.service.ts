@@ -13,11 +13,11 @@ export class AuthService {
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {}
 
-  getEmail(): Observable<String | null> {
+  getEmail(): Observable<string | null> {
     return this.user$.pipe(map((user) => user?.email ?? null));
   }
 
-  getUserId(): Observable<String | null> {
+  getUserId(): Observable<string | null> {
     return this.user$.pipe(map((user) => user?.uid ?? null));
   }
 

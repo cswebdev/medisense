@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 export class PatientPortalComponent implements OnInit {
   
   medications: Medication[] = [];
-  userFirstName?: String;
+  userFirstName?: string;
 
   @ViewChild(MedicationsListComponent, { static: false }) 
   medicationsListComponent!: MedicationsListComponent; 
