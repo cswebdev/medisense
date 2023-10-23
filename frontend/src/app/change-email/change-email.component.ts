@@ -53,7 +53,7 @@ export class ChangeEmailComponent implements OnInit {
           this.authService.setEmail(formData.email, formData.password, currentEmail as string).subscribe(
             () => {
               console.log('Email updated successfully');
-              this.router.navigate(['user-profile']);
+              this.router.navigate(['/user-profile']);
             },
             error => {
               console.error('Error updating email:', error);

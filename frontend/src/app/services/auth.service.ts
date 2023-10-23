@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from, Observable, throwError, of } from 'rxjs';
+import { from, Observable, throwError, take, tap } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { EmailAuthProvider } from '@firebase/auth';
@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   setEmail(newEmail: string, password: string, oldEmail: string): Observable<void> {
-    return from(this.signIn(oldEmail, password)).pipe(
+    return this.reauthenticateUser(oldEmail, password).pipe(
       switchMap((user) => {
         if (!user) {
           throw new Error('User not logged in');
@@ -31,9 +31,7 @@ export class AuthService {
           throw new Error('Please verify your old email before updating to a new one');
         }
         return from(user.verifyBeforeUpdateEmail(newEmail)).pipe(
-          switchMap(() => {
-            return from(user.sendEmailVerification()); // Send verification email to new email
-          })
+          switchMap(() => from(user.sendEmailVerification())) // Send verification email to new email
         );
       }),
       catchError((error) => {
@@ -46,7 +44,10 @@ export class AuthService {
   
 
   setPassword(newPassword: string, oldPassword: string, email: string): Observable<void> {
-    return from(this.signIn(email, oldPassword)).pipe(
+    console.log("Current user before password update:");
+    console.log(this.user$);
+  
+    return this.reauthenticateUser(email, oldPassword).pipe(
       switchMap((user) => {
         if (!user) {
           throw new Error('User not logged in');
@@ -56,6 +57,16 @@ export class AuthService {
         }
         return from(user.updatePassword(newPassword));
       }),
+      switchMap(() => {
+        // Retrieve the user again after the password has been updated
+        return this.afAuth.authState.pipe(
+          take(1),  // Take the first emitted value and then complete
+          map((user) => {
+            console.log("Current user after password update:");
+            console.log(user);
+          })
+        );
+      }),
       catchError((error) => {
         console.error('Error updating password:', error);
         return throwError(() => error);
@@ -64,10 +75,7 @@ export class AuthService {
   }
   
 
-  
-  
-  
-  
+
 
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
     console.log("auth persistence");
@@ -114,12 +122,16 @@ export class AuthService {
 
   signOut(): Observable<void> {
     return from(this.afAuth.signOut()).pipe(
+      tap(() => {
+        localStorage.clear(); // This will clear the local storage
+      }),
       catchError((error) => {
         console.error('Error during sign out:', error);
         throw error;
       })
     );
   }
+
 
   isAuthenticated(): Observable<firebase.default.User | null> {
     return this.user$;
@@ -156,17 +168,18 @@ export class AuthService {
     );
   }
 
-  reauthenticateUser(email: string, password: string): Observable<Promise<firebase.default.User | null>> {
+  // In AuthService
+
+  reauthenticateUser(email: string, password: string): Observable<firebase.default.User | null> {
     return from(this.afAuth.currentUser).pipe(
       switchMap((user) => {
         if (!user) {
           throw new Error('User not logged in');
         }
         const credential = EmailAuthProvider.credential(email, password);
-
         return from(user.reauthenticateWithCredential(credential));
       }),
-      map(() => this.afAuth.currentUser) // Map to return the current user after reauthentication
+      switchMap(() => from(this.afAuth.currentUser)) // Map to return the current user after reauthentication
     );
   }
 }

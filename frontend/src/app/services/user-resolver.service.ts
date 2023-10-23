@@ -17,6 +17,7 @@ export class UserResolverService implements Resolve<User | null> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User | null> {
+    console.log("resolver");
     return this.authService.getUserId().pipe(
       switchMap(userId => {
         if (!userId) {

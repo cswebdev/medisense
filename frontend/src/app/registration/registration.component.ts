@@ -48,7 +48,7 @@ import { AlertService } from '../services/alert.service';
           response => {
             console.log('User registered successfully', response);
             this.alertService.success('Successfully registered! A verification email has been sent. Check your email!');
-            this.router.navigate(['patient-portal']).catch(error => console.error('Navigation Error:', error));
+            this.router.navigate(['/patient-portal']).catch(error => console.error('Navigation Error:', error));
           },
           error => {
             console.error('Error:', error);

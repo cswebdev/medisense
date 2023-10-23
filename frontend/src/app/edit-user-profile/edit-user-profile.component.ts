@@ -110,7 +110,7 @@ export class EditUserProfileComponent implements OnInit {
         ).subscribe(
           response => {
             console.log('User information updated successfully', response);
-            this.router.navigate(['user-profile']);
+            this.router.navigate(['/user-profile']);
           },
           error => {
             console.error('Error updating user:', error);
