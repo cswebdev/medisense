@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AuthGuard } from './guards/auth.guard';
+import { VerifiedEmailGuard } from './guards/verified-email.guard';
 import { UserResolverService } from './services/user-resolver.service';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
@@ -49,13 +50,13 @@ const routes: Routes = [
     path: 'change-email',
     component: ChangeEmailComponent,
     resolve: { user: UserResolverService },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, VerifiedEmailGuard]  // Add EmailVerifiedGuard here
   },
   {
     path: 'change-password',
     component: ChangePasswordComponent,
     resolve: { user: UserResolverService },
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, VerifiedEmailGuard]  // Add EmailVerifiedGuard here
   }
 ];
 

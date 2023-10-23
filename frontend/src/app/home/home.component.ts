@@ -38,8 +38,8 @@ export class HomeComponent {
         return this.loginService.loginUser(formValue.email, formValue.password);
       }),
       tap(() => {
-        this.alertService.success('Successfully logged in!');
         this.router.navigate(['/patient-portal']);
+        this.alertService.success('Successfully logged in!');
       }),
       catchError((error: Error) => {
         this.alertService.warning('Incorrect username or password!');
