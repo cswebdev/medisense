@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, throwError, of, retryWhen, scan, delay } from 'rxjs';
 import { User } from '../models/user.model';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service'; 
+import { AuthService } from '../services/auth.service';
 
 const baseUrl = 'http://localhost:8080/api/v1/users';
 
@@ -52,19 +52,45 @@ export class UserService {
     );
   }
 
+  getUser(id: any): Observable<User | null> {
+    console.log('get user')
+    return this.http.get<User>(`${baseUrl}/${id}`).pipe(
+      retryWhen(errors => 
+        errors.pipe(
+          // Use the scan operator to keep track of the number of retries
+          scan((retryCount, error) => {
+            if (retryCount >= 3 || error.status === 404) {
+              // If the maximum number of retries is reached or the error status is 404,
+              // throw the error to be caught by catchError
+              throw error;
+            }
+            return retryCount + 1;
+          }, 0),
+          // Delay between retries
+          delay(1000)
+        )
+      ),
+      catchError((error) => {
+        if (error.status === 404) {
+          console.error('User not found:', error);
+          return of(null); // or return a default value or handle it in a way that makes sense for your application
+        }
+        return this.handleError(error);
+      })
+    );
+  }
+  
   
 
-
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(baseUrl);
-  }
-
-  getUser(id: any): Observable<User> {
-    return this.http.get<User>(`${baseUrl}/${id}`);
-  }
-
   createUser(data: any): Observable<any> {
-    return this.http.post(baseUrl, data);
+    return this.http.post(baseUrl, data).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: any) {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
   updateUser(id: any, data: any): Observable<any> {

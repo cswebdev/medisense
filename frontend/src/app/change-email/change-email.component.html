@@ -1,42 +1,15 @@
 <div class="parent-container">
-    <form class="container-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <form class="container-form" [formGroup]="emailForm" (ngSubmit)="onSubmit()">
         <!-- Profile Details Card -->
-        <div class="card mb-3" style="height: 35vh">
+        <div class="card mb-3" style="height: 55vh">
             <div class="card-body">
-                <h5 class="card-title"> Edit Profile </h5>
-                <div class="row input-row">
-                    <!-- First name -->
-                    <div class="col-md-6 mb-2 input-row-half left-row-split">
-                        <div class="form-outline">
-                            <input type="text" id="firstNameInput" class="form-control" placeholder="First Name"
-                                formControlName="firstName" [value]="(userFirstName$ | async) ?? ''"
-                                required />
-                            <label class="form-label" for="firstNameInput">First Name</label>
-                        </div>
-                    </div>
-                    <!-- Last name -->
-                    <div class="col-md-6 mb-2 input-row-half right-row-split">
-                        <div class="form-outline input-row">
-                            <input type="text" id="lastNameInput" class="form-control" placeholder="Last Name"
-                                formControlName="lastName" [value]="(userLastName$ | async) ?? ''"
-                                required />
-                            <label class="form-label" for="lastNameInput">Last Name</label>
-                        </div>
-                    </div>
-                </div>
-                <!-- Email
+                <h5 class="card-title"> Change Email </h5>
                 <div class="form-outline mb-2 input-row">
                     <input type="email" id="emailInput" class="form-control" placeholder="Email Address"
                         formControlName="email" [value]="(userEmail$ | async) ?? ''" 
                         required />
                     <label class="form-label" for="emailInput">Email Address</label>
-                </div> -->
-            </div>
-        </div>
-
-        <!-- Password Confirmation Card -->
-        <div class="card mb-2" style="height: 40vh">
-            <div class="card-body">
+                </div>
                 <h6 class="card-title"> Please enter your password to confirm changes: </h6>
                 <div class="row input-row">
                     <!-- Password -->

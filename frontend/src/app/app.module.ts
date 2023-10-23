@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegistrationComponent } from './registration/registration.component';
@@ -24,6 +23,8 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
+import { ChangeEmailComponent } from './change-email/change-email.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 @NgModule({
@@ -40,7 +41,9 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
     AddMedicationComponent,
     MedicationsListComponent,
     SearchBarComponent,
-    GlobalAlertComponent
+    GlobalAlertComponent,
+    ChangeEmailComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

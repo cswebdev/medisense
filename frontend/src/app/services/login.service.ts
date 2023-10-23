@@ -2,22 +2,21 @@ import { Injectable } from '@angular/core';
 import { Observable, from, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { switchMap, catchError } from 'rxjs/operators';
-import firebase from 'firebase/compat/app';
+import firebase from 'firebase/compat';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  constructor(
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   loginUser(email: string, password: string ): Observable<string> {
+    console.log('login login')
     return this.authService.signIn(email, password).pipe(
       switchMap((user: firebase.User | null) => {
         if (!user) {
-          console.error('No user!');
           return throwError(() => new Error('Login failed!'));
         }
 

@@ -1,64 +1,84 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject, from, Observable, throwError, tap } from 'rxjs';
-import { catchError, map, take, switchMap } from 'rxjs/operators';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { EmailAuthProvider } from 'firebase/auth';
+import { from, Observable, throwError, take, tap } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { EmailAuthProvider } from '@firebase/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private userSubject = new BehaviorSubject<firebase.default.User | null>(null);
-  public user$ = this.afAuth.authState; // Subscribed to afAuth.authState
+  public user$ = this.afAuth.authState;
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {}
 
   getEmail(): Observable<String | null> {
-    return this.user$.pipe(map((user) => (user ? user.email : null)));
+    return this.user$.pipe(map((user) => user?.email ?? null));
   }
 
   getUserId(): Observable<String | null> {
-    return this.user$.pipe(
-      map((user) => (user && user.uid !== undefined ? user.uid : null))
-    );
+    return this.user$.pipe(map((user) => user?.uid ?? null));
   }
 
-  setEmail(newEmail: string): Observable<void> {
-    return from(
-      this.afAuth.currentUser.then((user) => {
-        if (user) {
-          return user.updateEmail(newEmail);
-        } else {
+  setEmail(newEmail: string, password: string, oldEmail: string): Observable<void> {
+    return this.reauthenticateUser(oldEmail, password).pipe(
+      switchMap((user) => {
+        if (!user) {
           throw new Error('User not logged in');
         }
-      })
-    ).pipe(
+        if (!user.emailVerified) {
+          throw new Error('Please verify your old email before updating to a new one');
+        }
+        return from(user.verifyBeforeUpdateEmail(newEmail)).pipe(
+          switchMap(() => from(user.sendEmailVerification())) // Send verification email to new email
+        );
+      }),
       catchError((error) => {
         console.error('Error updating email:', error);
         throw error;
       })
     );
   }
+  
+  
 
-  setPassword(newPassword: string): Observable<void> {
-    return from(
-      this.afAuth.currentUser.then((user) => {
-        if (user) {
-          return user.updatePassword(newPassword);
-        } else {
+  setPassword(newPassword: string, oldPassword: string, email: string): Observable<void> {
+    console.log("Current user before password update:");
+    console.log(this.user$);
+  
+    return this.reauthenticateUser(email, oldPassword).pipe(
+      switchMap((user) => {
+        if (!user) {
           throw new Error('User not logged in');
         }
-      })
-    ).pipe(
+        if (!user.emailVerified) {
+          throw new Error('Please verify your email before updating your password');
+        }
+        return from(user.updatePassword(newPassword));
+      }),
+      switchMap(() => {
+        // Retrieve the user again after the password has been updated
+        return this.afAuth.authState.pipe(
+          take(1),  // Take the first emitted value and then complete
+          map((user) => {
+            console.log("Current user after password update:");
+            console.log(user);
+          })
+        );
+      }),
       catchError((error) => {
         console.error('Error updating password:', error);
-        throw error;
+        return throwError(() => error);
       })
     );
   }
+  
+
+
 
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
+    console.log("auth persistence");
     return from(
       this.afAuth.setPersistence(persistenceType)
     ).pipe(
@@ -69,10 +89,7 @@ export class AuthService {
     );
   }
 
-  signUp(
-    email: string,
-    password: string
-  ): Observable<firebase.default.auth.UserCredential> {
+  signUp(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       catchError((error) => {
         console.error('Error during sign up:', error);
@@ -83,16 +100,9 @@ export class AuthService {
 
   signIn(email: string, password: string): Observable<firebase.default.User | null> {
     return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
-      switchMap((userCredential) => {
-        // Update the user subject with the authenticated user
-        this.userSubject.next(userCredential.user);
-        // Return the user observable
-        return this.user$;
-      }),
+      map((userCredential) => userCredential.user),
       catchError((error) => {
-        // Log the error for debugging
         console.error('Login Error:', error);
-        // Provide a more informative error message based on Firebase error codes
         let errorMessage = 'Login failed due to an unexpected error.';
         if (error.code) {
           switch (error.code) {
@@ -105,7 +115,6 @@ export class AuthService {
             // Add more cases as needed for different Firebase error codes
           }
         }
-        // Return an observable that emits the error message
         return throwError(() => new Error(errorMessage));
       })
     );
@@ -113,12 +122,16 @@ export class AuthService {
 
   signOut(): Observable<void> {
     return from(this.afAuth.signOut()).pipe(
+      tap(() => {
+        localStorage.clear(); // This will clear the local storage
+      }),
       catchError((error) => {
         console.error('Error during sign out:', error);
         throw error;
       })
     );
   }
+
 
   isAuthenticated(): Observable<firebase.default.User | null> {
     return this.user$;
@@ -155,37 +168,18 @@ export class AuthService {
     );
   }
 
-  reauthenticateUser(email: string, password: string): Observable<Promise<firebase.default.User | null>> {
+  // In AuthService
+
+  reauthenticateUser(email: string, password: string): Observable<firebase.default.User | null> {
     return from(this.afAuth.currentUser).pipe(
       switchMap((user) => {
         if (!user) {
           throw new Error('User not logged in');
         }
         const credential = EmailAuthProvider.credential(email, password);
-
         return from(user.reauthenticateWithCredential(credential));
       }),
-      map(() => this.afAuth.currentUser) // Map to return the current user after reauthentication
+      switchMap(() => from(this.afAuth.currentUser)) // Map to return the current user after reauthentication
     );
-  }
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (route.data['requiresAuth']) {
-      return this.afAuth.authState.pipe(
-        take(1),
-        map((user) => (user ? true : this.router.createUrlTree(['/home']))),
-        tap((loggedIn) => {
-          if (loggedIn === true) {
-            console.log('Access granted');
-          } else {
-            console.log('Access denied');
-          }
-        })
-      );
-    }
-    return true;
   }
 }

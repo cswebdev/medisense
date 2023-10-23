@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { AuthService } from '../services/auth.service'; 
+import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { switchMap, of } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-edit-user-profile',
@@ -12,54 +14,39 @@ import { switchMap, of } from 'rxjs';
 export class EditUserProfileComponent implements OnInit {
   profileForm!: FormGroup;
 
-  userEmail: String | null = '';
-  userFirstName: String | undefined = '';
-  userLastName: String | undefined = '';
-
-  public editToggled: boolean = false;
+  userFirstName$!: Observable<String | null>;
+  userLastName$!: Observable<String | null>;
 
   constructor(
     private userService: UserService,
-    private formBuilder: FormBuilder, 
-    private authService: AuthService
-  ) { }
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.initializeForm();
   
-    this.authService.getEmail().subscribe(email => {
-      this.userEmail = email;
-      this.updateFormValues();
+    this.userService.getFirstName().pipe(
+      map(firstName => firstName ?? null),
+    ).subscribe(firstName => {
+      this.profileForm.get('firstName')?.setValue(firstName);
     });
   
-    this.userService.getFirstName().subscribe(firstName => {
-      this.userFirstName = firstName;
-      this.updateFormValues();
-    });
-  
-    this.userService.getLastName().subscribe(lastName => {
-      this.userLastName = lastName;
-      this.updateFormValues();
+    this.userService.getLastName().pipe(
+      map(lastName => lastName ?? null),
+    ).subscribe(lastName => {
+      this.profileForm.get('lastName')?.setValue(lastName);
     });
   }
   
-  private updateFormValues(): void {
-    if (this.userEmail && this.userFirstName && this.userLastName) {
-      this.profileForm.patchValue({
-        firstName: this.userFirstName,
-        lastName: this.userLastName,
-        email: this.userEmail
-      });
-    }
-  }  
 
   private initializeForm(): void {
     this.profileForm = this.formBuilder.group({
-      email: [{ value: '' }, [Validators.required, Validators.email]],
-      password: [{ value: '' }, [Validators.required]],
-      confirmPassword: [{ value: '' }, [Validators.required]],
-      firstName: [{ value: '' }, [Validators.required, Validators.maxLength(25)]],
-      lastName: [{ value: '' }, [Validators.required, Validators.maxLength(25)]]
+      password: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]],
+      firstName: [this.userFirstName$, [Validators.required, Validators.maxLength(25)]],
+      lastName: [this.userLastName$, [Validators.required, Validators.maxLength(25)]]
     });
   }
   
@@ -67,6 +54,13 @@ export class EditUserProfileComponent implements OnInit {
   onSubmit() {
     if (this.profileForm.valid) {
       const formData = this.profileForm.value;
+
+      if (formData.password !== formData.confirmPassword) {
+        console.error('Passwords do not match!');
+        // Optionally, show some user-friendly error message or notification here
+        return;
+      }
+
       const userUpdateData = {
         firstName: formData.firstName,
         lastName: formData.lastName
@@ -95,40 +89,38 @@ export class EditUserProfileComponent implements OnInit {
         }
       );
     } else {
-      console.log("invalid request");
+      console.log("Invalid request");
     }
   }
   
   private updateUserInformation(userUpdateData: any, retrievedEmail: string | null) {
     const formData = this.profileForm.value;
-
+  
     // Attempt to re-authenticate the user
     this.authService.reauthenticateUser(retrievedEmail as string, formData.password).subscribe(
-        () => {
-            // User re-authenticated successfully, now update the email
-            this.authService.setEmail(formData.email).toPromise()
-                .then((response: any) => {
-                    console.log('Email updated successfully in Firebase', response);
-                    return this.authService.getUserId().pipe(
-                        switchMap((userId) => {
-                            if (userId) {
-                                return this.userService.updateUser(userId, userUpdateData);
-                            }
-                            return of(null);
-                        })
-                    ).toPromise();
-                })
-                .then((response: any) => {
-                    console.log('PUT Request to PostgreSQL was successful', response);
-                })
-                .catch((error: Error) => {
-                    console.error('Error:', error);
-                });
-        },
-        (error: Error) => {
-            console.error('Error during re-authentication:', error);
-            // Handle re-authentication error, possibly notify user
-        }
+      () => {
+        console.log('Re-authentication successful');
+        this.authService.getUserId().pipe(
+          switchMap(userId => {
+            if (userId) {
+              return this.userService.updateUser(userId, userUpdateData);
+            }
+            return of(null);
+          }),
+        ).subscribe(
+          response => {
+            console.log('User information updated successfully', response);
+            this.router.navigate(['/user-profile']);
+          },
+          error => {
+            console.error('Error updating user:', error);
+          }
+        );
+      },
+      (error: Error) => {
+        console.error('Error during re-authentication:', error);
+        // Handle re-authentication error, possibly notify user
+      }
     );
-  }
-}  
+  }  
+}

@@ -20,6 +20,7 @@ export class GlobalAlertComponent implements OnInit {
       this.message = message;
     });
   }
+
   closeAlert() {
     this.message = null;
   }
