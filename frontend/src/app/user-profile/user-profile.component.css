@@ -46,10 +46,18 @@
     border-color: lightgray;
 }
 
+.card-title {
+    width: 100%;
+    height: 100%;
+}
+
 .container-form {
     justify-content: center;
     width: 95%;
+}
 
+.row {
+    width: 100%
 }
 
 
