@@ -33,3 +33,8 @@
     place-self: start;
     transform: translate(-40%, -40%);
 }
+
+.dropdown-menu-end {
+    right: 0;
+    left: auto;
+}
