@@ -1,19 +1,23 @@
 <div class="row mb-4 d-flex justify-content-center">
     <div class="col-9 pt-3">
         <div class="form">
-            <div class="search-container">
+            <div class="search-container" (mouseout)="onMouseOut()" (mouseover)="focusOnList=true">
                 <div class="input-group">
-                    <input type="text" [(ngModel)]="searchTerm" class="form-control form-input"
-                        placeholder="Search anything...">
+                    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()"
+                        class="form-control form-input" placeholder="Search anything..." (blur)="onInputBlur()"
+                        (keydown.enter)="searchMedication()" (focus)="onInputFocus()">
                     <div class="input-group-append">
-                        <button (click)="searchMedication()" id="search-btn" class="btn btn-success">Search</button>
+                        <button (click)="searchMedication()" (focus)="onInputFocus()" id="search-btn"
+                            class="btn btn-success">Search</button>
                     </div>
                 </div>
-                <div *ngIf="results.length" class="dropdown-menu show mt-2"
+                <div *ngIf="results.length && (searching || focusOnList)" class="dropdown-menu show mt-2"
                     style="display: block; max-height: 200px; overflow-y: auto;">
-                    <div href="#" *ngFor="let result of results" class="dropdown-item position-relative">
+                    <div href="#" *ngFor="let result of results; let i = index" class="dropdown-item position-relative"
+                        (mouseOver)="focusOnList = true" (focus)="onInputFocus()">
                         {{result}}
-                        <button class="btn btn-sm btn-primary position-absolute add-btn">Add</button>
+                        <button class="btn btn-sm btn-primary position-absolute add-btn"
+                            (click)="addMedication(result, i)">Add</button>
                     </div>
                 </div>
             </div>
