@@ -1,26 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, map, of, switchMap } from 'rxjs';
+import { map, switchMap, takeUntil, of, first } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { AlertService } from '../services/alert.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-edit-user-profile',
   templateUrl: './edit-user-profile.component.html',
   styleUrls: ['./edit-user-profile.component.css']
 })
-export class EditUserProfileComponent implements OnInit {
+export class EditUserProfileComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
 
-  userFirstName$!: Observable<string | null>;
-  userLastName$!: Observable<string | null>;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private alert: AlertService,
     private router: Router
   ) {}
 
@@ -29,98 +30,102 @@ export class EditUserProfileComponent implements OnInit {
   
     this.userService.getFirstName().pipe(
       map(firstName => firstName ?? null),
+      takeUntil(this.destroy$)
     ).subscribe(firstName => {
       this.profileForm.get('firstName')?.setValue(firstName);
     });
   
     this.userService.getLastName().pipe(
       map(lastName => lastName ?? null),
+      takeUntil(this.destroy$)
     ).subscribe(lastName => {
       this.profileForm.get('lastName')?.setValue(lastName);
     });
   }
   
-
   private initializeForm(): void {
     this.profileForm = this.formBuilder.group({
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      firstName: [this.userFirstName$, [Validators.required, Validators.maxLength(25)]],
-      lastName: [this.userLastName$, [Validators.required, Validators.maxLength(25)]]
+      firstName: ['', [Validators.required, Validators.maxLength(25)]],
+      lastName: ['', [Validators.required, Validators.maxLength(25)]],
     });
   }
-  
 
   onSubmit() {
     if (this.profileForm.valid) {
       const formData = this.profileForm.value;
-
+  
       if (formData.password !== formData.confirmPassword) {
-        console.error('Passwords do not match!');
-        // Optionally, show some user-friendly error message or notification here
+        this.alert.warning('Passwords do not match!');
         return;
       }
-
+  
       const userUpdateData = {
         firstName: formData.firstName,
-        lastName: formData.lastName
+        lastName: formData.lastName,
       };
   
-      // Get email from authService
-      let retrievedEmail: string | null = '';
-  
       this.authService.getEmail().pipe(
-        switchMap(email => {
-          retrievedEmail = email;
-          if (email) {
-            return this.authService.signIn(email as string, formData.password);
-          }
-          console.error('No email retrieved for signIn');
-          return of(null);
-        })
+        first(),
+        takeUntil(this.destroy$)
       ).subscribe(
-        () => {
-          // Successful login indicates the password is correct
-          this.updateUserInformation(userUpdateData, retrievedEmail as string);
+        email => {
+          if (email) {
+            this.reauthenticateAndSave(email, formData.password, userUpdateData);
+          } else {
+            this.alert.warning('No email retrieved for re-authentication');
+          }
         },
         error => {
-          console.error('Error verifying user password:', error);
-          // Show an error message to the user (e.g., using an alert or a toast notification)
+          this.alert.warning('Error retrieving email');
         }
       );
     } else {
-      console.log("Invalid request");
+      this.alert.warning("Invalid request");
     }
   }
   
-  private updateUserInformation(userUpdateData: any, retrievedEmail: string | null) {
-    const formData = this.profileForm.value;
-  
-    // Attempt to re-authenticate the user
-    this.authService.reauthenticateUser(retrievedEmail as string, formData.password).subscribe(
+
+  private reauthenticateAndSave(email: string, password: string, userUpdateData: any) {
+    this.authService.reauthenticateUser(email, password).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(
       () => {
-        console.log('Re-authentication successful');
-        this.authService.getUserId().pipe(
-          switchMap(userId => {
-            if (userId) {
-              return this.userService.updateUser(userId, userUpdateData);
-            }
-            return of(null);
-          }),
-        ).subscribe(
-          response => {
-            console.log('User information updated successfully', response);
-            this.router.navigate(['/user-profile']);
-          },
-          error => {
-            console.error('Error updating user:', error);
-          }
-        );
+        this.saveUserInformation(userUpdateData);
       },
-      (error: Error) => {
-        console.error('Error during re-authentication:', error);
-        // Handle re-authentication error, possibly notify user
+      error => {
+        if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-login-credentials') {
+          this.alert.warning('Incorrect password.');
+        } else if (error.code === 'auth/too-many-requests') {
+          this.alert.warning('Too many failed attempts. Account has been locked temporarily.');
+        }
       }
     );
-  }  
+  }
+
+  private saveUserInformation(userUpdateData: any) {
+    this.authService.getUserId().pipe(
+      switchMap(userId => {
+        if (userId) {
+          return this.userService.updateUser(userId, userUpdateData);
+        }
+        return of(null);
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(
+      response => {
+        this.router.navigate(['/user-profile']);
+        this.alert.success('User information updated successfully!');
+      },
+      error => {
+        console.error('Error updating user:', error);
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

@@ -4,6 +4,7 @@ import { from, Observable, throwError, take, tap } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { EmailAuthProvider } from '@firebase/auth';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,11 @@ import { EmailAuthProvider } from '@firebase/auth';
 export class AuthService {
   public user$ = this.afAuth.authState;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {}
+  constructor(
+    private afAuth: AngularFireAuth, 
+    private router: Router,
+    private alert: AlertService
+    ) {}
 
   getEmail(): Observable<string | null> {
     return this.user$.pipe(map((user) => user?.email ?? null));
@@ -102,7 +107,6 @@ export class AuthService {
     return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
       map((userCredential) => userCredential.user),
       catchError((error) => {
-        console.error('Login Error:', error);
         let errorMessage = 'Login failed due to an unexpected error.';
         if (error.code) {
           switch (error.code) {
@@ -112,13 +116,21 @@ export class AuthService {
             case 'auth/wrong-password':
               errorMessage = 'Incorrect password.';
               break;
-            // Add more cases as needed for different Firebase error codes
+            case 'auth/invalid-login-credentials':
+              errorMessage = 'Invalid login credentials.';
+              break;
+            case 'auth/too-many-requests':
+              errorMessage = 'Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by changing your password or you can try again later.';
+              break;
           }
         }
         return throwError(() => new Error(errorMessage));
       })
     );
   }
+  
+  
+  
 
   signOut(): Observable<void> {
     return from(this.afAuth.signOut()).pipe(
