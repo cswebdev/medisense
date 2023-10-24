@@ -25,7 +25,7 @@ export class LoginService {
       }),
       catchError(error => {
         // Removed the console.error line
-        return throwError(() => new Error('Login failed due to an unexpected error.'));
+        return throwError(() => new Error(error.message));
       })
     );
   }  

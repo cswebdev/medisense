@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core'; // Import OnDestroy
 import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable, map, takeUntil } from 'rxjs'; // Import takeUntil
+import { AlertService } from '../services/alert.service';
+import { Subject } from 'rxjs'; // Import Subject
 
 @Component({
   selector: 'app-change-email',
   templateUrl: './change-email.component.html',
   styleUrls: ['./change-email.component.css']
 })
-export class ChangeEmailComponent implements OnInit {
+export class ChangeEmailComponent implements OnInit, OnDestroy { // Implement OnDestroy
   emailForm!: FormGroup;
-
   userEmail$!: Observable<string | null>;
+  private destroy$ = new Subject<void>(); // Create a Subject to manage the subscription lifecycle
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private alert: AlertService
   ) {}
 
   ngOnInit(): void {
@@ -25,6 +28,7 @@ export class ChangeEmailComponent implements OnInit {
 
     this.authService.getEmail().pipe(
       map(email => email ?? null),
+      takeUntil(this.destroy$) // Ensure the subscription is unsubscribed when the component is destroyed
     ).subscribe(email => {
       this.emailForm.get('email')?.setValue(email);
     });
@@ -43,27 +47,57 @@ export class ChangeEmailComponent implements OnInit {
       const formData = this.emailForm.value;
 
       if (formData.password !== formData.confirmPassword) {
-        console.error('Passwords do not match!');
-        // Optionally, show some user-friendly error message or notification here
+        this.alert.warning('Passwords do not match!');
         return;
       }
 
-      this.authService.getEmail().subscribe(currentEmail => {
+      this.authService.getEmail().pipe(
+        takeUntil(this.destroy$) // Ensure the subscription is unsubscribed when the component is destroyed
+      ).subscribe(currentEmail => {
         if (currentEmail) {
-          this.authService.setEmail(formData.email, formData.password, currentEmail as string).subscribe(
+          this.authService.setEmail(formData.email, formData.password, currentEmail as string).pipe(
+            takeUntil(this.destroy$) // Ensure the subscription is unsubscribed when the component is destroyed
+          ).subscribe(
             () => {
-              console.log('Email updated successfully');
               this.router.navigate(['/user-profile']);
+              this.alert.success('Email change request successful. Check your current email to confirm the change.');
             },
             error => {
-              console.error('Error updating email:', error);
-              // Show an error message to the user
+              if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-login-credentials') {
+                this.alert.warning('Incorrect password.');
+              } else if (error.code === 'auth/too-many-requests') {
+                this.alert.warning('Too many failed attempts. Account has been locked temporarily.');
+              }
             }
           );
         }
       });
     } else {
-      console.log("Invalid form");
+      const emailControl = this.emailForm.get('email');
+      const passwordControl = this.emailForm.get('password');
+      const confirmPasswordControl = this.emailForm.get('confirmPassword');
+  
+      if (emailControl && emailControl.errors) {
+        if ('required' in emailControl.errors) {
+          this.alert.warning('Email is required.');
+        }
+        else if ('email' in emailControl.errors) {
+          this.alert.warning('Email is invalid.');
+        }
+      } else if (passwordControl && passwordControl.errors) {
+        if ('required' in passwordControl.errors) {
+          this.alert.warning('Password is required.');
+        }
+      } else if (confirmPasswordControl && confirmPasswordControl.errors) {
+        if ('required' in confirmPasswordControl.errors) {
+          this.alert.warning("Passwords do not match.");
+        }
+      }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

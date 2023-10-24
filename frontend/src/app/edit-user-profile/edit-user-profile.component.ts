@@ -82,9 +82,31 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
         }
       );
     } else {
-      this.alert.warning("Invalid request");
+      const passwordControl = this.profileForm.get('password');
+      const confirmPasswordControl = this.profileForm.get('confirmPassword');
+      const firstNameControl = this.profileForm.get('firstName');
+      const lastNameControl = this.profileForm.get('lastName');
+  
+      if (firstNameControl && firstNameControl.errors) {
+        if ('required' in firstNameControl.errors) {
+          this.alert.warning('First name is required.');
+        }
+      } else if (lastNameControl && lastNameControl.errors) {
+        if ('required' in lastNameControl.errors) {
+          this.alert.warning('Last name is required.');
+        }
+      } else if (passwordControl && passwordControl.errors) {
+        if ('required' in passwordControl.errors) {
+          this.alert.warning('Password is required.');
+        }
+      } else if (confirmPasswordControl && confirmPasswordControl.errors) {
+        if ('required' in confirmPasswordControl.errors) {
+          this.alert.warning("Passwords do not match.");
+        }
+      }
     }
   }
+
   
 
   private reauthenticateAndSave(email: string, password: string, userUpdateData: any) {
