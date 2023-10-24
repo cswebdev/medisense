@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MedicationService } from '../services/medication.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-medication',
@@ -12,38 +13,29 @@ export class MedicationComponent implements OnInit {
   newMedication: string = '';
 
   userId: number = 4;  // Static for now.
+  authService: any;
 
-  constructor(private medicationService: MedicationService) { }
+  constructor(private medicationService: MedicationService, authService: AuthService) { }
 
   ngOnInit(): void {
-    this.fetchMedications();
+    this.fetchUserMedications();
   }
 
-  fetchMedications() {
-    this.medicationService.getMedicationsByUserId(this.userId).subscribe(
-      (data: any) => {  // Explicitly type data or use a proper interface/type definition.
-        this.medications = data.medications;  // Assuming the response has a 'medications' field.
-      },
-      error => {
-        console.error('Error fetching medications:', error);
+  fetchUserMedications(): void {
+    this.authService.getUserId().subscribe((userId: string) => {
+      if (userId) {
+        this.medicationService.getMedicationsByUserId(userId).subscribe(
+          response => {
+            if (response && response.medications) {
+              this.medications = response.medications;
+            }
+          },
+          error => {
+            console.error('Error fetching medications:', error);
+            alert('An error occurred while fetching medications. Please try again.');
+          }
+        );
       }
-    );
-  }
-
-  addMedication() {
-    const medicationData = {
-      prescriptionName: this.newMedication
-      // Add other medication details here if needed.
-    };
-
-    this.medicationService.addMedicationToUser(this.userId, medicationData).subscribe(
-      (data: any) => {  // Explicitly type data or use a proper interface/type definition.
-        this.medications.push(data);
-        this.newMedication = '';
-      },
-      error => {
-        console.error('Error adding medication:', error);
-      }
-    );
+    });
   }
 }

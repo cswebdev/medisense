@@ -1,8 +1,13 @@
 package com.medisense.backend.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -57,4 +62,8 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Medication> medications;
+
 }

@@ -21,6 +21,9 @@ export class SearchBarComponent {
 
   dosages: (string | null)[] = [];
 
+  medications: any[] = [];
+  newMedication: string = '';
+
 
   constructor(public authService: AuthService, private medicationService: MedicationService) {}
 
@@ -112,12 +115,32 @@ export class SearchBarComponent {
     }
   }
 
-
   addMedication(result: string, index: number) {
-    const primaryName = result.split(' ')[0]; 
+    const primaryName = result.split(' ')[0];
+    const dosage = this.dosages[index];
     
     console.log("Selected medication:", primaryName);
-    console.log("Dosage for the medication:", this.dosages[index]);
-  }
+    console.log("Dosage for the medication:", dosage);
   
+    const medicationData = {
+      prescriptionName: primaryName + " " + dosage
+      // If there are other medication details you want to add, you can do so here.
+    };
+  
+    this.authService.getUserId().subscribe(userId => {
+      if (userId) {
+        this.medicationService.addMedicationToUser(userId, medicationData).subscribe(
+          (data: any) => {
+            this.medications.push(data);
+            this.searchTerm = ''; 
+          },
+          error => {
+            console.error('Error adding medication:', error);
+          }
+        );
+      } else {
+        console.error('User is not logged in or UID is not available.');
+      }
+    });
+  }
 }

@@ -19,19 +19,20 @@ export class MedicationsListComponent implements OnInit {
   }
 
   fetchUserMedications(): void {
-    // const loggedInUser = this.authService.getLoggedInUser();
-    // // if (loggedInUser && loggedInUser.id) {
-    //   // this.medicationService.getMedicationsByUserId(loggedInUser.id).subscribe(
-    //     response => {
-    //       if (response && response.medications) {
-    //         this.medications = response.medications;
-    //       }
-    //     },
-    //     error => {
-    //       console.error('Error fetching medications:', error);
-    //       alert('An error occurred while fetching medications. Please try again.');
-    //     }
-    //   );
-    // }
+    this.authService.getUserId().subscribe(userId => {
+      if (userId) {
+        this.medicationService.getMedicationsByUserId(userId).subscribe(
+          response => {
+            if (response && response.medications) {
+              this.medications = response.medications;
+            }
+          },
+          error => {
+            console.error('Error fetching medications:', error);
+            alert('An error occurred while fetching medications. Please try again.');
+          }
+        );
+      }
+    });
   }
 }
