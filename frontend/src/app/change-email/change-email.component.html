@@ -1,14 +1,16 @@
 <div class="parent-container">
     <form class="container-form" [formGroup]="emailForm" (ngSubmit)="onSubmit()">
         <!-- Profile Details Card -->
-        <div class="card mb-3" style="height: 55vh">
+        <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title"> Change Email </h5>
-                <div class="form-outline mb-2 input-row">
-                    <input type="email" id="emailInput" class="form-control" placeholder="Email Address"
-                        formControlName="email" [value]="(userEmail$ | async) ?? ''" 
-                        required />
-                    <label class="form-label" for="emailInput">Email Address</label>
+                <div class="row input-row">
+                    <div class="form-outline mb-2 input-row">
+                        <input type="email" id="emailInput" class="form-control" placeholder="Email Address"
+                            formControlName="email" [value]="(userEmail$ | async) ?? ''" 
+                            required />
+                        <label class="form-label" for="emailInput">Email Address</label>
+                    </div>
                 </div>
                 <h6 class="card-title"> Please enter your password to confirm changes: </h6>
                 <div class="row input-row">
@@ -25,7 +27,7 @@
                 <div class="row input-row">
                     <!-- Confirm Password -->
                     <div class="col">
-                        <div class="form-outline mb-3">
+                        <div class="form-outline mb-2">
                             <input type="password" id="confirmPasswordInput" class="form-control"
                                 formControlName="confirmPassword" required />
                             <label class="form-label" for="confirmPasswordInput">Confirm Password</label>
