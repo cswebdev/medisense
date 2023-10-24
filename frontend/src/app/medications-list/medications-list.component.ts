@@ -1,21 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Medication } from '../models/medication.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-medications-list',
   templateUrl: './medications-list.component.html',
   styleUrls: ['./medications-list.component.css']
 })
-export class MedicationsListComponent implements OnInit {
+export class MedicationsListComponent implements OnInit, OnDestroy {
 
   medications: Medication[] = [];
+  private medicationListSub!: Subscription;
 
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
 
   ngOnInit(): void {
     this.fetchUserMedications();
+    this.medicationListSub = this.medicationService.getMedicationChangedObservable().subscribe(() => {
+      this.fetchUserMedications();
+    });
+  }
+  ngOnDestroy(): void {
+    if (this.medicationListSub) {
+      this.medicationListSub.unsubscribe();
+    }
   }
 
   fetchUserMedications(): void {

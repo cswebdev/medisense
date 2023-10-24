@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Medication } from '../models/medication.model';
 
 
+
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
