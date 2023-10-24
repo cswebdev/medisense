@@ -73,4 +73,5 @@
     align-items: center;
     justify-content: center;
     height: 100%; /* or any other value that suits your design */
+    width: 95%;
 }
