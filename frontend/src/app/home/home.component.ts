@@ -5,6 +5,7 @@ import { catchError, switchMap, tap, of } from 'rxjs';
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { LoginService } from '../services/login.service';
+import { LoadingOverlayComponent } from '../loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,7 @@ import { LoginService } from '../services/login.service';
 export class HomeComponent {
 
   userLoginForm: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -30,6 +32,7 @@ export class HomeComponent {
   }
   
   handleLogin(): void {
+    this.isLoading = true;
     const formValue = this.userLoginForm.value;
     const persistenceType = formValue.persistence ? 'local' : 'session';
     console.log('home login')
@@ -45,6 +48,8 @@ export class HomeComponent {
         this.alertService.warning('Incorrect username or password!');
         return of(null);
       }),
-    ).subscribe();
+    ).subscribe(() => {
+      this.isLoading = false;
+    });
   }
 }
