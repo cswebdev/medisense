@@ -70,10 +70,9 @@ export class AuthService {
   
 
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
-    console.log('auth persistence');
     return from(this.afAuth.setPersistence(persistenceType)).pipe(
       catchError((error) => {
-        console.log('Error setting persistence:', error);
+        console.error('Error setting persistence:', error);
         throw error;
       })
     );
@@ -138,7 +137,7 @@ export class AuthService {
     return this.afAuth.authState.pipe(
       map((user) => user?.emailVerified ?? false),
       catchError((error) => {
-        console.log('Error checking email verification:', error);
+        console.error('Error checking email verification:', error);
         throw error;
       })
     );

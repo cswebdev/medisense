@@ -15,7 +15,6 @@ export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   getFirstName(): Observable<string | undefined> {
-    console.log(this.authService.getUserId());
     return this.authService.getUserId().pipe(
       switchMap((userId: string | null) => {
         if (userId) {
@@ -34,7 +33,6 @@ export class UserService {
   }
 
   getLastName(): Observable<string | undefined> {
-    console.log(this.authService.getUserId());
     return this.authService.getUserId().pipe(
       switchMap((userId: string | null) => {
         if (userId) {
@@ -53,7 +51,6 @@ export class UserService {
   }
 
   getUser(id: any): Observable<User | null> {
-    console.log('get user');
     return this.http.get<User>(`${baseUrl}/${id}`).pipe(
       retryWhen(errors =>
         errors.pipe(

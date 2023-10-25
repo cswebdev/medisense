@@ -13,7 +13,6 @@ export class LoginService {
   constructor(private authService: AuthService) {}
 
   loginUser(email: string, password: string): Observable<string> {
-    console.log('login login')
     return this.authService.signIn(email, password).pipe(
       switchMap((user: firebase.User | null) => {
         if (!user) {

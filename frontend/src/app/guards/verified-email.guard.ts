@@ -24,9 +24,9 @@ export class VerifiedEmailGuard implements CanActivate {
       }),
       tap((result) => {
         if (result === true) {
-          console.log('Email verified');
+          // console.log('Email verified');
         } else {
-          console.log('Email not verified');
+          // console.log('Email not verified');
         }
       })
     );

@@ -22,11 +22,9 @@ export class AppComponent implements OnDestroy {
 ngOnInit() {
   this.authSubscription = this.authService.isAuthenticated().subscribe((user) => {
     if (user) {
-      console.log('User is logged in');
       // Perform any actions you need when the user is logged in
       // this.router.navigate(['/patient-portal']); // Redirect to dashboard or any other route you want
     } else {
-      console.log('User is logged out');
       // Perform any actions you need when the user is logged out
       // this.router.navigate(['/home']); // Redirect to login or any other route you want
     }
