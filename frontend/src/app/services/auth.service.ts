@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { from, Observable, throwError, take, tap } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { EmailAuthProvider } from '@firebase/auth';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,11 @@ import { EmailAuthProvider } from '@firebase/auth';
 export class AuthService {
   public user$ = this.afAuth.authState;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private alert: AlertService
+  ) {}
 
   getEmail(): Observable<string | null> {
     return this.user$.pipe(map((user) => user?.email ?? null));
@@ -35,18 +40,12 @@ export class AuthService {
         );
       }),
       catchError((error) => {
-        console.error('Error updating email:', error);
         throw error;
       })
     );
   }
-  
-  
 
-  setPassword(newPassword: string, oldPassword: string, email: string): Observable<void> {
-    console.log("Current user before password update:");
-    console.log(this.user$);
-  
+  setPassword(newPassword: string, oldPassword: string, email: string): Observable<firebase.default.User | null> {
     return this.reauthenticateUser(email, oldPassword).pipe(
       switchMap((user) => {
         if (!user) {
@@ -60,28 +59,18 @@ export class AuthService {
       switchMap(() => {
         // Retrieve the user again after the password has been updated
         return this.afAuth.authState.pipe(
-          take(1),  // Take the first emitted value and then complete
-          map((user) => {
-            console.log("Current user after password update:");
-            console.log(user);
-          })
+          take(1) // Take the first emitted value and then complete
         );
       }),
       catchError((error) => {
-        console.error('Error updating password:', error);
         return throwError(() => error);
       })
     );
   }
   
 
-
-
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
-    console.log("auth persistence");
-    return from(
-      this.afAuth.setPersistence(persistenceType)
-    ).pipe(
+    return from(this.afAuth.setPersistence(persistenceType)).pipe(
       catchError((error) => {
         console.error('Error setting persistence:', error);
         throw error;
@@ -90,9 +79,9 @@ export class AuthService {
   }
 
   signUp(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
+    localStorage.setItem('lastEmailSentTimestamp', Date.now().toString());
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       catchError((error) => {
-        console.error('Error during sign up:', error);
         throw error;
       })
     );
@@ -102,7 +91,6 @@ export class AuthService {
     return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
       map((userCredential) => userCredential.user),
       catchError((error) => {
-        console.error('Login Error:', error);
         let errorMessage = 'Login failed due to an unexpected error.';
         if (error.code) {
           switch (error.code) {
@@ -112,7 +100,12 @@ export class AuthService {
             case 'auth/wrong-password':
               errorMessage = 'Incorrect password.';
               break;
-            // Add more cases as needed for different Firebase error codes
+            case 'auth/invalid-login-credentials':
+              errorMessage = 'Incorrect email or password.';
+              break;
+            case 'auth/too-many-requests':
+              errorMessage = 'Too many failed attempts. Account has been locked temporarily.';
+              break;
           }
         }
         return throwError(() => new Error(errorMessage));
@@ -126,12 +119,11 @@ export class AuthService {
         localStorage.clear(); // This will clear the local storage
       }),
       catchError((error) => {
-        console.error('Error during sign out:', error);
+        console.log('Error during sign out:', error);
         throw error;
       })
     );
   }
-
 
   isAuthenticated(): Observable<firebase.default.User | null> {
     return this.user$;
@@ -162,7 +154,7 @@ export class AuthService {
       })
     ).pipe(
       catchError((error) => {
-        console.error('Error sending email verification:', error);
+        console.log('Error sending email verification:', error);
         throw error;
       })
     );

@@ -25,6 +25,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     SearchBarComponent,
     GlobalAlertComponent,
     ChangeEmailComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    LoadingOverlayComponent
   ],
   imports: [
     BrowserModule,

@@ -15,7 +15,6 @@ export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   getFirstName(): Observable<string | undefined> {
-    console.log(this.authService.getUserId());
     return this.authService.getUserId().pipe(
       switchMap((userId: string | null) => {
         if (userId) {
@@ -34,7 +33,6 @@ export class UserService {
   }
 
   getLastName(): Observable<string | undefined> {
-    console.log(this.authService.getUserId());
     return this.authService.getUserId().pipe(
       switchMap((userId: string | null) => {
         if (userId) {
@@ -53,9 +51,8 @@ export class UserService {
   }
 
   getUser(id: any): Observable<User | null> {
-    console.log('get user')
     return this.http.get<User>(`${baseUrl}/${id}`).pipe(
-      retryWhen(errors => 
+      retryWhen(errors =>
         errors.pipe(
           // Use the scan operator to keep track of the number of retries
           scan((retryCount, error) => {
@@ -75,22 +72,18 @@ export class UserService {
           console.error('User not found:', error);
           return of(null); // or return a default value or handle it in a way that makes sense for your application
         }
-        return this.handleError(error);
+        // Handle other error types here
+        console.error('Error fetching user:', error);
+        return throwError(error);
       })
     );
   }
   
   
+  
 
   createUser(data: any): Observable<any> {
-    return this.http.post(baseUrl, data).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  private handleError(error: any) {
-    console.error('An error occurred:', error);
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return this.http.post(baseUrl, data);
   }
 
   updateUser(id: any, data: any): Observable<any> {
