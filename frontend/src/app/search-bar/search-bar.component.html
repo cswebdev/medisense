@@ -1,5 +1,5 @@
-<div class="row mb-4 d-flex justify-content-center">
-    <div class="col-10 pt-3">
+<div class="row mb-8 d-flex justify-content-center">
+    <div class="col-11 pt-3 pb-3">
         <div class="form">
             <div class="search-container d-flex" (mouseout)="onMouseOut()" (mouseover)="focusOnList=true">
                 <div class="input-group custom-input-group position-relative w-100">
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div *ngIf="results.length && isDropdownOpen" class="dropdown-menu show mt-0 col-10"
+            <div *ngIf="results.length && isDropdownOpen" class="dropdown-menu show mt-0 col-11"
                 style="display: block; max-height: 200px; overflow-y: auto;">
                 <div href="#" *ngFor="let result of results; let i = index" class="dropdown-item position-relative p-2"
                     (mouseOver)="focusOnList = true" (focus)="onInputFocus()">
