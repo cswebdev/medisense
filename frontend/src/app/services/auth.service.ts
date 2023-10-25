@@ -45,10 +45,7 @@ export class AuthService {
     );
   }
 
-  setPassword(newPassword: string, oldPassword: string, email: string): Observable<void> {
-    console.log('Current user before password update:');
-    console.log(this.user$);
-
+  setPassword(newPassword: string, oldPassword: string, email: string): Observable<firebase.default.User | null> {
     return this.reauthenticateUser(email, oldPassword).pipe(
       switchMap((user) => {
         if (!user) {
@@ -62,19 +59,15 @@ export class AuthService {
       switchMap(() => {
         // Retrieve the user again after the password has been updated
         return this.afAuth.authState.pipe(
-          take(1), // Take the first emitted value and then complete
-          map((user) => {
-            console.log('Current user after password update:');
-            console.log(user);
-          })
+          take(1) // Take the first emitted value and then complete
         );
       }),
       catchError((error) => {
-        console.log('Error updating password:', error);
         return throwError(() => error);
       })
     );
   }
+  
 
   setPersistence(persistenceType: 'local' | 'session'): Observable<void> {
     console.log('auth persistence');
