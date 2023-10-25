@@ -10,7 +10,7 @@
                     <a class="nav-link" routerLink="/registration" routerLinkActive="active">Registration</a>
                 </li>
             </ul>
-            
+
             <!-- Links for users who ARE logged in -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0" *ngIf="(loggedIn$ | async)">
                 <li class="nav-item">
@@ -24,27 +24,48 @@
             <ul class="navbar-nav ml-auto" *ngIf="(loggedIn$ | async)">
                 <div class="dropdown position-relative">
                     <button class="email-verification-box"
-                        [ngClass]="{'email-verified': (emailVerified$ | async), 'email-not-verified': !(emailVerified$ | async)}"
-                        ngbTooltip="{{ (emailVerified$ | async) ? 'Email is verified.' : 'Email is not verified.' }}"
-                        (click)="sendEmailVerification()"
-                        [disabled]="isVerificationButtonDisabled"
-                    >
-                        <i [ngClass]="{'fas fa-check': (emailVerified$ | async), 'fa-solid fa-exclamation': !(emailVerified$ | async)}" aria-hidden="true"></i>
+                            [ngClass]="{'email-verified': (emailVerified$ | async), 'email-not-verified': !(emailVerified$ | async)}"
+                            ngbTooltip="{{ (emailVerified$ | async) ? 'Email is verified.' : 'Email is not verified.' }}"
+                            (click)="sendEmailVerification()"
+                            [disabled]="isVerificationButtonDisabled">
+                        <i [ngClass]="{'fas fa-check': (emailVerified$ | async), 'fa-solid fa-exclamation': !(emailVerified$ | async)}"
+                           aria-hidden="true"></i>
                     </button>
                     <button class="btn btn-primary dropdown-toggle" 
                             type="button" 
                             id="optionsDropdownMenuButton" 
                             data-toggle="dropdown"
-                            aria-expanded="false"
-                    >
+                            aria-expanded="false">
                         {{ (userEmail$ | async) }} 
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="optionsDropdownMenuButton">
-                        <li><button class="dropdown-item" type="button" routerLink="/edit-user-profile">Edit Profile</button></li>
-                        <li><button class="dropdown-item" type="button" routerLink="/change-email" [disabled]="!(emailVerified$ | async)">Change Email</button></li>
-                        <li><button class="dropdown-item" type="button" routerLink="/change-password" [disabled]="!(emailVerified$ | async)">Change Password</button></li>
+                        <li>
+                            <button class="dropdown-item" type="button" routerLink="/edit-user-profile">Edit Profile</button>
+                        </li>
+                        <li>
+                            <span ngbTooltip="{{ !(emailVerified$ | async) ? 'Email Verification Required.' : null }}">
+                                <button class="dropdown-item" 
+                                        type="button" 
+                                        routerLink="/change-email" 
+                                        [disabled]="!(emailVerified$ | async)">
+                                    Change Email
+                                </button>
+                            </span>
+                        </li>
+                        <li>
+                            <span ngbTooltip="{{ !(emailVerified$ | async) ? 'Email Verification Required.' : null }}">
+                                <button class="dropdown-item" 
+                                        type="button" 
+                                        routerLink="/change-password" 
+                                        [disabled]="!(emailVerified$ | async)">
+                                    Change Password
+                                </button>
+                            </span>
+                        </li>                        
                         <li class="dropdown-divider"></li>
-                        <li><button class="dropdown-item" type="button" (click)="handleLogout()">Logout</button></li>
+                        <li>
+                            <button class="dropdown-item" type="button" (click)="handleLogout()">Logout</button>
+                        </li>
                     </ul>
                 </div>
             </ul>

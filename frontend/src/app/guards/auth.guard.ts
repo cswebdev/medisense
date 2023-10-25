@@ -29,9 +29,9 @@ export class AuthGuard implements CanActivate {
       }),
       tap((result) => {
         if (result === true) {
-          console.log('Access granted');
+          // console.log('Access granted');
         } else {
-          console.log('Access denied');
+          // console.log('Access denied');
         }
       })
     );

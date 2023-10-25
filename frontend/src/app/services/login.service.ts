@@ -12,21 +12,20 @@ export class LoginService {
 
   constructor(private authService: AuthService) {}
 
-  loginUser(email: string, password: string ): Observable<string> {
-    console.log('login login')
+  loginUser(email: string, password: string): Observable<string> {
     return this.authService.signIn(email, password).pipe(
       switchMap((user: firebase.User | null) => {
         if (!user) {
           return throwError(() => new Error('Login failed!'));
         }
-
+  
         // Return the token after successful login
         return from(user.getIdToken());
       }),
       catchError(error => {
-        console.error('Login Error:', error);
-        return throwError(() => new Error('Login failed due to an unexpected error.'));
+        // Removed the console.error line
+        return throwError(() => new Error(error.message));
       })
     );
-  }
+  }  
 }

@@ -20,4 +20,8 @@ export class AlertService {
   warning(message: string) {
     this.alertSubject.next({ type: 'warning', text: message });
   }
+
+  danger(message: string) {
+    this.alertSubject.next({ type: 'danger', text: message });
+  }
 }
