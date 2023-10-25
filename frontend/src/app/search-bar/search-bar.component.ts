@@ -19,6 +19,7 @@ export class SearchBarComponent {
   
   searching = false;
   focusOnList = true;
+  isDropdownOpen: boolean = false;
 
   dosages: (string | null)[] = [];
 
@@ -44,12 +45,8 @@ export class SearchBarComponent {
     this.searching = true;
   }
 
-  // Method called when mouse is out of the search container
   onMouseOut() {
     this.focusOnList = false;
-
-    // Add a delay to ensure dropdown doesn't disappear immediately
-    // when moving between the input and dropdown or within dropdown items.
     setTimeout(() => {
       if (!this.searching) {
         this.showResults = false;
@@ -57,16 +54,7 @@ export class SearchBarComponent {
     }, 10000);
   }
 
-  shortenMedicationName(name: string): string {
-    const dosage = this.getDosage(name);
-    const primaryName = name.split(' ')[0]; // Usually, the first word is the primary name
 
-    if (dosage) {
-        return `${primaryName} ${dosage}`;
-    }
-
-    return primaryName;
-}
 
   getDosage(name: string): string | null {
     name = name.trim();
@@ -76,10 +64,20 @@ export class SearchBarComponent {
     return match ? match[0] : null;
 }
 
+shortenMedicationName(name: string): string {
+  const dosage = this.getDosage(name);
+  const primaryName = name.split(' ')[0];
 
+  return primaryName;
+}
 
   searchMedication() {
-    console.log(this.searchTerm);
+    if(this.isDropdownOpen) {
+      this.isDropdownOpen = false;
+      this.searching = false;
+      return;
+    }
+
     this.medicationService.searchMedicationNames(this.searchTerm).subscribe(data => {
       const extractedNames = [];
       const extractedDosages = [];
@@ -107,6 +105,7 @@ export class SearchBarComponent {
     }, error => {
       console.error("There was an error making this request:", error)
     });
+    this.isDropdownOpen = true;
   }
 
   onSearchTermChange() {
@@ -117,15 +116,16 @@ export class SearchBarComponent {
   }
 
   addMedication(result: string, index: number) {
-    const primaryName = result.split(' ')[0];
+    const primaryName = result;
     const dosage = this.dosages[index];
-    
-    console.log("Selected medication:", primaryName);
-    console.log("Dosage for the medication:", dosage);
+
+    console.log('Clicked Add for:', primaryName);
+    console.log('Dosage:', dosage);
   
-    const medicationData = {
-      prescriptionName: primaryName + " " + dosage
-      // If there are other medication details you want to add, you can do so here.
+  
+    const medicationData: Partial<Medication> = {
+      prescriptionName: primaryName,
+      dose: dosage
     };
   
     this.authService.getUserId().subscribe(userId => {
@@ -134,6 +134,7 @@ export class SearchBarComponent {
           (data: any) => {
             this.medications.push(data);
             this.searchTerm = ''; 
+            console.log(medicationData)
           },
           error => {
             console.error('Error adding medication:', error);

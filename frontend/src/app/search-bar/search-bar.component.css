@@ -1,66 +1,44 @@
-/* Search Bar */
-/* .search-container {
-    position: relative;
-    width: 100%;
-
-} */
-/* 
-.form-input {
-    padding-left: 10px;
-
-}
-
-#search-btn,
-.right-pan {
-    position: absolute;
-    top: 50%;
-    right: 1px;
-    transform: translateY(-50%);
-
-} */
+ .custom-input:focus {
+     border-color: inherit;
+     box-shadow: none;
 
 
-/* Remove the blue outline from the input itself */
-.custom-input:focus {
-    border-color: inherit;
-    box-shadow: none;
-
-}
+ }
 
 
+ .custom-input-group .custom-input:focus~.input-group-append,
+ .custom-input-group .custom-input:focus,
+ .btn:focus {
+     /* border-color: #80bdff; */
+     border: 0;
+     box-shadow: 0 0 0 0.2rem #80bdff;
+     border-radius: 5px;
+     margin: 0;
 
-/* Apply the blue outline to the input group when the input is focused */
-.custom-input-group .custom-input:focus~.input-group-append,
-.custom-input-group .custom-input:focus {
-    border-color: #80bdff;
-    /* Adjust this color if needed */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
-    /* Adjust these values if needed */
-    border-radius: 5px;
-}
+ }
 
-.input-group-append .btn {
-    border-radius: 0 5px 5px 0%;
-}
+ .input-group-append .btn {
+     border-radius: 0 5px 5px 0%;
+ }
 
 
 
 
-.list-group-item {
-    padding-right: 70px;
-}
+ .list-group-item {
+     padding-right: 70px;
+ }
 
-.dropdown-item {
-    padding-right: 70px;
-}
+ .dropdown-item {
+     padding-right: 70px;
+ }
 
-.add-btn {
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-}
+ .add-btn {
+     top: 50%;
+     right: 10px;
+     transform: translateY(-50%);
+ }
 
-/* 
+ /* 
 .dropdown-menu.show {
     
 } */

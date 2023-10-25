@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 export class MedicationsListComponent implements OnInit, OnDestroy {
 
   medications: Medication[] = [];
-  private medicationListSub!: Subscription;
+  private medicationListSub: Subscription = new Subscription;
 
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
 
@@ -23,6 +23,7 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy(): void {
+    // Unsubscribe from the subscription when the component is destroyed
     if (this.medicationListSub) {
       this.medicationListSub.unsubscribe();
     }

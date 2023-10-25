@@ -8,16 +8,16 @@
                         (keydown.enter)="searchMedication()" (focus)="onInputFocus()" />
                     <div class="input-group-append">
                         <button (click)="searchMedication()" (focus)="onInputFocus()" id="search-btn"
-                            class="btn btn-success dropdown-toggle">Search</button>
+                            class="btn btn-primary dropdown-toggle m-0">Search</button>
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="results.length && (searching || focusOnList)" class="dropdown-menu show mt-0 col-10"
+            <div *ngIf="results.length && isDropdownOpen" class="dropdown-menu show mt-0 col-10"
                 style="display: block; max-height: 200px; overflow-y: auto;">
-                <div href="#" *ngFor="let result of results; let i = index" class="dropdown-item position-relative"
+                <div href="#" *ngFor="let result of results; let i = index" class="dropdown-item position-relative p-2"
                     (mouseOver)="focusOnList = true" (focus)="onInputFocus()">
-                    {{result}}
+                    {{result}} {{dosages[i]}}
                     <button class="btn btn-sm btn-primary position-absolute add-btn"
                         (click)="addMedication(result, i)">Add</button>
                 </div>

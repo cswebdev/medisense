@@ -1,9 +1,9 @@
 export interface Medication {
     id?: number;
     prescriptionName?: string;
-    dose?: string;
+    dose?: string | null;
     dosageForm?: string;
-    frequency?: string;
+    frequency?: string | null;
     route?: string;
 }
 
