@@ -1,4 +1,5 @@
 <div class="parent-container">
+    <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
     <form class="container-form" [formGroup]="emailForm" (ngSubmit)="onSubmit()">
         <!-- Profile Details Card -->
         <div class="card mb-3">

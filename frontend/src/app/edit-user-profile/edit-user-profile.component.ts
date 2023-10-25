@@ -17,6 +17,7 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
 
   private destroy$ = new Subject<void>();
+  isLoading = false;
 
   constructor(
     private userService: UserService,
@@ -58,6 +59,7 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.isLoading = true;
     if (this.profileForm.valid) {
       const formData = this.profileForm.value;
   
@@ -78,10 +80,15 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          this.alert.warning('Error retrieving email');
+          if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-login-credentials') {
+            this.alert.warning('Incorrect password.');
+          } else if (error.code === 'auth/too-many-requests') {
+            this.alert.warning('Too many failed attempts. Account has been locked temporarily.');
+          }
         }
       );
     } else {
+      this.isLoading = false;
       const passwordControl = this.profileForm.get('password');
       const confirmPasswordControl = this.profileForm.get('confirmPassword');
       const firstNameControl = this.profileForm.get('firstName');

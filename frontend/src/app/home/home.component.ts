@@ -5,6 +5,7 @@ import { catchError, switchMap, tap, of, Subject, takeUntil, first } from 'rxjs'
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { LoginService } from '../services/login.service';
+import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,8 @@ export class HomeComponent implements OnDestroy {
     private authService: AuthService
   ) {
     this.userLoginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [ Validators.required, 
+                    Validators.email ]],
       password: ['', Validators.required],
       persistence: [false]
     });
@@ -63,7 +65,7 @@ export class HomeComponent implements OnDestroy {
           this.alert.warning('Email is required.');
         } else if ('email' in emailControl.errors) {
           this.alert.warning('Invalid email address.');
-        }
+        } 
       } else if (passwordControl && passwordControl.errors) {
         if ('required' in passwordControl.errors) {
           this.alert.warning('Password is required.');

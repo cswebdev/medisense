@@ -83,7 +83,6 @@ export class AuthService {
     localStorage.setItem('lastEmailSentTimestamp', Date.now().toString());
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       catchError((error) => {
-        console.log('Error during sign up:', error);
         throw error;
       })
     );

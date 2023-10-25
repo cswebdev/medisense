@@ -5,15 +5,19 @@ import { Router } from '@angular/router';
 import { Observable, map, takeUntil } from 'rxjs'; // Import takeUntil
 import { AlertService } from '../services/alert.service';
 import { Subject } from 'rxjs'; // Import Subject
+import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
   selector: 'app-change-email',
   templateUrl: './change-email.component.html',
   styleUrls: ['./change-email.component.css']
 })
-export class ChangeEmailComponent implements OnInit, OnDestroy { // Implement OnDestroy
+export class ChangeEmailComponent implements OnInit, OnDestroy {
   emailForm!: FormGroup;
   userEmail$!: Observable<string | null>;
+
+  isLoading = false;
+
   private destroy$ = new Subject<void>(); // Create a Subject to manage the subscription lifecycle
 
   constructor(
@@ -36,13 +40,16 @@ export class ChangeEmailComponent implements OnInit, OnDestroy { // Implement On
 
   private initializeForm(): void {
     this.emailForm = this.formBuilder.group({
-      email: [this.userEmail$, [Validators.required, Validators.email]],
+      email: ['', [ Validators.required,
+                    Validators.email,
+                    CustomValidators.whitespaceValidator()]],
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]]
-    });
+    }, { validator: CustomValidators.fieldsMatchValidator('password', 'confirmPassword') });
   }
 
   onSubmit() {
+    this.isLoading = true;
     if (this.emailForm.valid) {
       const formData = this.emailForm.value;
 
@@ -73,6 +80,7 @@ export class ChangeEmailComponent implements OnInit, OnDestroy { // Implement On
         }
       });
     } else {
+      this.isLoading = false;
       const emailControl = this.emailForm.get('email');
       const passwordControl = this.emailForm.get('password');
       const confirmPasswordControl = this.emailForm.get('confirmPassword');
@@ -83,6 +91,8 @@ export class ChangeEmailComponent implements OnInit, OnDestroy { // Implement On
         }
         else if ('email' in emailControl.errors) {
           this.alert.warning('Email is invalid.');
+        } else if ('whitespace' in emailControl.errors) {
+          this.alert.warning('Email cannot contain whitespace.')
         }
       } else if (passwordControl && passwordControl.errors) {
         if ('required' in passwordControl.errors) {
@@ -92,6 +102,8 @@ export class ChangeEmailComponent implements OnInit, OnDestroy { // Implement On
         if ('required' in confirmPasswordControl.errors) {
           this.alert.warning("Passwords do not match.");
         }
+      } else if (this.emailForm.hasError('fieldsMismatch')) {
+        this.alert.warning('Passwords do not match!');
       }
     }
   }
