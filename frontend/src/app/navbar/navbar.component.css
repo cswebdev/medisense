@@ -1,5 +1,22 @@
 @import '@fortawesome/fontawesome-free/css/all.css';
 
+a.nav-link {
+    color: #ccc;
+    font-size: 20px;
+}
+
+a.nav-link.active {
+    color: white;
+
+
+}
+
+a:active,
+a:visited,
+a:current {
+    color: #3B71CA;
+}
+
 .email-verified {
     background-color: #198754;
     color: white;

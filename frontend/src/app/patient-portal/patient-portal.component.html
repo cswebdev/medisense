@@ -1,50 +1,54 @@
-<div class="container">
+<div class="container-fluid mt-2">
     <!-- Greeting card -->
-    <div class="card mb-4">
+    <div class="card mb-2">
         <div class="card-body">
-            <h1 class="card-title">Hello,<span class="text-primary"> {{ userFirstName }}</span>.</h1>
+            <h1 class="card-title">Hello,<span class="text-primary" style="text-transform: capitalize;"> {{
+                    userFirstName }}</span>.</h1>
         </div>
     </div>
 
 
 
     <!-- Meds list and chat container -->
-    <div class="row p-0 m-0">
-        <div class="col-6 p-0 m-0">
+    <div class="row">
+        <div class="col-lg-4 m-0">
             <div class="card p-0 m-0" style=" height: 74vh;">
                 <!-- Search container -->
                 <app-search-bar (results)="handleResults($event)"></app-search-bar>
                 <!-- Meds list -->
                 <div class="mb-4">
-                    <div class="card pt-1" style="max-height: 65.1vh">
+                    <h2 class="mb-3 text-center text-primary"> Your Medications</h2>
+                    <div class="btn btn-outline-success m-1 justify-content-center align-content-end">Edit</div>
+                    <div class="card pt-1 border-0" style="max-height: 52.2vh">
                         <div class="card-body m-0 p-0 overflow-auto">
                             <h5 class="card-title"></h5>
-                            <!-- search/add bar -->
-
-                            <!-- <form class="d-flex">
-                                <app-add-medication (medicationAdded)="onMedicationAdded($event)"></app-add-medication>
-                            </form> -->
-
-                            <!-- current meds list -->
-
                             <app-medications-list class="overflow-auto"></app-medications-list>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Chat container -->
-        <div class="col-lg-6">
+        <div class="col-lg-8 m-0">
             <div class="card" style="height: 74vh">
-                <div class="card-body">
+                <div class="card-body d-flex justify-content-center align-content-center">
                     <h5 class="card-title"><span class="text-primary">AI</span> powered analysis</h5>
-                    <textarea class="card-chat-history" style="height: 60vh; resize: none; outline: none; overflow:auto"
-                        readonly></textarea>
+                    <div class="card-chat-history pb-0 m-auto text-muted w-75"
+                        style="height: 60vh; resize: none; outline: none; overflow:auto; border-top:2px solid rgb(222, 222, 222);"
+                        readonly>
+                        Hey there! <span style="font-weight: 800;">:)</span><br> I'm Medisense, your AI medication
+                        analyst.
+                        I can review drug
+                        information, offer
+                        potential
+                        interactions, suggest dosage guidelines, and answer questions you might have about your
+                        medications.
+                        <br>How can I assist you today?
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <button class="btn btn-primary m-0 " type="submit">Start</button>
+                <div class="card-body d-flex">
+                    <div class=" d-flex align-items-center justify-content-center">
+                        <button class="btn btn-outline-primary" type="submit">Start</button>
 
                     </div>
                 </div>

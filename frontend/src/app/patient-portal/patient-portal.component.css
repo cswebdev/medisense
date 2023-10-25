@@ -2,7 +2,8 @@
     align-items: center;
     justify-content: center;
     padding: 2%;
-    background-color: #ffffff14;
+    background-color: #e4efffb6;
+
 
 }
 
@@ -13,6 +14,7 @@
 .card-body {
     display: flex;
     flex-direction: column;
+    display: relative;
 }
 
 .card-title {
@@ -40,36 +42,4 @@
 .search-container {
     position: relative;
     width: 100%;
-}
-
-.form-input {
-    padding-left: 10px;
-    width: 100%;
-
-}
-
-.right-pan {
-    position: absolute;
-    top: 50%;
-    right: 1px;
-    transform: translateY(-50%);
-
-}
-
-
-.right-pan .btn {
-    border: none;
-    background-color: rgba(172, 251, 145, 0.267);
-    color: #28a745;
-    box-shadow: none;
-
-
-
-}
-
-.right-pan .btn:hover {
-    background-color: #28a745;
-    color: white;
-
-    margin: 0;
 }

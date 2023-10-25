@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,8 @@ import jakarta.transaction.Transactional;
 @RestController
 @RequestMapping("/api/v1")
 public class MedicationController {
+
+	private static final Logger logger = LoggerFactory.getLogger(MedicationController.class);
 
 	@Autowired
 	private MedicationRepository medicationRepository;
@@ -65,7 +70,8 @@ public class MedicationController {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 
-		// medication.setUser(userOptional.get());
+		// Set the userId to the medication object
+		medication.setUserId(userId);
 
 		try {
 			// Save the medication
@@ -75,10 +81,10 @@ public class MedicationController {
 			response.setMessage("Medication added successfully.");
 			return new ResponseEntity<>(response, HttpStatus.CREATED);
 		} catch (Exception e) {
-			response.setMessage("An error occured while adding the medication");
+			logger.error("Error while adding the medication", e); // This will log the error details
+			response.setMessage("An error occurred while adding the medication");
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@Value("${my.api.key}")
@@ -88,7 +94,7 @@ public class MedicationController {
 	public ResponseEntity<String> searchMedication(@RequestParam String medication) {
 		RestTemplate restTemplate = new RestTemplate();
 		String url = "https://rxnav.nlm.nih.gov/REST/drugs.json?name=" + medication;
-		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-		return response;
+		ResponseEntity<String> externalResponse = restTemplate.getForEntity(url, String.class);
+		return new ResponseEntity<>(externalResponse.getBody(), HttpStatus.OK);
 	}
 }
