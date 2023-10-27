@@ -16,13 +16,19 @@
                 <!-- Search container -->
                 <app-search-bar (results)="handleResults($event)"></app-search-bar>
                 <!-- Meds list -->
-                <div class="mb-4">
-                    <h2 class="mb-3 text-center text-primary"> Your Medications</h2>
-                    <div class="btn btn-outline-success m-1 justify-content-center align-content-end">Edit</div>
+                <div class="mb-4 d-flex flex-column">
+                    <h2 class="mb-3 text-center justify-self-center text-primary"> Your Medications</h2>
+                    <div class="d-flex justify-content-end">
+                        <div class="btn btn-outline-success m-1 justify-content-end align-items-start" id="edit-btn"
+                            (click)="toggleEdit(); saveFrequency(medications[0])">
+                            {{ isEditing ? 'Save' : 'Edit'}}
+                        </div>
+                    </div>
+
                     <div class="card pt-1 border-0" style="max-height: 52.2vh">
                         <div class="card-body m-0 p-0 overflow-auto">
                             <h5 class="card-title"></h5>
-                            <app-medications-list class="overflow-auto"></app-medications-list>
+                            <app-medications-list class="overflow-auto" [isEditing]="isEditing"></app-medications-list>
                         </div>
                     </div>
                 </div>
@@ -32,7 +38,7 @@
         <div class="col-lg-8 m-0">
             <div class="card" style="height: 74vh">
                 <div class="card-body d-flex justify-content-center align-content-center">
-                    <h5 class="card-title"><span class="text-primary">AI</span> powered analysis</h5>
+                    <h2 class="card-title m-3"><span class="text-primary">AI</span> powered analysis</h2>
                     <div class="card-chat-history pb-0 m-auto text-muted w-75"
                         style="height: 60vh; resize: none; outline: none; overflow:auto; border-top:2px solid rgb(222, 222, 222);"
                         readonly>

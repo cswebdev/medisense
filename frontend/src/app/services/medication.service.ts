@@ -33,10 +33,30 @@
     }
     
 
-    // New method to search for medication names
     searchMedicationNames(medicationName: string): Observable<any> {
       return this.http.get<any>(`${this.apiBaseUrl}/search-medication`, {
         params: { medication: medicationName }
       });
+    }
+
+    updateMedicationFrequency(userId: string | null | undefined, medicationId: number | undefined, frequency: string): Observable<any> {
+      if (userId === undefined || userId === null) {
+        // Handle the case where userId is undefined or null, e.g., show an error message or return early.
+         throw Error('User ID is undefined or null');
+      }
+    
+      if (medicationId === undefined) {
+        // Handle the case where medicationId is undefined, e.g., show an error message or return early.
+         throw Error('Medication ID is undefined');
+      }
+    
+      const url = `${this.baseUrl}/${userId}/medications/${medicationId}`;
+      const body = { frequency };
+    
+      return this.http.put(url, body).pipe(
+        tap(() => {
+          this.medicationChanged.next();
+        })
+      );
     }
   }

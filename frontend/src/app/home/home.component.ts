@@ -23,7 +23,8 @@ export class HomeComponent implements OnDestroy {
     private loginService: LoginService,
     private alert: AlertService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService, 
+
   ) {
     this.userLoginForm = this.fb.group({
       email: ['', [ Validators.required, 
@@ -79,4 +80,5 @@ export class HomeComponent implements OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
 }

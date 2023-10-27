@@ -43,3 +43,8 @@
     position: relative;
     width: 100%;
 }
+
+#edit-btn {
+    right: 0;
+ 
+}

@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+// medications-list.component.ts
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Medication } from '../models/medication.model';
@@ -10,6 +11,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./medications-list.component.css']
 })
 export class MedicationsListComponent implements OnInit, OnDestroy {
+  @Input() isEditing!: boolean;
 
   medications: Medication[] = [];
   private medicationListSub: Subscription = new Subscription;
@@ -22,8 +24,8 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
       this.fetchUserMedications();
     });
   }
+
   ngOnDestroy(): void {
-    // Unsubscribe from the subscription when the component is destroyed
     if (this.medicationListSub) {
       this.medicationListSub.unsubscribe();
     }

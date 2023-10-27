@@ -3,7 +3,7 @@ export interface Medication {
     prescriptionName?: string;
     dose?: string | null;
     dosageForm?: string;
-    frequency?: string | null;
+    frequency?: string ;
     route?: string;
 }
 

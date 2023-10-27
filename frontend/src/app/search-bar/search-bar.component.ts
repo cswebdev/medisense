@@ -134,7 +134,6 @@ shortenMedicationName(name: string): string {
           (data: any) => {
             this.medications.push(data);
             this.searchTerm = ''; 
-            console.log(medicationData)
           },
           error => {
             console.error('Error adding medication:', error);
