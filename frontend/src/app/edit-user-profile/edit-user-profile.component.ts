@@ -97,7 +97,7 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
         if ('required' in firstNameControl.errors) {
           this.alert.warning('First name is required!');
         } else if ('whitespace' in firstNameControl.errors) {
-          this.alert.warning('First name cannot contain whitepsace.');
+          this.alert.warning('First name cannot contain whitespace.');
         } else if ('maxlength' in firstNameControl.errors) {
           this.alert.warning('First name cannot exceed 25 characters.');
         }
