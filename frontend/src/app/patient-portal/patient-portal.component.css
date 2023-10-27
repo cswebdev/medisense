@@ -17,13 +17,15 @@
     display: relative;
 }
 
+
+
 .card-title {
     align-self: center;
 }
 
-.d-flex {
+/* .d-flex {
     padding-bottom: 1%;
-}
+} */
 
 .custom-select {
     height: 100%;
@@ -46,5 +48,5 @@
 
 #edit-btn {
     right: 0;
- 
+
 }
