@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
     this.logoutService.logoutUser().subscribe(
       () => {
         this.alertService.success('Successfully logged out!');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/login']);
       },
       error => {
         console.error('Error logging out:', error);
