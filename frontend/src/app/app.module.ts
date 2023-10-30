@@ -6,7 +6,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { PatientPortalComponent } from './patient-portal/patient-portal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
-import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FooterComponent } from './footer/footer.component';
@@ -34,7 +34,7 @@ import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.compo
     RegistrationComponent,
     PatientPortalComponent,
     NavbarComponent,
-    HomeComponent,
+    LoginComponent,
     FooterComponent,
     UserProfileComponent,
     EditUserProfileComponent,

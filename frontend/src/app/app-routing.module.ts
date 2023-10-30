@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { PatientPortalComponent } from './patient-portal/patient-portal.component';
-import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -16,11 +16,11 @@ const routes: Routes = [
   {
     path: '', 
     pathMatch: 'full',
-    redirectTo: 'home'
+    redirectTo: 'login'
   },
   {
-    path: 'home', 
-    component: HomeComponent,
+    path: 'login', 
+    component: LoginComponent,
     canActivate: [AuthGuard]
   },
   {

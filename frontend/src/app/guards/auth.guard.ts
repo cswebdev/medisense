@@ -17,12 +17,12 @@ export class AuthGuard implements CanActivate {
     return this.authService.isLoggedIn().pipe(
       take(1),
       map((isLoggedIn) => {
-        const isPublicRoute = ['/registration', '/home'].includes(state.url);
+        const isPublicRoute = ['/registration', '/login'].includes(state.url);
 
         if (isPublicRoute && isLoggedIn) {
           return this.router.createUrlTree(['/patient-portal']);
         } else if (!isPublicRoute && !isLoggedIn) {
-          return this.router.createUrlTree(['/home']);
+          return this.router.createUrlTree(['/login']);
         }
 
         return true;
