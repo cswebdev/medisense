@@ -50,13 +50,17 @@ const routes: Routes = [
     path: 'change-email',
     component: ChangeEmailComponent,
     resolve: { user: UserResolverService },
-    canActivate: [AuthGuard, VerifiedEmailGuard]  // Add EmailVerifiedGuard here
+    canActivate: [AuthGuard, VerifiedEmailGuard]
   },
   {
     path: 'change-password',
     component: ChangePasswordComponent,
     resolve: { user: UserResolverService },
-    canActivate: [AuthGuard, VerifiedEmailGuard]  // Add EmailVerifiedGuard here
+    canActivate: [AuthGuard, VerifiedEmailGuard]
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
   }
 ];
 
