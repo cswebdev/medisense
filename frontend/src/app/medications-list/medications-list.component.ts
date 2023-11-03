@@ -17,7 +17,6 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   private medicationListSub: Subscription = new Subscription;
 
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
-
   ngOnInit(): void {
     this.fetchUserMedications();
     this.medicationListSub = this.medicationService.getMedicationChangedObservable().subscribe(() => {
@@ -48,4 +47,22 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  saveFrequency(medication: Medication): void {
+    if (medication && medication.frequency) {
+      const frequency: string = medication.frequency;
+
+      this.authService.getUserId().subscribe(userId => {
+        if (typeof userId === 'string' && userId.trim() !== '') {
+          this.medicationService.updateMedicationFrequency(userId, medication.id, frequency).subscribe(
+            () => {
+            },
+            error => {
+              console.error('Error updating frequency:', error);
+            }
+          );
+        }
+      });
+    } 
+  }  
 }
