@@ -10,6 +10,7 @@ import { VerifiedEmailGuard } from './guards/verified-email.guard';
 import { UserResolverService } from './services/user-resolver.service';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const routes: Routes = [
@@ -57,6 +58,11 @@ const routes: Routes = [
     component: ChangePasswordComponent,
     resolve: { user: UserResolverService },
     canActivate: [AuthGuard, VerifiedEmailGuard]
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

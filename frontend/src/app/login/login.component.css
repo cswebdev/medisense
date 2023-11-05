@@ -106,3 +106,15 @@
     border-top-left-radius: 10;
     border-top-right-radius: 10;
 }
+
+.text-align-right {
+    text-align: right;
+}
+
+.text-align-left {
+    text-align: left;
+}
+
+.col {
+    width: auto;
+}

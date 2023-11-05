@@ -26,6 +26,7 @@ import { GlobalAlertComponent } from './global-alert/global-alert.component';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.compo
     GlobalAlertComponent,
     ChangeEmailComponent,
     ChangePasswordComponent,
-    LoadingOverlayComponent
+    LoadingOverlayComponent,
+    ResetPasswordComponent
   ],
   imports: [
     BrowserModule,
