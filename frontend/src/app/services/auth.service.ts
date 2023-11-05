@@ -174,4 +174,16 @@ export class AuthService {
       switchMap(() => from(this.afAuth.currentUser)) // Map to return the current user after reauthentication
     );
   }
+
+  resetPassword(email: string): Observable<void> {
+    // Convert the promise returned by sendPasswordResetEmail to an Observable
+    return from(this.afAuth.sendPasswordResetEmail(email).then(() => {
+      // Email sent.
+      console.log("Password reset email sent successfully.");
+    }).catch((error) => {
+      // An error happened.
+      console.error("Error sending password reset email:", error);
+      throw error; // Re-throw the error so it can be handled by the subscriber
+    }));
+  }
 }
