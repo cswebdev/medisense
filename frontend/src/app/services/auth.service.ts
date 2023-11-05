@@ -79,7 +79,7 @@ export class AuthService {
   }
 
   signUp(email: string, password: string): Observable<firebase.default.auth.UserCredential> {
-    localStorage.setItem('lastEmailSentTimestamp', Date.now().toString());
+    localStorage.setItem('lastVerifyEmailSentTimestamp', Date.now().toString());
     return from(this.afAuth.createUserWithEmailAndPassword(email, password)).pipe(
       catchError((error) => {
         throw error;
@@ -160,8 +160,6 @@ export class AuthService {
     );
   }
 
-  // In AuthService
-
   reauthenticateUser(email: string, password: string): Observable<firebase.default.User | null> {
     return from(this.afAuth.currentUser).pipe(
       switchMap((user) => {
@@ -178,11 +176,7 @@ export class AuthService {
   resetPassword(email: string): Observable<void> {
     // Convert the promise returned by sendPasswordResetEmail to an Observable
     return from(this.afAuth.sendPasswordResetEmail(email).then(() => {
-      // Email sent.
-      console.log("Password reset email sent successfully.");
     }).catch((error) => {
-      // An error happened.
-      console.error("Error sending password reset email:", error);
       throw error; // Re-throw the error so it can be handled by the subscriber
     }));
   }
