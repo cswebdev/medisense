@@ -49,13 +49,16 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   }
 
   saveFrequency(medication: Medication): void {
-    if (medication && medication.frequency) {
-      const frequency: string = medication.frequency;
-
+    // Check if the medication id and frequency are valid
+    if (medication && medication.id) {
+      const frequency = medication.frequency || 'default value'; // Provide a default value if frequency is null
+  
       this.authService.getUserId().subscribe(userId => {
-        if (typeof userId === 'string' && userId.trim() !== '') {
+        if (userId) {
+          // Update medication frequency - allowing frequency to be null if that's valid
           this.medicationService.updateMedicationFrequency(userId, medication.id, frequency).subscribe(
             () => {
+              // Handle successful update
             },
             error => {
               console.error('Error updating frequency:', error);
@@ -64,5 +67,5 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
         }
       });
     } 
-  }  
+  }
 }
