@@ -35,7 +35,15 @@
     max-width: 100%;
     height: auto;
     transform: scale(3) rotate(-55deg) translateX(.4px) translateY(1px);
-
     transform-origin: center;
+}
+
+#edit-save-btn {
+    position: fixed;
+    right: 15px;
+    bottom: 18%;
+    border-radius: 2px;
+
+    margin: 0;
 
 }

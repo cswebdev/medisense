@@ -1,5 +1,5 @@
 // medications-list.component.ts
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Medication } from '../models/medication.model';
@@ -16,11 +16,22 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   medications: Medication[] = [];
   private medicationListSub: Subscription = new Subscription;
 
+
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
   ngOnInit(): void {
     this.fetchUserMedications();
     this.medicationListSub = this.medicationService.getMedicationChangedObservable().subscribe(() => {
       this.fetchUserMedications();
+    });
+  }
+
+  toggleEdit() {
+    this.isEditing =!this.isEditing;
+  }
+
+  onEditSave(): void {
+    this.medications.forEach(medication => {
+      this.saveFrequency(medication);
     });
   }
 

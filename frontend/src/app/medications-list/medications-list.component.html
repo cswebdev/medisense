@@ -6,12 +6,12 @@
                     <div class="rounded-circle overflow-hidden">
                         <img src="assets/images/pill.png">
                     </div>
-                    <div class="col-md-6 d-flex text-primary text-uppercase  align-items-center justify-content-start">
+                    <div class="col-md-4 d-flex text-primary text-uppercase  align-items-center justify-content-start">
                         {{
                         med.prescriptionName
                         }}
                     </div>
-                    <div class="col-md-4 mt-2 p-0 justify-content-end align-items-end flex-column">
+                    <div class="col-md-4 mt-1 p-0 justify-content-end flex-column" style="display: flex;">
                         <div class="col-md-2 text-muted flex-column">
                             <input placeholder="{{med.dose}}" disabled class="m-0">
                         </div>
@@ -20,8 +20,10 @@
                                 class="m-0 ">
                         </div>
                         <div class="col-md-2 flex justify-content-start align-items-center">
-                            <button class="btn btn-outline-success m-1">Edit</button>
-
+                            <div class="btn btn-outline-success justify-content-end align-items-start"
+                                id="edit-save-btn" (click)="toggleEdit(); onEditSave();">
+                                {{ isEditing ? 'Save' : 'Edit'}}
+                            </div>
                         </div>
                     </div>
 
