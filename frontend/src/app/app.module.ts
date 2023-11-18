@@ -27,6 +27,7 @@ import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ChangeEmailComponent,
     ChangePasswordComponent,
     LoadingOverlayComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ChatbotComponent
   ],
   imports: [
     BrowserModule,
