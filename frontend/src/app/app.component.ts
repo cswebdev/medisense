@@ -26,7 +26,7 @@ ngOnInit() {
       // this.router.navigate(['/patient-portal']); // Redirect to dashboard or any other route you want
     } else {
       // Perform any actions you need when the user is logged out
-      // this.router.navigate(['/home']); // Redirect to login or any other route you want
+      // this.router.navigate(['/login']); // Redirect to login or any other route you want
     }
   });
 }

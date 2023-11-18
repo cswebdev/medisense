@@ -8,11 +8,11 @@ import { LoginService } from '../services/login.service';
 import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class HomeComponent implements OnDestroy {
+export class LoginComponent implements OnDestroy {
 
   userLoginForm: FormGroup;
   isLoading = false;

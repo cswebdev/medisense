@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { PatientPortalComponent } from './patient-portal/patient-portal.component';
-import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -10,17 +10,18 @@ import { VerifiedEmailGuard } from './guards/verified-email.guard';
 import { UserResolverService } from './services/user-resolver.service';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const routes: Routes = [
   {
     path: '', 
     pathMatch: 'full',
-    redirectTo: 'home'
+    redirectTo: 'login'
   },
   {
-    path: 'home', 
-    component: HomeComponent,
+    path: 'login', 
+    component: LoginComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -50,13 +51,22 @@ const routes: Routes = [
     path: 'change-email',
     component: ChangeEmailComponent,
     resolve: { user: UserResolverService },
-    canActivate: [AuthGuard, VerifiedEmailGuard]  // Add EmailVerifiedGuard here
+    canActivate: [AuthGuard, VerifiedEmailGuard]
   },
   {
     path: 'change-password',
     component: ChangePasswordComponent,
     resolve: { user: UserResolverService },
-    canActivate: [AuthGuard, VerifiedEmailGuard]  // Add EmailVerifiedGuard here
+    canActivate: [AuthGuard, VerifiedEmailGuard]
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
   }
 ];
 

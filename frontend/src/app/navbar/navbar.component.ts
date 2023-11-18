@@ -30,14 +30,14 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
 
   ngOnInit() {  // Add ngOnInit lifecycle hook
     // Check local storage to see if enough time has passed since the last email was sent
-    const lastSentTimestamp = localStorage.getItem('lastEmailSentTimestamp');
+    const lastSentTimestamp = localStorage.getItem('lastVerifyEmailSentTimestamp');
     if (lastSentTimestamp) {
       const timePassed = Date.now() - parseInt(lastSentTimestamp);
       if (timePassed < 180000) {
         this.isVerificationButtonDisabled = true;
         timer(180000 - timePassed).subscribe(() => {
           this.isVerificationButtonDisabled = false;
-          localStorage.removeItem('lastEmailSentTimestamp');
+          localStorage.removeItem('lastVerifyEmailSentTimestamp');
         });
       }
     }
@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
     this.logoutService.logoutUser().subscribe(
       () => {
         this.alertService.success('Successfully logged out!');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/login']);
       },
       error => {
         console.error('Error logging out:', error);
@@ -65,10 +65,10 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
     ).subscribe({
       next: () => {
         this.alertService.success('Verification email sent successfully!');
-        localStorage.setItem('lastEmailSentTimestamp', Date.now().toString());
+        localStorage.setItem('lastVerifyEmailSentTimestamp', Date.now().toString());
         timer(180000).subscribe(() => {
           this.isVerificationButtonDisabled = false;
-          localStorage.removeItem('lastEmailSentTimestamp');
+          localStorage.removeItem('lastVerifyEmailSentTimestamp');
         });
       },
       error: (error) => {

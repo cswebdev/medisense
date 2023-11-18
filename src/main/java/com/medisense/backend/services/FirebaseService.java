@@ -21,10 +21,12 @@ public class FirebaseService {
         try {
             FileInputStream serviceAccount =
               new FileInputStream("medisense-7104f-firebase-adminsdk-30q14-1652601820.json");
+              
 
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
+            
 
             FirebaseApp.initializeApp(options);
         } catch (Exception e) {
