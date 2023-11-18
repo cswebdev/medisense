@@ -17,13 +17,9 @@
                 <app-search-bar (results)="handleResults($event)"></app-search-bar>
                 <!-- Meds list -->
                 <div class="d-flex flex-column">
-                    <h2 class="mb-3 text-center justify-self-center text-primary"
-                        style="border-bottom: 2px solid rgb(222, 222, 222);"> Your Medications</h2>
-                    <div class="d-flex justify-content-end" s>
-                        <div class="btn btn-outline-success m-1 justify-content-end align-items-start" id="edit-btn"
-                            (click)="toggleEdit(); saveFrequency(medications[0])">
-                            {{ isEditing ? 'Save' : 'Edit'}}
-                        </div>
+                    <h2 class="mb-3 text-center justify-self-center text-primary"> Your Medications</h2>
+                    <div class="d-flex justify-content-end">
+
                     </div>
 
                     <div class="card pt-1 border-0" style="max-height: 52.2vh">

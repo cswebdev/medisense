@@ -1,5 +1,5 @@
 // medications-list.component.ts
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Medication } from '../models/medication.model';
@@ -16,12 +16,22 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   medications: Medication[] = [];
   private medicationListSub: Subscription = new Subscription;
 
-  constructor(public authService: AuthService, private medicationService: MedicationService) { }
 
+  constructor(public authService: AuthService, private medicationService: MedicationService) { }
   ngOnInit(): void {
     this.fetchUserMedications();
     this.medicationListSub = this.medicationService.getMedicationChangedObservable().subscribe(() => {
       this.fetchUserMedications();
+    });
+  }
+
+  toggleEdit() {
+    this.isEditing =!this.isEditing;
+  }
+
+  onEditSave(): void {
+    this.medications.forEach(medication => {
+      this.saveFrequency(medication);
     });
   }
 
@@ -47,5 +57,26 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  saveFrequency(medication: Medication): void {
+    // Check if the medication id and frequency are valid
+    if (medication && medication.id) {
+      const frequency = medication.frequency || 'default value'; // Provide a default value if frequency is null
+  
+      this.authService.getUserId().subscribe(userId => {
+        if (userId) {
+          // Update medication frequency - allowing frequency to be null if that's valid
+          this.medicationService.updateMedicationFrequency(userId, medication.id, frequency).subscribe(
+            () => {
+              // Handle successful update
+            },
+            error => {
+              console.error('Error updating frequency:', error);
+            }
+          );
+        }
+      });
+    } 
   }
 }
