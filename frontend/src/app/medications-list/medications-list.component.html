@@ -1,28 +1,25 @@
 <div class="container">
     <div class="container-list">
         <div *ngIf="medications && medications.length">
-            <div class="card mb-2 p-3" *ngFor="let med of medications" style="border: 1px solid red;">
+            <div class="card mb-2 p-3" *ngFor="let med of medications">
                 <div class="row border-0 d-flex">
                     <div class="rounded-circle overflow-hidden" style="border: 1px solid rgb(104, 213, 230);">
                         <img src="assets/images/pill-svg.svg">
                     </div>
-                    <div class="col-md-4 d-flex text-primary text-uppercase  align-items-center justify-content-start"
-                        style="border: 1px solid green;">
+                    <div class="col-md-4 d-flex text-primary text-uppercase  align-items-center justify-content-start">
                         {{
                         med.prescriptionName
                         }}
                     </div>
-                    <div class="col-md-4 p-0 justify-content-center flex-column overflow-hidden"
-                        style="display: flex; border: 1px solid purple;">
+                    <div class="col-md-4 p-0 justify-content-center align-self-center m-1">
                         <div class="col-md-2 text-muted">
-                            <input value="{{med.dose}}" disabled style="border: 1px solid red; width: fit-content;">
+                            <input value="{{med.dose}}" disabled>
                             <input [(ngModel)]="med.frequency" placeholder="frequency" [disabled]=" !isEditing"
                                 class="m-0 ">
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex flex-column justify-content-center align-items-center"
-                        style="border: 1px solid red;">
-                        <div class="btn btn-outline-success action-btn" id="edit-save-btn"
+                    <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <div class="btn btn-outline-primary action-btn" id="edit-save-btn"
                             (click)="toggleEdit(); onEditSave();">
                             {{ isEditing ? 'Save' : 'Edit'}}
                         </div>

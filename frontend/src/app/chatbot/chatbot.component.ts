@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-chatbot',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class ChatbotComponent {
 
+
+ faPaperPlane = faPaperPlane
 }
