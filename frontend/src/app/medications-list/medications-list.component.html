@@ -1,31 +1,32 @@
 <div class="container">
     <div class="container-list">
         <div *ngIf="medications && medications.length">
-            <div class="card mb-2 p-3" *ngFor="let med of medications">
+            <div class="card mb-2 p-3" *ngFor="let med of medications" style="border: 1px solid red;">
                 <div class="row border-0 d-flex">
-                    <div class="rounded-circle overflow-hidden">
-                        <img src="assets/images/pill.png">
+                    <div class="rounded-circle overflow-hidden" style="border: 1px solid rgb(104, 213, 230);">
+                        <img src="assets/images/pill-svg.svg">
                     </div>
-                    <div class="col-md-4 d-flex text-primary text-uppercase  align-items-center justify-content-start">
+                    <div class="col-md-4 d-flex text-primary text-uppercase  align-items-center justify-content-start"
+                        style="border: 1px solid green;">
                         {{
                         med.prescriptionName
                         }}
                     </div>
-                    <div class="col-md-4 mt-1 p-0 justify-content-center flex-column" style="display: flex;">
-                        <div class="col-md-2 text-muted flex-column">
-                            <input placeholder="{{med.dose}}" disabled class="m-0">
-                        </div>
-                        <div class="col-md-2 p-0 flex-column">
+                    <div class="col-md-4 p-0 justify-content-center flex-column overflow-hidden"
+                        style="display: flex; border: 1px solid purple;">
+                        <div class="col-md-2 text-muted">
+                            <input value="{{med.dose}}" disabled style="border: 1px solid red; width: fit-content;">
                             <input [(ngModel)]="med.frequency" placeholder="frequency" [disabled]=" !isEditing"
                                 class="m-0 ">
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                    <div class="col-md-2 d-flex flex-column justify-content-center align-items-center"
+                        style="border: 1px solid red;">
                         <div class="btn btn-outline-success action-btn" id="edit-save-btn"
                             (click)="toggleEdit(); onEditSave();">
                             {{ isEditing ? 'Save' : 'Edit'}}
                         </div>
-                        <div class="btn btn-outline-danger action-btn">
+                        <div class="btn btn-outline-danger action-btn" (click)="deleteMedication(med.id)">
                             <fa-icon [icon]="faTrashcan"></fa-icon>
                         </div>
                     </div>
