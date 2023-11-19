@@ -1,9 +1,9 @@
-// medications-list.component.ts
 import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Medication } from '../models/medication.model';
 import { Subscription } from 'rxjs';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-medications-list',
@@ -16,6 +16,7 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   medications: Medication[] = [];
   private medicationListSub: Subscription = new Subscription;
 
+  faTrashcan = faTrashCan;
 
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
   ngOnInit(): void {

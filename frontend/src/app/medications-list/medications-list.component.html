@@ -2,7 +2,7 @@
     <div class="container-list">
         <div *ngIf="medications && medications.length">
             <div class="card mb-2 p-3" *ngFor="let med of medications">
-                <div class="row border-0 d-flex ">
+                <div class="row border-0 d-flex">
                     <div class="rounded-circle overflow-hidden">
                         <img src="assets/images/pill.png">
                     </div>
@@ -11,7 +11,7 @@
                         med.prescriptionName
                         }}
                     </div>
-                    <div class="col-md-4 mt-1 p-0 justify-content-end flex-column" style="display: flex;">
+                    <div class="col-md-4 mt-1 p-0 justify-content-center flex-column" style="display: flex;">
                         <div class="col-md-2 text-muted flex-column">
                             <input placeholder="{{med.dose}}" disabled class="m-0">
                         </div>
@@ -19,18 +19,23 @@
                             <input [(ngModel)]="med.frequency" placeholder="frequency" [disabled]=" !isEditing"
                                 class="m-0 ">
                         </div>
-                        <div class="col-md-2 flex justify-content-start align-items-center">
-                            <div class="btn btn-outline-success justify-content-end align-items-start"
-                                id="edit-save-btn" (click)="toggleEdit(); onEditSave();">
-                                {{ isEditing ? 'Save' : 'Edit'}}
-                            </div>
+                    </div>
+                    <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <div class="btn btn-outline-success action-btn" id="edit-save-btn"
+                            (click)="toggleEdit(); onEditSave();">
+                            {{ isEditing ? 'Save' : 'Edit'}}
+                        </div>
+                        <div class="btn btn-outline-danger action-btn">
+                            <fa-icon [icon]="faTrashcan"></fa-icon>
                         </div>
                     </div>
+
 
                 </div>
             </div>
         </div>
     </div>
-    <p class="mt-3 text-muted text-center text-lowercase" *ngIf="!medications?.length">No medications found for the
+    <p class="mt-3 text-muted text-center text-lowercase" *ngIf="!medications?.length">No medications found for
+        the
         user.</p>
 </div>
