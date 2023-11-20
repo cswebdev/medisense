@@ -14,13 +14,30 @@
     display: flex;
     width: 55px;
     height: 55px;
-    /* background-color: #fbfdffef; */
+    background-color: #fbfdffef;
     /* border: 1px solid rgb(167, 167, 167); */
     overflow: none;
     justify-content: center;
     align-items: center;
     align-self: center
 }
+
+/* note to self - this is a sloppy way to do this
+I would like to do input{ max-width: min-content};
+I dont know what constitutes as content
+the way values are currently being imported
+may not count as content */
+
+input:nth-of-type(1) {
+    max-width: 75%;
+
+}
+
+input:nth-of-type(2) {
+    max-width: 75%;
+}
+
+
 
 /* .rounded-circle img {
     display: block;
@@ -31,9 +48,9 @@
 } */
 
 .rounded-circle img {
-    display: block;
-    max-width: 130%;
+    max-width: 100%;
     height: auto;
+    transform: scale(1.3);
     /* transform: scale(3) rotate(-55deg) translateX(.4px) translateY(1px); */
     transform-origin: center;
 }
