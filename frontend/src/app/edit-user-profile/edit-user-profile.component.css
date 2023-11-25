@@ -1,23 +1,16 @@
-/* Styles for the parent container */
+@import '@fortawesome/fontawesome-free/css/all.css';
+
 .parent-container {
     display: grid;
     place-items: center;
     height: auto;
-    margin: 5%
-    /* This will take the full height of the viewport */
+    margin: 2%;
 }
 
-/* Styles for the card */
 .card {
     width: 50%;
     display: flex;
     height: auto;
-}
-
-.container {
-    align-items: center;
-    justify-content: center;
-    padding: 2%;
 }
 
 .card-body {
@@ -33,21 +26,6 @@
 
 .d-flex {
     padding-bottom: 1%;
-}
-
-.custom-select {
-    height: 100%;
-    border-color: lightgray;
-}
-
-.card-chat-history {
-    border-color: lightgray;
-}
-
-.container-form {
-    justify-content: center;
-    width: 95%;
-
 }
 
 .input-row {
@@ -72,6 +50,107 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%; /* or any other value that suits your design */
+    height: 100%;
     width: 95%;
+}
+
+.card-danger {
+    width: 50%;
+    display: flex;
+    height: auto;
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+
+.collapse {
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+}
+
+.title-warning {
+    color: #dc3545;
+    align-self: center;
+}
+
+.body-warning {
+    color: #dc3545;
+    margin: 0.5rem 1rem 0.5rem 1rem;
+    width: 100%;
+    align-items: center;
+    font-size: 1rem;
+    padding: 0px 2.5% 0px 2.5%;
+}
+
+
+.delete-confirm {
+    width: 10ch;
+    text-align: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.container-accordion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title-left {
+    text-align: left;
+}
+
+.title-right {
+    text-align: right;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.title-warning-content {
+    flex-grow: 1;
+}
+
+.icon-container {
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.fa-triangle-exclamation {
+    color: #dc3545;
+    font-size: 1.5rem;
+}
+
+.fa-caret-down, .fa-caret-up {
+    color: #f0f0f0;
+    background-color: #dc3545;
+    border-radius: 5px;
+    padding: 5px 8px 5px 8px;
+    font-size: 1rem;
+}
+
+.delete-container-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.pr-6 {
+    padding-right: 6px;
+}
+
+.px-0 {
+    padding-left: 0;
+    padding-right: 0;
 }

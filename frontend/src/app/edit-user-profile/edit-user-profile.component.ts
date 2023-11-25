@@ -15,9 +15,11 @@ import { CustomValidators } from '../validators/custom-validators';
 })
 export class EditUserProfileComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
+  deleteForm!: FormGroup;
 
   private destroy$ = new Subject<void>();
   isLoading = false;
+  isAccordionOpen = false;
 
   constructor(
     private userService: UserService,
@@ -55,7 +57,14 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
       lastName: ['', [Validators.required, 
                       Validators.maxLength(25),
                       CustomValidators.whitespaceValidator()]],
-    }, { validator: CustomValidators.fieldsMatchValidator('password', 'confirmPassword') });  
+    }, { validator: CustomValidators.fieldsMatchValidator('password', 'confirmPassword') });
+    this.deleteForm = this.formBuilder.group({
+      confirmDeleteAccount: ['', [Validators.required]],
+    })  
+  }
+
+  toggleAccordion() {
+    this.isAccordionOpen = !this.isAccordionOpen;
   }
 
   onSubmit() {

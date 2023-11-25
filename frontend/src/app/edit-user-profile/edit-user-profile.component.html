@@ -61,4 +61,48 @@
             </div>
         </div>
     </form>
+    <div class="container-accordion full-width" id="accordion">
+        <div class="card card-danger">
+            <div class="card-header header-danger" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn accordion-btn full-width" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" (click)="toggleAccordion()">
+                        <div class="title-container">
+                            <div class="row title-warning-content">
+                                <div class="col icon-container title-right">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <h5 class="title-warning col-auto">Delete Account</h5>
+                                <div class="col-auto icon-container title-left">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                                <div class="col icon-container title-right">
+                                    <i class="fa-solid" [ngClass]="{'fa-caret-down': !isAccordionOpen, 'fa-caret-up': isAccordionOpen}"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </h5>
+            </div>            
+            <div id="collapseOne" class="collapse full-width" aria-labelledby="headingOne" data-parent="#accordion">
+                <form class="delete-container-form" [formGroup]="deleteForm" (ngSubmit)="onSubmit()">
+                    <div class="body-warning">
+                        <div class="row">
+                            <div class="col title-right pr-6">
+                                Type "DELETE" to confirm:
+                            </div>
+                            <div class="col-auto px-0">
+                                    <input type="text" id="confirmDeleteAccount" class="form-control form-control-sm delete-confirm "
+                                    formControlName="confirmDeleteAccount" required/>
+                            </div>
+                            <div class="col-4 title-left">
+                                <button class="btn btn-danger btn-sm" type="submit">
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
