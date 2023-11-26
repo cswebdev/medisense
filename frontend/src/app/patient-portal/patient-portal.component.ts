@@ -19,7 +19,7 @@ export class PatientPortalComponent implements OnInit {
   private medicationListSub: Subscription = new Subscription;
 
 
-  @ViewChild(MedicationsListComponent, { static: false }) 
+  @ViewChild(MedicationsListComponent) 
   medicationsListComponent!: MedicationsListComponent; 
 
   constructor(private route: ActivatedRoute,
@@ -53,22 +53,9 @@ export class PatientPortalComponent implements OnInit {
     this.medicationsListComponent.fetchUserMedications();
   }
 
-  saveFrequency(medication: Medication): void {
-    if (medication && medication.frequency) {
-      const frequency: string = medication.frequency;
-  
-      this.authService.getUserId().subscribe(userId => {
-        if (typeof userId === 'string' && userId.trim() !== '') {
-          this.medicationService.updateMedicationFrequency(userId, medication.id, frequency).subscribe(
-            () => {
-            },
-            error => {
-              console.error('Error updating frequency:', error);
-            }
-          );
-        }
-      });
-    } 
-  }  
+  onEditSave():void {
+this.medicationsListComponent.saveFrequency(this.medicationsListComponent.medications[0]);
+  }
+
   }
 

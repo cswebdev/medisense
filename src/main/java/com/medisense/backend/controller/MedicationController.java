@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -84,6 +85,49 @@ public class MedicationController {
 		} catch (Exception e) {
 			logger.error("Error while adding the medication", e); // This will log the error details
 			response.setMessage("An error occurred while adding the medication");
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PutMapping("/users/{userId}/medications/{medicationId}")
+	@Transactional
+	public ResponseEntity<MedicationResponse> updateMedication(
+			@PathVariable("userId") String userId,
+			@PathVariable("medicationId") Long medicationId,
+			@RequestBody Medication medicationDetails) {
+
+		MedicationResponse response = new MedicationResponse();
+
+		// First, check if the user exists
+		Optional<User> userOptional = userRepository.findById(userId);
+		if (!userOptional.isPresent()) {
+			response.setMessage("User not found");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+
+		Optional<Medication> medicationOptional = medicationRepository.findById(medicationId);
+		if (!medicationOptional.isPresent()) {
+			response.setMessage("Medication not found");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+
+		Medication existingMedication = medicationOptional.get();
+		if (!existingMedication.getUserId().equals(userId)) {
+			response.setMessage("Medication does not belong to the user");
+			return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+		}
+
+		existingMedication.setFrequency(medicationDetails.getFrequency());
+
+		try {
+			Medication updatedMedication = medicationRepository.save(existingMedication);
+
+			response.setMedications(Collections.singletonList(updatedMedication));
+			response.setMessage("Medication updated successfully.");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Error while updating the medication", e);
+			response.setMessage("An error occurred while updating the medication");
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
