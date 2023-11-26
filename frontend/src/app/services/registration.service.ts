@@ -17,7 +17,7 @@ export class RegistrationService {
       switchMap((credential: firebase.auth.UserCredential) => {
         if (!credential.user) {
           console.error("No user in credential!");
-          return throwError("No user in credential!"); // Import throwError from 'rxjs'
+          return throwError("No user in credential!");
         }
         
         return from(credential.user.getIdToken()).pipe(

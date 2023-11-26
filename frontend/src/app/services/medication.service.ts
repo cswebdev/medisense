@@ -59,4 +59,8 @@
         })
       );
     }
+
+    deleteAllMedicationsByUserId(userId: string): Observable<any> {
+      return this.http.delete(`${this.baseUrl}/${userId}/medications/all`);
+    }    
   }

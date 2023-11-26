@@ -68,6 +68,8 @@ export class RegistrationComponent implements OnDestroy {
           error => {
             if (error.code === 'auth/email-already-in-use') {
               this.alert.warning('User with email already exists.');
+            } else if (error.code === 'auth/invalid-email') {
+              this.alert.warning('Invalid email format')
             } else {
               this.alert.warning('Something went wrong.');
             }
@@ -119,10 +121,6 @@ export class RegistrationComponent implements OnDestroy {
         this.alert.warning('Password must contain at least 1 number.');
       } else if ('noSpecialCharacter' in passwordControl.errors) {
         this.alert.warning('Password must contain at least 1 special character.');
-      }
-    } else if (confirmPasswordControl && confirmPasswordControl.errors) {
-      if ('required' in confirmPasswordControl.errors) {
-        this.alert.warning("Passwords do not match!");
       }
     } else if (this.userRegistrationForm.hasError('fieldsMismatch')) {
         this.alert.warning('Passwords do not match!');

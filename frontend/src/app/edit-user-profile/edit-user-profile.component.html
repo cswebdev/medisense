@@ -60,5 +60,31 @@
                 </div>
             </div>
         </div>
+
+        <!-- Account Deletion -->
+        <div class="container-delete full-width mb-3">
+            <div class="card card-danger">
+                <div class="body-warning">
+                    <div class="row">
+                        <div class="col-auto icon-container title-right">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="col-auto title-right pr-6">
+                            Delete your account?:
+                        </div>
+                        <div class="col-auto px-0 ">
+                            <input class="form-check-input checkbox" type="checkbox" id="deleteAccountCheckbox" formControlName="deleteAccount">
+                        </div>
+                        <div class="col-auto title-right pr-6">
+                            Type "DELETE" to confirm:
+                        </div>
+                        <div class="col-auto px-0">
+                                <input type="text" id="confirmDeleteAccount" class="form-control form-control-sm delete-confirm "
+                                formControlName="confirmDelete"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>

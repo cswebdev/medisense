@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { Subject } from 'rxjs';
 import { CustomValidators } from '../validators/custom-validators';
+import { MedicationService } from '../services/medication.service';
 
 @Component({
   selector: 'app-edit-user-profile',
@@ -23,6 +24,7 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private medicationService: MedicationService,
     private alert: AlertService,
     private router: Router
   ) {}
@@ -55,14 +57,16 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
       lastName: ['', [Validators.required, 
                       Validators.maxLength(25),
                       CustomValidators.whitespaceValidator()]],
-    }, { validator: CustomValidators.fieldsMatchValidator('password', 'confirmPassword') });  
+      deleteAccount: [false],
+      confirmDelete: [''],
+    }, { validator: [ CustomValidators.fieldsMatchValidator('password', 'confirmPassword'),
+                      CustomValidators.deleteAccountValidator('deleteAccount', 'confirmDelete') ]});
   }
 
   onSubmit() {
     this.isLoading = true;
     if (this.profileForm.valid) {
       const formData = this.profileForm.value;
-  
       const userUpdateData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -74,7 +78,11 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
       ).subscribe(
         email => {
           if (email) {
-            this.reauthenticateAndSave(email, formData.password, userUpdateData);
+            if (formData.deleteAccount) {
+              this.reauthenticateAndDelete(email, formData.password);
+            } else {
+              this.reauthenticateAndSave(email, formData.password, userUpdateData);
+            }
           } else {
             this.alert.warning('No email retrieved for re-authentication');
           }
@@ -119,6 +127,8 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
         }
       } else if (this.profileForm.hasError('fieldsMismatch')) {
           this.alert.warning('Passwords do not match!');
+      } else if (this.profileForm.hasError('deleteAccount')) {
+        this.alert.warning('You must enter "DELETE" to confirm account deletion.')
       }
     }
   }
@@ -127,6 +137,7 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
 
   private reauthenticateAndSave(email: string, password: string, userUpdateData: any) {
     this.authService.reauthenticateUser(email, password).pipe(
+      first(),
       takeUntil(this.destroy$)
     ).subscribe(
       () => {
@@ -144,6 +155,7 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
 
   private saveUserInformation(userUpdateData: any) {
     this.authService.getUserId().pipe(
+      first(),
       switchMap(userId => {
         if (userId) {
           return this.userService.updateUser(userId, userUpdateData);
@@ -157,10 +169,64 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
         this.alert.success('User information updated successfully!');
       },
       error => {
-        console.error('Error updating user:', error);
+        this.alert.danger("Error updating user.");
       }
     );
   }
+
+  private reauthenticateAndDelete(email: string, password: string) {
+    this.authService.reauthenticateUser(email, password).pipe(
+      first(),
+      takeUntil(this.destroy$)
+    ).subscribe(
+      () => {
+        this.deleteUser();
+      },
+      error => {
+        if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-login-credentials') {
+          this.alert.warning('Incorrect password.');
+        } else if (error.code === 'auth/too-many-requests') {
+          this.alert.warning('Too many failed attempts. Account has been locked temporarily.');
+        }
+      }
+    );
+  }
+
+  private deleteUser() {
+    this.authService.getUserId().pipe(
+      first(),
+      switchMap(userId => {
+        if (!userId) {
+          throw new Error('User ID not found');
+        }
+        return this.medicationService.deleteAllMedicationsByUserId(userId)
+               .pipe(map(() => ({ userId })));
+      }),
+      switchMap(({ userId }) => {
+        return this.userService.deleteUser(userId)
+               .pipe(map(() => ({ userId })));
+      }),
+      switchMap(({ userId }) => {
+        return this.authService.deleteAccount();
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+        this.alert.success('User account deleted successfully!');
+      },
+      error: error => {
+        this.alert.danger('Error during account deletion.');
+        this.isLoading = false;
+      },
+      complete: () => {
+        localStorage.clear();
+        this.isLoading = false;
+      }
+    });
+  }
+  
+  
 
   ngOnDestroy(): void {
     this.destroy$.next();
