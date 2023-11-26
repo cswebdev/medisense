@@ -1,6 +1,7 @@
 package com.medisense.backend.controller;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -145,18 +146,18 @@ public class MedicationController {
 
 	@DeleteMapping("/users/{userId}/medications/all")
 	@Transactional
-	public ResponseEntity<String> deleteAllMedicationsByUserId(@PathVariable("userId") String userId) {
-    Optional<User> userOptional = userRepository.findById(userId);
-    if (!userOptional.isPresent()) {
-        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-    }
-    try {
-        medicationRepository.deleteAllByUserId(userId);
-        return new ResponseEntity<>("All medications deleted successfully for user " + userId, HttpStatus.OK);
-    } catch (Exception e) {
-        logger.error("Error while deleting medications for user " + userId, e);
-        return new ResponseEntity<>("An error occurred while deleting the medications", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
+	public ResponseEntity<Map<String, String>> deleteAllMedicationsByUserId(@PathVariable("userId") String userId) {
+		Optional<User> userOptional = userRepository.findById(userId);
+		if (!userOptional.isPresent()) {
+			return new ResponseEntity<>(Collections.singletonMap("message", "User not found"), HttpStatus.NOT_FOUND);
+		}
+		try {
+			medicationRepository.deleteAllByUserId(userId);
+			return new ResponseEntity<>(Collections.singletonMap("message", "All medications deleted successfully for user " + userId), HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Error while deleting medications for user " + userId, e);
+			return new ResponseEntity<>(Collections.singletonMap("message", "An error occurred while deleting the medications"), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 }

@@ -68,6 +68,8 @@ export class RegistrationComponent implements OnDestroy {
           error => {
             if (error.code === 'auth/email-already-in-use') {
               this.alert.warning('User with email already exists.');
+            } else if (error.code === 'auth/invalid-email') {
+              this.alert.warning('Invalid email format')
             } else {
               this.alert.warning('Something went wrong.');
             }

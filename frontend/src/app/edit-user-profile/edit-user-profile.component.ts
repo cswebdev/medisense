@@ -169,7 +169,6 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
         this.alert.success('User information updated successfully!');
       },
       error => {
-        console.error('Error updating user:', error);
         this.alert.danger("Error updating user.");
       }
     );
@@ -200,28 +199,31 @@ export class EditUserProfileComponent implements OnInit, OnDestroy {
         if (!userId) {
           throw new Error('User ID not found');
         }
-        // First, delete all medications for the user
-        return this.medicationService.deleteAllMedicationsByUserId(userId).pipe(
-          switchMap(() => {
-            // Then delete the user
-            return this.userService.deleteUser(userId);
-          })
-        );
+        return this.medicationService.deleteAllMedicationsByUserId(userId)
+               .pipe(map(() => ({ userId })));
       }),
-      switchMap(() => {
-        // Finally, delete the user's account
+      switchMap(({ userId }) => {
+        return this.userService.deleteUser(userId)
+               .pipe(map(() => ({ userId })));
+      }),
+      switchMap(({ userId }) => {
         return this.authService.deleteAccount();
       }),
       takeUntil(this.destroy$)
-    ).subscribe(
-      () => {
+    ).subscribe({
+      next: () => {
         this.router.navigate(['/login']);
         this.alert.success('User account deleted successfully!');
       },
-      error => {
+      error: error => {
         this.alert.danger('Error during account deletion.');
+        this.isLoading = false;
+      },
+      complete: () => {
+        localStorage.clear();
+        this.isLoading = false;
       }
-    );
+    });
   }
   
   
