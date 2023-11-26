@@ -120,10 +120,6 @@ export class RegistrationComponent implements OnDestroy {
       } else if ('noSpecialCharacter' in passwordControl.errors) {
         this.alert.warning('Password must contain at least 1 special character.');
       }
-    } else if (confirmPasswordControl && confirmPasswordControl.errors) {
-      if ('required' in confirmPasswordControl.errors) {
-        this.alert.warning("Passwords do not match!");
-      }
     } else if (this.userRegistrationForm.hasError('fieldsMismatch')) {
         this.alert.warning('Passwords do not match!');
     }

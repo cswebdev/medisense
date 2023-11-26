@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -97,4 +98,21 @@ public class MedicationController {
 		ResponseEntity<String> externalResponse = restTemplate.getForEntity(url, String.class);
 		return new ResponseEntity<>(externalResponse.getBody(), HttpStatus.OK);
 	}
+
+	@DeleteMapping("/users/{userId}/medications/all")
+	@Transactional
+	public ResponseEntity<String> deleteAllMedicationsByUserId(@PathVariable("userId") String userId) {
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (!userOptional.isPresent()) {
+        return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+    }
+    try {
+        medicationRepository.deleteAllByUserId(userId);
+        return new ResponseEntity<>("All medications deleted successfully for user " + userId, HttpStatus.OK);
+    } catch (Exception e) {
+        logger.error("Error while deleting medications for user " + userId, e);
+        return new ResponseEntity<>("An error occurred while deleting the medications", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 }

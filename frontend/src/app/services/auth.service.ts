@@ -180,4 +180,22 @@ export class AuthService {
       throw error; // Re-throw the error so it can be handled by the subscriber
     }));
   }
+
+  deleteAccount(): Observable<void> {
+    return from(this.afAuth.currentUser).pipe(
+        switchMap((user) => {
+            if (!user) {
+                throw new Error('User not logged in');
+            }
+            return from(user.delete());
+        }),
+        tap(() => {
+            this.router.navigate(['/']);
+            localStorage.clear();
+        }),
+        catchError((error) => {
+            throw error;
+        })
+    );
+  }
 }

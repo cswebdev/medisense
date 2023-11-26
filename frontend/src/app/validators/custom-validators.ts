@@ -42,4 +42,16 @@ export class CustomValidators {
             return !hasWhitespace ? null : { whitespace: true };
         };
     }
+
+    static deleteAccountValidator(field1: string, field2: string): ValidatorFn {
+        return (control: AbstractControl): ValidationErrors | null => {
+            const checkbox = control.get(field1)?.value;
+            const input = control.get(field2)?.value;
+            if (checkbox === true && input !== "DELETE") {
+                return { deleteAccount: true };
+            }
+            return null;
+        };
+    }
+    
 }
