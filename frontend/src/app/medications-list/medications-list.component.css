@@ -8,42 +8,43 @@
 
 .card:hover {
     transform: scale(1.01);
-
-    .rounded-circle {
-        background-color: rgb(173, 201, 255);
-    }
 }
-
-
 
 .rounded-circle {
     display: flex;
     width: 55px;
     height: 55px;
     background-color: #fbfdffef;
-    border: 1px solid rgb(167, 167, 167);
+    /* border: 1px solid rgb(167, 167, 167); */
     overflow: none;
     justify-content: center;
     align-items: center;
-    align-self: center;
-
-
+    align-self: center
 }
+
+/* note to self - this is a sloppy way to do this
+I would like to do input{ max-width: min-content};
+I dont know what constitutes as content
+the way values are currently being imported
+may not count as content */
+
+input {
+    max-width: 75%;
+}
+
+
+
 
 .rounded-circle img {
-    display: block;
     max-width: 100%;
     height: auto;
-    transform: scale(3) rotate(-55deg) translateX(.4px) translateY(1px);
-    transform-origin: center;
+    transform: scale(1.3);
 }
 
-#edit-save-btn {
-    position: fixed;
-    right: 15px;
-    bottom: 18%;
-    border-radius: 2px;
-
-    margin: 0;
-
+.action-btn {
+    width: 50px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

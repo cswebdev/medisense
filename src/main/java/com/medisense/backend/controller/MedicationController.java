@@ -66,18 +66,15 @@ public class MedicationController {
 			@RequestBody Medication medication) {
 		MedicationResponse response = new MedicationResponse();
 
-		// Check if the user exists.
 		Optional<User> userOptional = userRepository.findById(userId);
 		if (!userOptional.isPresent()) {
 			response.setMessage("User not found");
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 
-		// Set the userId to the medication object
 		medication.setUserId(userId);
 
 		try {
-			// Save the medication
 			Medication savedMedication = medicationRepository.save(medication);
 
 			response.setMedications(Collections.singletonList(savedMedication));
@@ -99,7 +96,6 @@ public class MedicationController {
 
 		MedicationResponse response = new MedicationResponse();
 
-		// First, check if the user exists
 		Optional<User> userOptional = userRepository.findById(userId);
 		if (!userOptional.isPresent()) {
 			response.setMessage("User not found");
@@ -129,6 +125,35 @@ public class MedicationController {
 		} catch (Exception e) {
 			logger.error("Error while updating the medication", e);
 			response.setMessage("An error occurred while updating the medication");
+			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@DeleteMapping("/users/{userId}/medications/{medicationId}")
+	@Transactional
+	public ResponseEntity<MedicationResponse> deleteMedication(
+			@PathVariable("userId") String userId,
+			@PathVariable("medicationId") Long medicationId) {
+
+		MedicationResponse response = new MedicationResponse();
+		Optional<User> userOptional = userRepository.findById(userId);
+		if (!userOptional.isPresent()) {
+			response.setMessage("User not found");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+
+		Optional<Medication> medicationOptional = medicationRepository.findById(medicationId);
+		if (!medicationOptional.isPresent() || !medicationOptional.get().getUserId().equals(userId)) {
+			response.setMessage("Medication not found or does not belong to the user");
+			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+		}
+		try {
+			medicationRepository.deleteById(medicationId);
+			response.setMessage("Medication deleted successfully.");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Error while deleting the medication", e);
+			response.setMessage("An error occurred while deleting the medication");
 			return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

@@ -1,9 +1,9 @@
-// medications-list.component.ts
 import { Component, OnDestroy, OnInit, Input, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Medication } from '../models/medication.model';
 import { Subscription } from 'rxjs';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-medications-list',
@@ -16,6 +16,7 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   medications: Medication[] = [];
   private medicationListSub: Subscription = new Subscription;
 
+  faTrashcan = faTrashCan;
 
   constructor(public authService: AuthService, private medicationService: MedicationService) { }
   ngOnInit(): void {
@@ -41,6 +42,28 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
     }
   }
 
+  deleteMedication(medicationId: number | undefined): void {
+    if (typeof medicationId === 'undefined') {
+      console.error('Medication ID is undefined');
+      return;
+    }
+  
+    this.authService.getUserId().subscribe(userId => {
+      if (userId) {
+        this.medicationService.deleteMedication(userId, medicationId).subscribe(
+          () => {
+            this.medications = this.medications.filter(med => med.id !== medicationId);
+          },
+          error => {
+            console.error('Error deleting medication:', error);
+            alert('An error occurred while deleting the medication. Please try again.');
+          }
+        );
+      }
+    });
+  }
+  
+
   fetchUserMedications(): void {
     this.authService.getUserId().subscribe(userId => {
       if (userId) {
@@ -60,16 +83,13 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
   }
 
   saveFrequency(medication: Medication): void {
-    // Check if the medication id and frequency are valid
     if (medication && medication.id) {
       const frequency = medication.frequency || 'default value'; // Provide a default value if frequency is null
   
       this.authService.getUserId().subscribe(userId => {
         if (userId) {
-          // Update medication frequency - allowing frequency to be null if that's valid
           this.medicationService.updateMedicationFrequency(userId, medication.id, frequency).subscribe(
             () => {
-              // Handle successful update
             },
             error => {
               console.error('Error updating frequency:', error);
