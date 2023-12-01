@@ -11,26 +11,29 @@
 
     <!-- Meds list and chat container -->
     <div class="row">
-        <div class="col-lg-4 m-0">
-            <div class="card p-0 m-0" style=" height: 74vh;">
+        <div class="col-lg-4 m-0 d-flex flex-column">
+            <div class="card p-0 m-0" style="height: 74vh; display: flex; flex-direction: column;">
                 <!-- Search container -->
                 <app-search-bar (results)="handleResults($event)"></app-search-bar>
                 <!-- Meds list -->
-                <div class="d-flex flex-column">
+                <div class="d-flex flex-column" style="flex: 1;">
                     <h2 class="mb-3 text-center justify-self-center text-primary"> Your Medications</h2>
-                    <div class="d-flex justify-content-end">
-
-                    </div>
-
-                    <div class="card pt-1 border-0" style="max-height: 52.2vh">
-                        <div class="card-body m-0 p-0 overflow-auto">
+                    <div class="col m-0 d-flex flex-column">
+                        <div class="card p-0 m-0 border-0" style="height:100%; display: flex; flex-direction: column;">
                             <h5 class="card-title"></h5>
-                            <app-medications-list class="overflow-auto" [isEditing]="isEditing"></app-medications-list>
+                            <div class="card-body m-0 p-0 overflow-auto">
+                                <app-medications-list class="overflow-auto"
+                                    [isEditing]="isEditing"></app-medications-list>
+                            </div>
+                            <div class="card-footer mt-auto">
+                                <button class="btn btn-outline-primary container-fluid">Analyze</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- Chat container -->
         <div class="col-lg-8 m-0">
             <app-chatbot></app-chatbot>

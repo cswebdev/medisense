@@ -16,7 +16,7 @@ public class OpenAIService {
     public String callOpenAI(String prompt) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "https://api.openai.com/v1/engines/davinci-codex/completions"; // Change the engine if needed
+        String url = "https://api.openai.com/v1/engines/davinci-codex/completions";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(openAIConfig.getApiKey());
