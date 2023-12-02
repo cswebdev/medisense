@@ -14,7 +14,8 @@ export class AppComponent implements OnDestroy {
   private authSubscription!: Subscription;
 
 
-  constructor(private authService: AuthService, 
+  constructor(
+    private authService: AuthService, 
     private modalService: NgbModal) {
 }
 
@@ -22,18 +23,15 @@ export class AppComponent implements OnDestroy {
 ngOnInit() {
   this.authSubscription = this.authService.isAuthenticated().subscribe((user) => {
     if (user) {
-      // Perform any actions you need when the user is logged in
-      // this.router.navigate(['/patient-portal']); // Redirect to dashboard or any other route you want
+
     } else {
-      // Perform any actions you need when the user is logged out
-      // this.router.navigate(['/login']); // Redirect to login or any other route you want
+
     }
   });
 }
 
 
   ngOnDestroy() {
-    // Unsubscribe from the authState subscription when the component is destroyed
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
