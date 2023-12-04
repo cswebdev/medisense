@@ -1,6 +1,6 @@
   import { Injectable } from '@angular/core';
-  import { HttpClient } from '@angular/common/http';
-  import { Observable, Subject, tap } from 'rxjs';
+  import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+  import { Observable, Subject, catchError, tap } from 'rxjs';
   import { Medication } from '../models/medication.model';
   import { MedicationResponse } from '../models/medication-response.model';
 
@@ -17,7 +17,16 @@
     constructor(private http: HttpClient) { }
 
     getMedicationsByUserId(userId: string): Observable<MedicationResponse> {
-      return this.http.get<MedicationResponse>(`${this.baseUrl}/${userId}/medications`);
+      return this.http.get<MedicationResponse>(`${this.baseUrl}/${userId}/medications`)
+        .pipe(
+          tap((response) => {
+            console.log('Fetched Medications:', response);
+          }),
+          catchError((error: HttpErrorResponse) => {
+            console.error('Error fetching medications:', error);
+            throw error; 
+          })
+        );
     }
 
     getMedicationChangedObservable(): Observable<void> {
