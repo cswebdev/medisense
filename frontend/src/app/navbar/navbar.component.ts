@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
     this.emailVerified$ = this.authService.isEmailVerified();
   }
 
-  ngOnInit() {  // Add ngOnInit lifecycle hook
+  ngOnInit() {
     // Check local storage to see if enough time has passed since the last email was sent
     const lastSentTimestamp = localStorage.getItem('lastVerifyEmailSentTimestamp');
     if (lastSentTimestamp) {
