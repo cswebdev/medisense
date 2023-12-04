@@ -26,7 +26,8 @@
                     <button class="email-verification-box"
                         [ngClass]="{'email-verified': (emailVerified$ | async), 'email-not-verified': !(emailVerified$ | async)}"
                         ngbTooltip="{{ (emailVerified$ | async) ? 'Email is verified.' : 'Email is not verified.' }}"
-                        (click)="sendEmailVerification()" [disabled]="isVerificationButtonDisabled">
+                        (click)="sendEmailVerification()" [disabled]="isVerificationButtonDisabled"
+                        placement="left">
                         <i [ngClass]="{'fas fa-check': (emailVerified$ | async), 'fa-solid fa-exclamation': !(emailVerified$ | async)}"
                             aria-hidden="true"></i>
                     </button>
@@ -40,7 +41,8 @@
                                 Profile</button>
                         </li>
                         <li>
-                            <span ngbTooltip="{{ !(emailVerified$ | async) ? 'Email Verification Required.' : null }}">
+                            <span ngbTooltip="{{ !(emailVerified$ | async) ? 'Email Verification Required.' : null }}" 
+                                placement="left">
                                 <button class="dropdown-item" type="button" routerLink="/change-email"
                                     [disabled]="!(emailVerified$ | async)">
                                     Change Email
@@ -48,7 +50,8 @@
                             </span>
                         </li>
                         <li>
-                            <span ngbTooltip="{{ !(emailVerified$ | async) ? 'Email Verification Required.' : null }}">
+                            <span ngbTooltip="{{ !(emailVerified$ | async) ? 'Email Verification Required.' : null }}" 
+                                placement="left">
                                 <button class="dropdown-item" type="button" routerLink="/change-password"
                                     [disabled]="!(emailVerified$ | async)">
                                     Change Password
@@ -57,7 +60,10 @@
                         </li>
                         <li class="dropdown-divider"></li>
                         <li>
-                            <button class="dropdown-item" type="button" (click)="handleLogout()">Logout</button>
+                            <button class="dropdown-item" type="button" (click)="handleLogout()">
+                                Logout
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                            </button>
                         </li>
                     </ul>
                 </div>

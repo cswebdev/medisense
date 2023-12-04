@@ -5,7 +5,6 @@ import { catchError, switchMap, tap, of, Subject, takeUntil, first } from 'rxjs'
 import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { LoginService } from '../services/login.service';
-import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
   selector: 'app-login',
@@ -35,19 +34,22 @@ export class LoginComponent implements OnDestroy {
   }
 
   handleLogin(): void {
+    this.isLoading = true;
     if (this.userLoginForm.valid) {
-      this.isLoading = true;
       const formValue = this.userLoginForm.value;
       const persistenceType = formValue.persistence ? 'local' : 'session';
   
       this.authService.setPersistence(persistenceType).pipe(
-        switchMap(() => {
-          return this.loginService.loginUser(formValue.email, formValue.password);
-        }),
-        first(), // Only take the first value emitted
-        tap(() => {
+        switchMap(() => this.loginService.loginUser(formValue.email, formValue.password)),
+        first(),
+        switchMap(() => this.authService.isEmailVerified()),
+        tap((isVerified) => {
           this.router.navigate(['/patient-portal']);
-          this.alert.success('Successfully logged in!');
+          const loginMessage = isVerified 
+            ? 'Successfully logged in!'
+            : 'Successfully logged in! NOTE: Your email still requires verification.' + 
+              ' Click the indicator in the top right corner to send another verification email.';
+          this.alert.warning(loginMessage);
         }),
         catchError((error) => {
           this.alert.warning(error.message);
@@ -73,6 +75,7 @@ export class LoginComponent implements OnDestroy {
         }
       }
     }
+    this.isLoading = false;
   }
   
 
