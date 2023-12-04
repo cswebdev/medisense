@@ -1,5 +1,7 @@
 package com.medisense.backend.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medisense.backend.security.config.OpenAIConfig;
 
 import org.slf4j.Logger;
@@ -8,7 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import java.util.Collections;
+
+import java.util.*;
 
 @Service
 public class OpenAIService {
@@ -18,6 +21,8 @@ public class OpenAIService {
     private OpenAIConfig openAIConfig;
 
     public String callOpenAI(String prompt) {
+        logger.info("OpenAI Request Prompt: {}", prompt);
+
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://api.openai.com/v1/chat/completions";
@@ -27,20 +32,30 @@ public class OpenAIService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        String requestBody = "{\n" +
-                "  \"model\": \"gpt-3.5-turbo\",\n" +
-                "  \"messages\": [\n" +
-                "    {\"role\": \"user\", \"content\": \"" + prompt + "\"}\n" +
-                "  ],\n" +
-                "  \"max_tokens\": 150\n" +
-                "}";
+        // Use Jackson to create a JSON payload
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody;
+        try {
+            Map<String, Object> requestBodyMap = new HashMap<>();
+            List<Map<String, String>> messages = new ArrayList<>();
+            messages.add(Map.of("role", "system", "content",
+                    "You are a helpful assistant named Medisense an AI medication analyst. You can provide general information on saftey between medication management, your aim is to inform of potential negative drug interactions between provided medications.You are not a medical professional and you should end your replies with something similar to, 'I am not a medical professional and you should refer to a licensed medical professional for any further information.'"));
+            messages.add(Map.of("role", "user", "content", prompt));
+            requestBodyMap.put("messages", messages);
+            requestBodyMap.put("model", "gpt-3.5-turbo");
+            requestBody = objectMapper.writeValueAsString(requestBodyMap);
+        } catch (JsonProcessingException e) {
+            logger.error("Error converting request body to JSON", e);
+            throw new RuntimeException("Error converting request body to JSON", e);
+        }
+
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
                 logger.info("OpenAI Request: {}", requestBody);
-                logger.info("OpenAI Reponse: {}", response.getBody());
+                logger.info("OpenAI Response: {}", response.getBody());
                 return response.getBody();
             } else {
                 logger.error("OpenAI request failed with status code: {}", response.getStatusCode());
