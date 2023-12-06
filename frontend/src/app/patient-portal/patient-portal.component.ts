@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { MedicationService } from '../services/medication.service';
 import { Subscription } from 'rxjs';
 import { OpenAIService } from '../services/openai.service';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-patient-portal',
@@ -26,7 +27,8 @@ export class PatientPortalComponent implements OnInit {
     private route: ActivatedRoute,
     public authService: AuthService,
     private medicationService: MedicationService,
-    private openAIService: OpenAIService
+    private openAIService: OpenAIService,
+    private chatService: ChatService,
   ) { }
 
   toggleEdit() {
@@ -78,22 +80,19 @@ export class PatientPortalComponent implements OnInit {
   }
 
   analyzeMedications() {
-    // Extract prescription names from medication list
     const prescriptionNames = this.medications.map(med => med.prescriptionName);
 
-    // Check if there are prescription names
     if (prescriptionNames.length === 0) {
       console.warn('No medications found. Cannot analyze.');
       return;
     }
 
-    // Create a prompt using prescription names
     const prompt = `Analyzing medications: ${prescriptionNames.join(',')}. Are they safe together? `;
    
-
-    // Call OpenAPIService 
     this.openAIService.callOpenAI(prompt)
       .subscribe(response => {
+        const assistantResponse = response.choices[0]?.message.content;
+        this.chatService.updateChatContent(assistantResponse);
         console.log('OpenAI Response:', response);
       }, error => {
         console.error('OpenAI API Error:', error);
