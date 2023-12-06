@@ -87,7 +87,7 @@ export class PatientPortalComponent implements OnInit {
       return;
     }
 
-    const prompt = `Analyzing medications: ${prescriptionNames.join(',')}. Are they safe together? `;
+    const prompt = `Analyzing medications: ${prescriptionNames.join(',')}. `;
    
     this.openAIService.callOpenAI(prompt)
       .subscribe(response => {

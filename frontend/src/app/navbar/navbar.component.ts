@@ -5,6 +5,7 @@ import { AlertService } from '../services/alert.service';
 import { Router } from '@angular/router';
 import { Observable, timer } from 'rxjs';
 import { filter, switchMap, take } from 'rxjs/operators';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-navbar',
@@ -21,7 +22,8 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
     private authService: AuthService,
     private logoutService: LogoutService,
     private alertService: AlertService,
-    private router: Router
+    private router: Router,
+    private chatService:ChatService
   ) {
     this.loggedIn$ = this.authService.isLoggedIn();
     this.userEmail$ = this.authService.getEmail();
@@ -44,6 +46,10 @@ export class NavbarComponent implements OnInit {  // Implement OnInit
   }
 
   handleLogout() {
+
+    this.chatService.clearChatContent();
+
+    
     this.logoutService.logoutUser().subscribe(
       () => {
         this.alertService.success('Successfully logged out!');

@@ -14,4 +14,8 @@ export class ChatService {
   updateChatContent(content:string){
     this.chatContentSubject.next(content);
   }
+
+  clearChatContent() {
+    this.updateChatContent('');
+  }
 }
