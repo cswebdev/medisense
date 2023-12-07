@@ -14,7 +14,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileComponent } from './edit-user-profile/edit-user-profile.component';
 import { MedicationComponent } from './medication/medication.component';
-import { AddMedicationComponent } from './add-medication/add-medication.component';
 import { MedicationsListComponent } from './medications-list/medications-list.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -41,7 +40,6 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     UserProfileComponent,
     EditUserProfileComponent,
     MedicationComponent,
-    AddMedicationComponent,
     MedicationsListComponent,
     SearchBarComponent,
     GlobalAlertComponent,

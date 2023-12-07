@@ -48,10 +48,20 @@ export class SearchBarComponent implements OnDestroy {
 
   getDosage(name: string): string | null {
     name = name.trim();
+  
+    // Regular expression to match dosage patterns
     const pattern = /(\d+(\.\d+)?\s*(mg|g|mcg|µg|ml|mL|L|U|IU|mEq|%))/i;
+  
+    // Check if the dosage pattern is found in the name
     const match = name.match(pattern);
-    return match ? match[0] : null;
+  
+    // Check if the dosage is a combination of numbers without a clear medication name
+    const containsNumbersOnly = /^\d+\s*\d*\s*(mg|g|mcg|µg|ml|mL|L|U|IU|mEq|%)$/i.test(name);
+  
+    // Return null if dosage pattern is not found or if it contains only numbers
+    return match && !containsNumbersOnly ? match[0] : null;
   }
+  
 
   shortenMedicationName(name: string): string {
     const dosage = this.getDosage(name);
@@ -60,41 +70,60 @@ export class SearchBarComponent implements OnDestroy {
   }
 
   searchMedication() {
-    if(this.isDropdownOpen) {
+    if (this.isDropdownOpen) {
       this.isDropdownOpen = false;
       this.searching = false;
       return;
     }
-
+  
     this.medicationService.searchMedicationNames(this.searchTerm)
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        const extractedNames = [];
-        const extractedDosages = [];
-
-        this.showResults = this.results.length > 0;
-
+        const uniquePrescriptions = new Set<string>();
+        const sortedPrescriptions: { name: string; dosage: string | null }[] = [];
+  
         const conceptGroup = data.drugGroup.conceptGroup || [];
         for (let group of conceptGroup) {
           if (group.conceptProperties) {
             for (let prop of group.conceptProperties) {
-              if (!prop.name.startsWith('{')) {
+              const excludedPrefixes = ['{', '12', '24', '84', '90','168', '250','500', '750', '1000'];
+  
+              if (!excludedPrefixes.some(prefix => prop.name.startsWith(prefix))) {
                 const shortenedName = this.shortenMedicationName(prop.name);
                 const dosage = this.getDosage(prop.name);
-
-                extractedNames.push(shortenedName);
-                extractedDosages.push(dosage);
+  
+                // Combine prescription name and dosage to check for uniqueness
+                const combined = `${shortenedName} ${dosage || ''}`;
+  
+                if (!uniquePrescriptions.has(combined)) {
+                  uniquePrescriptions.add(combined);
+                  sortedPrescriptions.push({ name: shortenedName, dosage });
+                }
               }
             }
           }
         }
-        this.results = extractedNames;
-        this.dosages = extractedDosages;
+  
+        // Sort the prescriptions based on dosage
+        sortedPrescriptions.sort((a, b) => {
+          // Convert dosages to numbers for proper numeric sorting
+          const dosageA = parseFloat(a.dosage || '0');
+          const dosageB = parseFloat(b.dosage || '0');
+          return dosageA - dosageB;
+        });
+  
+        // Update the results and dosages arrays
+        this.results = sortedPrescriptions.map(item => item.name);
+        this.dosages = sortedPrescriptions.map(item => item.dosage);
+  
+        this.showResults = this.results.length > 0;
       }, error => {
-        console.error("There was an error making this request:", error)
+        console.error("There was an error making this request:", error);
       });
+  
     this.isDropdownOpen = true;
   }
+  
 
   onSearchTermChange() {
     if (!this.searchTerm.trim()) {

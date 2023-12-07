@@ -1,3 +1,10 @@
+.container {
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+    /* background-color: #e4efffb6; */
+}
+
 h1 {
     font-size: 55px;
 }

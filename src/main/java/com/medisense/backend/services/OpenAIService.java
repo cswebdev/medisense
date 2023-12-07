@@ -39,7 +39,7 @@ public class OpenAIService {
             Map<String, Object> requestBodyMap = new HashMap<>();
             List<Map<String, String>> messages = new ArrayList<>();
             messages.add(Map.of("role", "system", "content",
-                    "You are a helpful assistant named Medisense an AI medication analyst. You can provide general information on saftey between medication management, your aim is to inform of potential negative drug interactions between provided medications.You are not a medical professional and you should end your replies with something similar to, 'I am not a medical professional and you should refer to a licensed medical professional for any further information.'"));
+                    "You are a helpful assistant named Medisense an AI medication analyst. You can provide general information on saftey between medication management, your aim is to inform of potential negative drug interactions between provided medications.Your response should be short and easy to read. You are not a medical professional and you should end your replies with something similar to, 'I am not a medical professional and you should refer to a licensed medical professional for any further information.'"));
             messages.add(Map.of("role", "user", "content", prompt));
             requestBodyMap.put("messages", messages);
             requestBodyMap.put("model", "gpt-3.5-turbo");

@@ -1,7 +1,7 @@
 <div class="container-fluid mt-2">
     <!-- Greeting card -->
     <div class="card mb-2">
-        <div class="card-body">
+        <div class="card-body greeting-card">
             <h1 class="card-title">Hello,<span class="text-primary" style="text-transform: capitalize;"> {{
                     userFirstName }}</span>.</h1>
         </div>
@@ -23,7 +23,7 @@
                     <div class="col m-0 d-flex flex-column">
                         <div class="card p-0 m-0 border-0" style="height:100%; display: flex; flex-direction: column;">
                             <h5 class="card-title"></h5>
-                            <div class="card-body m-0 p-0 overflow-auto">
+                            <div class="card-body m-0 p-0 overflow-auto" style="max-height: 52vh;">
                                 <app-medications-list class="overflow-auto"
                                     [isEditing]="isEditing"></app-medications-list>
                             </div>
