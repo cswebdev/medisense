@@ -34,13 +34,12 @@ div.card.mb-2 {
     justify-content: center;
 }
 
-/* Search Bar */
+.card.p-0.m-0 {
+    background-color: transparent;
+    border: 0;
+}
+
 .search-container {
     position: relative;
     width: 100%;
-}
-
-#edit-btn {
-    right: 0;
-
 }

@@ -11,23 +11,24 @@
 
     <!-- Meds list and chat container -->
     <div class="row">
-        <div class="col-lg-4 m-0">
-            <div class="card p-0 m-0 border-top-0" style="height: 74vh; display: flex; flex-direction: column;">
+        <div class="col-lg-5 m-0">
+            <div class="card p-0 m-0" style="height: 74vh; display: flex; flex-direction: column;">
                 <!-- Search container -->
+
                 <app-search-bar (results)="handleResults($event)"></app-search-bar>
+
                 <!-- Meds list -->
                 <div class="d-flex flex-column" style="flex: 1;">
-                    <h2 class="mb-3 text-center justify-self-center text-primary"> Your Medications</h2>
+                    <h4 class="text-center justify-self-center text-primary"> Your Medications</h4>
                     <div class="col m-0 d-flex flex-column">
-                        <div class="card p-0 m-0 border-top-0"
-                            style="height:100%; display: flex; flex-direction: column;">
+                        <div class="card p-0 m-0 border-0" style="height:100%; display: flex; flex-direction: column;">
                             <h5 class="card-title"></h5>
                             <div class="card-body m-0 p-0 overflow-auto">
                                 <app-medications-list class="overflow-auto"
                                     [isEditing]="isEditing"></app-medications-list>
                             </div>
-                            <div class="card-footer mt-auto">
-                                <button class="btn btn-outline-primary container-fluid"
+                            <div class="card mt-auto" style="background-color: transparent; border: 0;">
+                                <button class="btn btn-primary w-50 m-auto"
                                     (click)="analyzeMedications()">Analyze</button>
                             </div>
                         </div>
@@ -36,7 +37,7 @@
             </div>
         </div>
         <!-- Chat container -->
-        <div class="col-lg-8 m-0">
+        <div class="col-lg-6 m-0">
             <app-chatbot></app-chatbot>
         </div>
     </div>
