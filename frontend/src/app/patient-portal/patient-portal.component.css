@@ -1,28 +1,20 @@
-.container {
-    align-items: center;
-    justify-content: center;
-    padding: 2%;
-    background-color: #e4efffb6;
-
-
-}
-
 h1 {
-    text-align: center;
+    font-size: 55px;
 }
 
 .card {
     display: flex;
 }
 
+div.card.mb-2 {
+    border: 0;
+    background-color: rgb(196, 233, 255);
+}
+
 .card-body {
     display: flex;
     flex-direction: column;
     display: relative;
-}
-
-å .card-title {
-    align-self: center;
 }
 
 /* .d-flex {
