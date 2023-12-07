@@ -2,17 +2,20 @@
     align-items: center;
     justify-content: center;
     padding: 2%;
-    background-color: #e4efffb6;
-
-
+    /* background-color: #e4efffb6; */
 }
 
 h1 {
-    text-align: center;
+    text-align: start;
+    font-size: 65px;
 }
 
 .card {
     display: flex;
+}
+
+div.card.mb-2 {
+    border: 0;
 }
 
 .card-body {
@@ -21,9 +24,12 @@ h1 {
     display: relative;
 }
 
-å .card-title {
-    align-self: center;
+.card-body.greeting-card {
+    background-color: rgb(141, 211, 255);
+    color: #fff;
 }
+
+
 
 /* .d-flex {
     padding-bottom: 1%;

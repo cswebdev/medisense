@@ -56,7 +56,6 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
           },
           error => {
             console.error('Error deleting medication:', error);
-            alert('An error occurred while deleting the medication. Please try again.');
           }
         );
       }
