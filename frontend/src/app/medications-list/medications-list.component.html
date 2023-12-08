@@ -1,7 +1,7 @@
 <div class="container">
     <div class="container-list">
         <div *ngIf="medications && medications.length">
-            <div class="card mb-2 p-3" *ngFor="let med of medications">
+            <div class="card mb-2 p-3 " *ngFor="let med of medications; let i = index">
                 <div class="row border-0 d-flex">
                     <div class="rounded-circle overflow-hidden" style="border: 1px solid rgb(104, 213, 230);">
                         <img src="assets/images/pill-svg.svg">
@@ -13,16 +13,16 @@
                         }}
                     </div>
                     <div class="col-md-4 p-0 justify-content-center align-self-center m-1 ">
-                        <input value="{{med.dose}}" class="scale-width" disabled>
-                        <input [(ngModel)]="med.frequency" placeholder="frequency" [disabled]=" !isEditing"
-                            class="m-0 ">
+                        <input [value]="med.dose" class="scale-width" [disabled]="true">
+                        <input [(ngModel)]="med.frequency" placeholder="Frequency"
+                            [disabled]="!isEditing || editedMedicationIndex !== i" class="m-0">
                     </div>
-                    <div class="col-md-2 d-flex flex-row justify-content-center align-items-center">
-                        <div class="btn btn-outline-primary action-btn" id="edit-save-btn"
-                            (click)="toggleEdit(); onEditSave();">
-                            {{ isEditing ? 'Save' : 'Edit'}}
+                    <div class="col-md-2 d-flex flex-row justify-content-center align-items-center position-relative">
+                        <div class="btn btn-outline-primary action-btn m-1" id="edit-save-btn"
+                            (click)="toggleEdit(i); onEditSave(i);">
+                            {{ isEditing && editedMedicationIndex === i ? 'Save' : 'Edit'}}
                         </div>
-                        <div class="btn btn-outline-primary action-btn" (click)="deleteMedication(med.id)">
+                        <div class="btn btn-outline-primary action-btn m-1" (click)="deleteMedication(med.id)">
                             <fa-icon [icon]="faTrashcan"></fa-icon>
                         </div>
                     </div>

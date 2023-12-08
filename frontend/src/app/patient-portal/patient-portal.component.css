@@ -6,8 +6,7 @@
 }
 
 h1 {
-    text-align: start;
-    font-size: 65px;
+    font-size: 55px;
 }
 
 .card {
@@ -16,6 +15,7 @@ h1 {
 
 div.card.mb-2 {
     border: 0;
+    background-color: rgb(196, 233, 255);
 }
 
 .card-body {
@@ -23,13 +23,6 @@ div.card.mb-2 {
     flex-direction: column;
     display: relative;
 }
-
-.card-body.greeting-card {
-    background-color: rgb(141, 211, 255);
-    color: #fff;
-}
-
-
 
 /* .d-flex {
     padding-bottom: 1%;
@@ -48,13 +41,12 @@ div.card.mb-2 {
     justify-content: center;
 }
 
-/* Search Bar */
+.card.p-0.m-0 {
+    background-color: transparent;
+    border: 0;
+}
+
 .search-container {
     position: relative;
     width: 100%;
-}
-
-#edit-btn {
-    right: 0;
-
 }

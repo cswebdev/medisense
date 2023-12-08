@@ -13,6 +13,9 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 export class MedicationsListComponent implements OnInit, OnDestroy {
   @Input() isEditing!: boolean;
 
+  editedMedicationIndex: number | null = null;
+
+
   medications: Medication[] = [];
   private medicationListSub: Subscription = new Subscription;
 
@@ -26,14 +29,15 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleEdit() {
-    this.isEditing =!this.isEditing;
+  toggleEdit(index: number): void {
+    this.isEditing = !this.isEditing;
+    this.editedMedicationIndex = this.isEditing ? index : null;
   }
-
-  onEditSave(): void {
-    this.medications.forEach(medication => {
-      this.saveFrequency(medication);
-    });
+  
+  onEditSave(index: number): void {
+    // Save logic for the specific medication at the given index
+    const editedMedication = this.medications[index];
+    this.saveFrequency(editedMedication);
   }
 
   ngOnDestroy(): void {
@@ -83,8 +87,7 @@ export class MedicationsListComponent implements OnInit, OnDestroy {
 
   saveFrequency(medication: Medication): void {
     if (medication && medication.id) {
-      const frequency = medication.frequency || 'default value'; // Provide a default value if frequency is null
-  
+      const frequency = medication.frequency || 'frequency';
       this.authService.getUserId().subscribe(userId => {
         if (userId) {
           this.medicationService.updateMedicationFrequency(userId, medication.id, frequency).subscribe(

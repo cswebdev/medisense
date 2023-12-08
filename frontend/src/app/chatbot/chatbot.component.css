@@ -3,8 +3,6 @@
     justify-content: center;
     padding: 2%;
     background-color: #e4efffb6;
-
-
 }
 
 .card {
@@ -17,13 +15,10 @@
     display: relative;
 }
 
-å .card-title {
+.card-title {
     align-self: center;
 }
 
-/* .d-flex {
-    padding-bottom: 1%;
-} */
 
 .custom-select {
     height: 100%;
@@ -32,6 +27,7 @@
 
 .card-chat-history {
     border-color: lightgray;
+    margin: auto;
 }
 
 .container-form {
