@@ -3,6 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MedicationService } from '../services/medication.service';
 import { AuthService } from '../services/auth.service';
 import { Medication } from '../models/medication.model';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-search-bar',
@@ -19,6 +20,7 @@ export class SearchBarComponent implements OnDestroy {
   dosages: (string | null)[] = [];
   medications: any[] = [];
   newMedication: string = '';
+  faPlus = faPlus;
 
   private destroy$ = new Subject<void>();
 
@@ -48,17 +50,9 @@ export class SearchBarComponent implements OnDestroy {
 
   getDosage(name: string): string | null {
     name = name.trim();
-  
-    // Regular expression to match dosage patterns
     const pattern = /(\d+(\.\d+)?\s*(mg|g|mcg|µg|ml|mL|L|U|IU|mEq|%))/i;
-  
-    // Check if the dosage pattern is found in the name
     const match = name.match(pattern);
-  
-    // Check if the dosage is a combination of numbers without a clear medication name
     const containsNumbersOnly = /^\d+\s*\d*\s*(mg|g|mcg|µg|ml|mL|L|U|IU|mEq|%)$/i.test(name);
-  
-    // Return null if dosage pattern is not found or if it contains only numbers
     return match && !containsNumbersOnly ? match[0] : null;
   }
   

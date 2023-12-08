@@ -1,5 +1,5 @@
 <div class="row mb-8 d-flex justify-content-center">
-    <div class="col-11 pt-3 pb-3">
+    <div class="col-12 pt-3 pb-3">
         <div class="form">
             <div class="search-container d-flex" (mouseout)="onMouseOut()" (mouseover)="focusOnList=true">
                 <div class="input-group custom-input-group position-relative w-100">
@@ -13,13 +13,13 @@
                 </div>
             </div>
 
-            <div *ngIf="results.length && isDropdownOpen" class="dropdown-menu show mt-0 col-11"
+            <div *ngIf="results.length && isDropdownOpen" class="col-lg-12 dropdown-menu custom-dropdown mt-0"
                 style="display: block; max-height: 200px; overflow-y: auto;">
                 <div href="#" *ngFor="let result of results; let i = index" class="dropdown-item position-relative p-2"
                     (mouseOver)="focusOnList = true" (focus)="onInputFocus()">
                     {{result}} {{dosages[i]}}
-                    <button class="btn btn-sm btn-primary position-absolute add-btn"
-                        (click)="addMedication(result, i)">Add</button>
+                    <button class="btn btn-sm btn-outline-primary position-absolute add-btn"
+                        (click)="addMedication(result, i)"><fa-icon [icon]="faPlus"></fa-icon></button>
                 </div>
             </div>
         </div>

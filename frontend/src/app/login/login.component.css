@@ -24,16 +24,14 @@
     position: relative;
     text-align: center;
     opacity: 100%;
-    /* margin-bottom: 33px; */
     color: #f49fbc;
     font-size: 5em;
     font-weight: 800;
     line-height: 1.5;
-    margin-left: 5%;
+    margin: auto;
     background-color: #f6f6ff;
     max-width: 50%;
-    /* box-shadow: 0 0 0 1rem #0037723d;
-    border-radius: 2px; */
+
 }
 
 
@@ -85,7 +83,6 @@
 }
 
 .form-signin input[type="password"] {
-    /* margin-bottom: 10px; */
     border-top-left-radius: 10;
     border-top-right-radius: 10;
 }

@@ -1,13 +1,11 @@
-<div class="container-form">
+<div class="container-form ">
     <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
-    <!-- <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)"> -->
 
     <div class="container">
         <h1 style="color: rgb(106, 158, 255);">Medisense</h1>
         <h1>Medication</h1>
         <h1>Assistant</h1>
     </div>
-
 
     <form class="form-signin" [formGroup]="userLoginForm" (ngSubmit)="handleLogin()">
         <div class="card" style="width: 18rem;">
@@ -36,5 +34,4 @@
             </div>
         </div>
     </form>
-    <!-- </div> -->
 </div>

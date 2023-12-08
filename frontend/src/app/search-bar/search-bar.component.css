@@ -38,7 +38,20 @@
      transform: translateY(-50%);
  }
 
- /* 
-.dropdown-menu.show {
-    
-} */
+ .custom-dropdown {
+     font-family: 'Your-Font', sans-serif;
+     font-size: 14px;
+     max-width: 96.5%;
+ }
+
+ .dropdown-item {
+     margin: 0;
+     padding: 8px 12px;
+     font-size: 18px;
+     text-transform: capitalize;
+ }
+
+ .add-btn {
+     margin-left: 8px;
+     padding: 4px 8px;
+ }
