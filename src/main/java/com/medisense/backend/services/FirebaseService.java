@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.FirebaseAuthException;
 
-
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,20 +18,19 @@ public class FirebaseService {
     @PostConstruct
     public void initialize() {
         try {
-            FileInputStream serviceAccount =
-              new FileInputStream("medisense-7104f-firebase-adminsdk-30q14-1652601820.json");
-              
+            FileInputStream serviceAccount = new FileInputStream(
+                    "medisense-1fb49-firebase-adminsdk-sr8bb-2c85a385b9.json");
 
             FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build();
-            
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
 
             FirebaseApp.initializeApp(options);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public FirebaseToken verifyToken(String idToken) {
         try {
             return FirebaseAuth.getInstance().verifyIdToken(idToken);
@@ -41,5 +39,5 @@ public class FirebaseService {
             throw new RuntimeException("Error verifying Firebase token", fae);
         }
     }
-    
+
 }

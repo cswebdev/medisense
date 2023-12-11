@@ -1,13 +1,13 @@
 <div class="container">
     <div class="container-list">
         <div *ngIf="medications && medications.length">
-            <div class="card mb-2 p-3 " *ngFor="let med of medications; let i = index">
+            <div class="card  mb-2 p-3 " *ngFor="let med of medications; let i = index">
                 <div class="row border-0 d-flex">
                     <div class="rounded-circle overflow-hidden" style="border: 1px solid rgb(104, 213, 230);">
                         <img src="assets/images/pill-svg.svg">
                     </div>
                     <div
-                        class="col-md-4 col-sm-6 d-flex text-primary text-uppercase  align-items-center justify-content-start">
+                        class="col-md-4 col-sm-8 d-flex text-primary text-uppercase  align-items-center justify-content-start">
                         {{
                         med.prescriptionName
                         }}

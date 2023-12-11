@@ -4,7 +4,7 @@
             <div class="search-container d-flex" (mouseout)="onMouseOut()" (mouseover)="focusOnList=true">
                 <div class="input-group custom-input-group position-relative w-100">
                     <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchTermChange()"
-                        class="form-control custom-input" placeholder="Search anything..." (blur)="onInputBlur()"
+                        class="form-control custom-input" placeholder="Search medications..." (blur)="onInputBlur()"
                         (keydown.enter)="searchMedication()" (focus)="onInputFocus()" />
                     <div class="input-group-append">
                         <button (click)="searchMedication()" (focus)="onInputFocus()" id="search-btn"
