@@ -27,6 +27,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { LoadingOverlayComponent } from './loading-overlay/loading-overlay.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { SafeHtmlPipe } from './services/safe-html.pipe';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     ChangePasswordComponent,
     LoadingOverlayComponent,
     ResetPasswordComponent,
-    ChatbotComponent
+    ChatbotComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,

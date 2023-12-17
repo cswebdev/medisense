@@ -4,11 +4,10 @@
             <span class="text-primary">AI</span> Powered Analysis
         </h2>
 
-        <div class="card-chat-history-container d-flex justify-content-center">
-            <div class="card-chat-history p-2 text-muted" style="height: 60vh; overflow: auto;" readonly>
+        <div class="card-chat-history-container d-flex justify-content-center overflow-auto">
+            <div class="card-chat-history p-2 text-muted" style="max-height: 60vh; " readonly>
                 <!-- Use *ngIf to conditionally display dynamic content or placeholder text -->
-                <div class="m-auto" *ngIf="chatContent; else placeholder">
-                    {{ chatContent }}
+                <div class="m-auto" *ngIf="chatContent; else placeholder" [innerHTML]="chatContent | safeHtml">
                 </div>
                 <ng-template #placeholder>
                     Hello there! <span style="font-weight: 800;">:)</span><br> Welcome to Medisense, your trusted AI
@@ -21,7 +20,8 @@
         </div>
 
         <!-- Analyze Button in Card Footer -->
-        <div class="card-footer border-0 d-flex position-absolute bottom-0 w-100 justify-content-center">
+        <div
+            class="card-footer border-0 d-flex position-absolute bottom-0 w-100 justify-content-center overflow-hidden">
             <!-- Analyze Button goes here-->
             <div class="btn btn-outline-primary" (click)="analyzeMedications()">Analyze<fa-icon [icon]="faPaperPlane"
                     class="p-1"></fa-icon></div>

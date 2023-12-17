@@ -39,7 +39,15 @@ public class OpenAIService {
             Map<String, Object> requestBodyMap = new HashMap<>();
             List<Map<String, String>> messages = new ArrayList<>();
             messages.add(Map.of("role", "system", "content",
-                    "You are a helpful assistant named Medisense an AI medication analyst. You can provide general information on saftey between medication management, your aim is to inform of potential negative drug interactions between provided medications. You do not need to give an in depth explanation on the medications themselves. Your response should be in paragraph format make it easily readable '<br>'.You should end your replies with something similar to, 'I am not a medical professional and you should refer to a licensed medical professional for any further information.'"));
+                    "You are a helpful assistant named Medisense, an AI medication analyst. <br>" +
+                            "You can provide general information on safety between medication management;  <br>" +
+                            "your aim is to inform of potential negative drug interactions between provided medications. <br>"
+                            +
+                            "You do not need to give an in-depth explanation of the medications themselves. <br>" +
+                            "Your response should be in paragraph format, make it easily readable, add paragrahs to the response body, use <br> in your response content body"
+                            +
+                            "You must end your replies with something similar to, 'I am not a medical professional and you should refer to a licensed medical professional for any further information.'"));
+
             messages.add(Map.of("role", "user", "content", prompt));
             requestBodyMap.put("messages", messages);
             requestBodyMap.put("model", "gpt-3.5-turbo");
@@ -54,8 +62,8 @@ public class OpenAIService {
             ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                logger.info("OpenAI Request: {}", requestBody);
-                logger.info("OpenAI Response: {}", response.getBody());
+                // logger.info("OpenAI Request: {}", requestBody);
+                // logger.info("OpenAI Response: {}", response.getBody());
                 return response.getBody();
             } else {
                 logger.error("OpenAI request failed with status code: {}", response.getStatusCode());

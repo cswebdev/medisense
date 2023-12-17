@@ -65,7 +65,7 @@ export class ChatbotComponent implements OnInit {
     this.openAIService.callOpenAI(prompt).subscribe(
       (response: { choices: { message: { content: any } }[] }) => {
         const assistantResponse = response.choices[0]?.message.content;
-        this.chatService.updateChatContent(assistantResponse);
+        this.chatService.updateChatContent(assistantResponse.replace(/\n/g, '<br>'));
         console.log('OpenAI Response:', response);
       },
       (error: any) => {
