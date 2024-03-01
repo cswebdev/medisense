@@ -2,13 +2,19 @@
     <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
 
     <div class="container">
-        <h1 style="color: rgb(106, 158, 255);">Medisense</h1>
-        <h1>Medication</h1>
-        <h1>Assistant</h1>
+        <div class="hero">
+            <img [src]="heroImage" id="heroImage" alt="healthy man">
+            <div class="hero-text">
+                <h1>Take Your Medications With Confidence</h1>
+                <h1>With <span>Medisense</span>.</h1>
+                <button class="btn btn-primary">Learn more</button>
+            </div>
+        </div>
+
     </div>
 
     <form class="form-signin" [formGroup]="userLoginForm" (ngSubmit)="handleLogin()">
-        <div class="card" style="width: 18rem;">
+        <div class="card">
             <div class="card-body">
 
                 <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
@@ -34,4 +40,6 @@
             </div>
         </div>
     </form>
+
+
 </div>

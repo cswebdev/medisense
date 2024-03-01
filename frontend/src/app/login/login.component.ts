@@ -6,12 +6,15 @@ import { AlertService } from '../services/alert.service';
 import { AuthService } from '../services/auth.service';
 import { LoginService } from '../services/login.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnDestroy {
+
+  heroImage = '../../assets/images/heroImage.jpg';
 
   userLoginForm: FormGroup;
   isLoading = false;
