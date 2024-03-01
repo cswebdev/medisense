@@ -1,4 +1,4 @@
-.container-form {
+.container-header {
     display: -ms-flexbox;
     display: -webkit-box;
     box-sizing: border-box;
@@ -34,7 +34,6 @@
     margin: 0;
     /* border: 1px solid red; */
     overflow: hidden;
-    border-radius: 0.25rem;
     position: relative;
     display: flex;
     justify-content: center;
@@ -61,21 +60,24 @@ img {
     position: absolute;
     text-align: center;
     /* left: 0; */
-    margin-left: 2%;
+    margin: 2%;
     color: rgb(255, 255, 255);
-    background-color: #00000089;
-    padding: .4%;
+    bottom: 0;
+    background-color: #2e2e2eae;
+    padding: 2%;
     border-radius: .2rem;
-
 }
 
 .hero-text h1 {
-    font-size: 3em;
+    font-size: 3.5em;
+
 }
 
 .hero-text span {
-    color: rgb(221, 8, 196);
+    /* color: rgb(221, 8, 196); */
+    color: #007bff;
     font-weight: 800;
+    font-size: 3.8rem;
 }
 
 
@@ -88,19 +90,21 @@ img {
     justify-content: center;
     padding: 0;
     margin: 0;
+    border-radius: 0;
 }
 
 .card-body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border-radius: 0;
 
 }
 
 .form-signin {
     width: 100%;
     max-width: 360px;
-    padding: 15px;
+    /* padding: 15px; */
     margin: 0;
 }
 
