@@ -1,20 +1,20 @@
 <section class="container-header">
     <app-loading-overlay [isLoading]="isLoading"></app-loading-overlay>
 
-    <div class="container">
+    <div class="container-hero">
         <div class="hero">
             <img [src]="heroImage" id="heroImage" alt="healthy man">
             <div class="hero-text">
                 <h1>Take Your Medications With Confidence</h1>
                 <h1>With <span>Medisense</span>.</h1>
-                <button class="btn btn-outline-primary">Learn more</button>
+                <button class="btn btn-primary">Learn more</button>
             </div>
         </div>
 
     </div>
 
     <form class="form-signin" [formGroup]="userLoginForm" (ngSubmit)="handleLogin()">
-        <div class="card">
+        <div class="card card-login">
             <div class="card-body">
 
                 <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
@@ -41,10 +41,21 @@
     </form>
 </section>
 <section class="container-body">
-    <h1>how we help</h1>
-    <div class="text-body">
-        <p>
+    <div class="card card-info">
+        <div class="card-title">
+            <h1>how we help</h1>
+        </div>
+        <div class="card-body">
+            <p>
+                When patients are on more than 4 prescriptions, their chance of having a negative drug interaction
+                increase
+                exponentially. [insert claim]
+            </p>
 
-        </p>
+            <p>
+                Medisense's utilizes AI to analyze your medications of any negative interactions between your
+                prescriptions.
+            </p>
+        </div>
     </div>
 </section>
