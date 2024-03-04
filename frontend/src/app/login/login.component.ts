@@ -16,9 +16,19 @@ export class LoginComponent implements OnDestroy {
 
   heroImage = '../../assets/images/heroImage.jpg';
 
+
+
+  infoCardBody =[
+    {
+      bodyStatement1: "When patients are on more than 4 prescriptions, their chance of having a negative drug interaction increase exponentially. [insert claim]",
+      bodyStatement2: "Medisense's utilizes AI to analyze your medications of any negative interactions between your prescriptions."
+    }
+  ] 
+
   userLoginForm: FormGroup;
   isLoading = false;
   private destroy$ = new Subject<void>();
+subText1: any;
 
   constructor(
     private fb: FormBuilder,
