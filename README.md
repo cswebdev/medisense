@@ -2,6 +2,9 @@
 
 Welcome to Medisense, an application designed to empower users in making informed decisions about medication combinations and potential health implications.
 
+## Next Phase
+The next phase of Medisense involves Dockerizing the application to facilitate hosting. This process will streamline deployment and eliminate the need for manual replacement of the OpenAI API key, enhancing both the efficiency and security of the application and allowing easy access to the application.
+
 ## Overview
 
 Medisense integrates a Spring Boot (Java) backend with an Angular frontend, providing an intuitive and cohesive user experience. Leveraging PostgreSQL for robust data storage and retrieval, the application ensures a secure and efficient platform for managing medication-related information.
